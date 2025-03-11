@@ -24,6 +24,13 @@
                 </div>
             </div>
 
+            <div class="col-md-10 mb-4">
+                <div class="form-group" wire:ignore>
+                    <label>Deskripsi</label>
+                    <textarea class="form-control ckeditor"  id="description" name="description">{{ $description }}</textarea>
+                </div>
+            </div>
+            
             <div class="col-md-10 mb-4" wire:ignore>
                 <label for="">Lokasi Map</label>
                 <div id="map" style="height: 400px;"></div>
@@ -36,12 +43,6 @@
                 </div>
             </div>
 
-            <div class="col-md-10 mb-4">
-                <div class="form-group" wire:ignore>
-                    <label>Deskripsi</label>
-                    <textarea class="form-control ckeditor"  id="description" name="description">{{ $description }}</textarea>
-                </div>
-            </div>
         <button type="submit" class="btn btn-success mt-3">
             Simpan
         </button>
