@@ -43,7 +43,7 @@
                 </div>
             </div>
             <div class="col-md-10 mb-4">
-                <button type="submit" class="btn btn-success mt-3">
+                <button type="submit" class="btn btn-success mt-3 w-100">
                     Simpan
                 </button>
             </div>
