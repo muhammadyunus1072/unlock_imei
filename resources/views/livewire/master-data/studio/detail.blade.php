@@ -30,7 +30,7 @@
                     <textarea class="form-control ckeditor"  id="description" name="description">{{ $description }}</textarea>
                 </div>
             </div>
-            
+
             <div class="col-md-10 mb-4" wire:ignore>
                 <label for="">Lokasi Map</label>
                 <div id="map" style="height: 400px;"></div>
@@ -42,10 +42,12 @@
                     <textarea rows="5" class="form-control" placeholder="Alamat" name="address" wire:model="address"></textarea>
                 </div>
             </div>
+            <div class="col-md-10 mb-4">
+                <button type="submit" class="btn btn-success mt-3">
+                    Simpan
+                </button>
+            </div>
 
-        <button type="submit" class="btn btn-success mt-3">
-            Simpan
-        </button>
     
     </form>
 </div>
