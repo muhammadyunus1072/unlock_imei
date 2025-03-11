@@ -104,7 +104,7 @@
     </style>
 @endpush
 
-@include('js.ckeditor' )
+@include('js.ckeditor')
 
 @push('js')
 

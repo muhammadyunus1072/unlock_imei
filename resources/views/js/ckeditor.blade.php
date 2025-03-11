@@ -9,6 +9,7 @@
 
             if (!processedInstances.has(instanceName)) {
                 evt.editor.on('blur', function () {
+                    console.log(evt.editor.getData());
                     @this.set(instanceName, evt.editor.getData());
                 });
                 processedInstances.add(instanceName);
