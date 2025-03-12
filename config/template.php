@@ -40,6 +40,11 @@ return [
                     'route' => 'studio.index',
                     'icon_color' => 'success',
                 ],
+                [
+                    'text' => 'Produk',
+                    'route' => 'product.index',
+                    'icon_color' => 'success',
+                ],
             ],
         ],
         [

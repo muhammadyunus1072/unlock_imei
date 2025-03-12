@@ -8,7 +8,7 @@
             const instanceName = evt.editor.name;
 
             if (!processedInstances.has(instanceName)) {
-                evt.editor.on('blur', function () {
+                evt.editor.on('change', function () {
                     console.log(evt.editor.getData());
                     @this.set(instanceName, evt.editor.getData());
                 });

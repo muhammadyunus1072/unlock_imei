@@ -2,8 +2,10 @@
 
 namespace App\Models\MasterData;
 
+use App\Helpers\FilePathHelper;
 use Sis\TrackHistory\HasTrackHistory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -39,5 +41,10 @@ class ProductDetail extends Model
         $object[$prefix . 'image'] = $this->image;
 
         return $object;
+    }
+
+    public function image_url()
+    {
+        return $this->image ? Storage::url(FilePathHelper::FILE_PRODUCT_DETAIL_IMAGE . $this->image) : null;
     }
 }

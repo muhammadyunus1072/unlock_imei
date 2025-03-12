@@ -19,6 +19,8 @@ class Datatable extends Component
 
     public $isCanUpdate;
     public $isCanDelete;
+    public $isCanUpdateBookingTime;
+    public $isCanUpdateDetail;
 
     // Delete Dialog
     public $targetDeleteId;
@@ -27,6 +29,8 @@ class Datatable extends Component
     {
         $authUser = UserRepository::authenticatedUser();
         $this->isCanUpdate = $authUser->hasPermissionTo(PermissionHelper::transform(AccessMasterData::PRODUCT, PermissionHelper::TYPE_UPDATE));
+        $this->isCanUpdateBookingTime = $authUser->hasPermissionTo(PermissionHelper::transform(AccessMasterData::PRODUCT_BOOKING_TIME, PermissionHelper::TYPE_UPDATE));
+        $this->isCanUpdateDetail = $authUser->hasPermissionTo(PermissionHelper::transform(AccessMasterData::PRODUCT_DETAIL, PermissionHelper::TYPE_UPDATE));
     }
 
     #[On('on-delete-dialog-confirm')]
@@ -102,9 +106,42 @@ class Datatable extends Component
                             </button>
                         </div>";
                     }
+                    $bookingTimeHtml = "";
+                    if ($this->isCanUpdateBookingTime) {
+                        $bookingTimeUrl = route('product_booking_time.edit', $id);
+                        $bookingTimeHtml = "<div class='col-auto mb-2'>
+                            <a class='btn btn-warning btn-sm w-100' href='$bookingTimeUrl'>
+                            <i class='ki-duotone ki-time fs-1'>
+                                <span class='path1'></span>
+                                <span class='path2'></span>
+                                <span class='path3'></span>
+                            </i>
+                            Waktu Booking
+                        </a>
+                        </div>";
+                    }
+                    $detailHtml = "";
+                    if ($this->isCanUpdateDetail) {
+                        $detailUrl = route('product_detail.edit', $id);
+                        $detailHtml = "<div class='col-auto mb-2'>
+                            <a class='btn btn-success btn-sm w-100' href='$detailUrl'>
+                            <i class='ki-duotone ki-element-11 fs-1'>
+                                <span class='path1'></span>
+                                <span class='path2'></span>
+                                <span class='path3'></span>
+                                <span class='path4'></span>
+                                <span class='path5'></span>
+                                <span class='path6'></span>
+                                <span class='path7'></span>
+                            </i>
+                            Detail Produk
+                        </a>
+                        </div>";
+                    }
+                    
 
                     $html = "<div class='row'>
-                        $editHtml $destroyHtml 
+                        $editHtml $bookingTimeHtml $detailHtml $destroyHtml 
                     </div>";
 
                     return $html;
@@ -115,84 +152,11 @@ class Datatable extends Component
                 'name' => 'Nama Produk',
             ],
             [
-                'key' => 'kode_simrs',
-                'name' => 'Kode SIMRS',
-            ],
-            [
-                'key' => 'kode_sakti',
-                'name' => 'Kode SAKTI',
-            ],
-            [
-                'key' => 'type',
-                'name' => 'Tipe Produk',
-                'render' => function($item)
-                {
-                    return $item->getTranslatedType();
-                }
-            ],
-            [
-                'sortable' => false,
-                'searchable' => false,
-                'name' => 'Satuan',
-                'render' => function($item)
-                {
-                    return $item->unit->title;
-                }
-            ],
-            [
-                'sortable' => false,
-                'searchable' => false,
-                'name' => 'Kategori Produk',
-                'render' => function($item)
-                {
-                    $html = "<ul style='list-style-type: disc; padding-left: 20px;'>";
-
-                    foreach ($item->productCategories as $index => $product_category) {
-                        $html .= "<li class='m-0 p-0'>
-                            <span class='mr-2'>".$product_category->categoryProduct->name."</span>
-                        </li>";
-                    }
-                    
-                    $html .= "</ul>";
-
-                    return $html;
-                }
-            ],
-            [
-                'sortable' => false,
-                'searchable' => false,
-                'name' => 'Persentase TKDN',
-                'render' => function($item)
-                {
-                    return $item->interkoneksi_sakti_persentase_tkdn;
-                }
-            ],
-            [
-                'sortable' => false,
-                'searchable' => false,
-                'name' => 'Kategori PDN',
-                'render' => function($item)
-                {
-                    return $item->interkoneksi_sakti_kategori_pdn;
-                }
-            ],
-            [
-                'sortable' => false,
-                'searchable' => false,
-                'name' => 'KBKI',
-                'render' => function($item)
-                {
-                    return $item->kbki->nama;
-                }
-            ],
-            [
-                'sortable' => false,
-                'searchable' => false,
-                'name' => 'COA',
-                'render' => function($item)
-                {
-                    return $item->coa->kode;
-                }
+                'key' => 'price',
+                'name' => 'Harga',
+                'render' => function ($item) {
+                    return number_format($item->price, 0, ',', '.');
+                },
             ],
         ];
     }
@@ -204,6 +168,6 @@ class Datatable extends Component
 
     public function getView(): string
     {
-        return 'livewire.logistic.master.product.datatable';
+        return 'livewire.master-data.product.datatable';
     }
 }

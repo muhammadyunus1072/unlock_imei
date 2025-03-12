@@ -2,8 +2,11 @@
 
 namespace App\Models\MasterData;
 
+use App\Helpers\FilePathHelper;
+use App\Models\MasterData\Studio;
 use Sis\TrackHistory\HasTrackHistory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -42,5 +45,25 @@ class Product extends Model
         $object[$prefix . 'note'] = $this->note;
 
         return $object;
+    }
+
+    public function image_url()
+    {
+        return $this->image ? Storage::url(FilePathHelper::FILE_PRODUCT_IMAGE . $this->image) : null;
+    }
+
+    public function studio()
+    {
+        return $this->belongsTo(Studio::class, 'studio_id', 'id');
+    }
+
+    public function productDetails()
+    {
+        return $this->hasMany(ProductDetail::class, 'product_id', 'id');
+    }
+
+    public function productBookingTimes()
+    {
+        return $this->hasMany(ProductBookingTime::class, 'product_id', 'id');
     }
 }
