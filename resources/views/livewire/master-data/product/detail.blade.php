@@ -85,36 +85,38 @@
                 </button>
             </div>
 
-            <div class="row p-0 m-0">
-                @can(PermissionHelper::transform(AccessMasterData::PRODUCT_BOOKING_TIME, PermissionHelper::TYPE_UPDATE))
-                    <div class="col-md-5">
-                        <a class="btn btn-warning w-100" href="{{ route('product_booking_time.edit', $objId) }}">
-                            <i class="ki-duotone ki-time fs-1">
-                                <span class="path1"></span>
-                                <span class="path2"></span>
-                                <span class="path3"></span>
-                            </i>
-                            Waktu Booking
-                        </a>
-                    </div>
-                @endcan
-                @can(PermissionHelper::transform(AccessMasterData::PRODUCT_DETAIL, PermissionHelper::TYPE_UPDATE))
-                    <div class="col-md-5">
-                        <a class="btn btn-primary w-100" href="{{ route('product_detail.edit', $objId) }}">
-                            <i class="ki-duotone ki-element-11 fs-1">
-                                <span class="path1"></span>
-                                <span class="path2"></span>
-                                <span class="path3"></span>
-                                <span class="path4"></span>
-                                <span class="path5"></span>
-                                <span class="path6"></span>
-                                <span class="path7"></span>
-                            </i>
-                            Detail Produk
-                        </a>
-                    </div>
-                @endcan
-            </div>
+            @if($objId)
+                <div class="row p-0 m-0">
+                    @can(PermissionHelper::transform(AccessMasterData::PRODUCT_BOOKING_TIME, PermissionHelper::TYPE_UPDATE))
+                        <div class="col-md-5">
+                            <a class="btn btn-warning w-100" href="{{ route('product_booking_time.edit', $objId) }}">
+                                <i class="ki-duotone ki-time fs-1">
+                                    <span class="path1"></span>
+                                    <span class="path2"></span>
+                                    <span class="path3"></span>
+                                </i>
+                                Waktu Booking
+                            </a>
+                        </div>
+                    @endcan
+                    @can(PermissionHelper::transform(AccessMasterData::PRODUCT_DETAIL, PermissionHelper::TYPE_UPDATE))
+                        <div class="col-md-5">
+                            <a class="btn btn-primary w-100" href="{{ route('product_detail.edit', $objId) }}">
+                                <i class="ki-duotone ki-element-11 fs-1">
+                                    <span class="path1"></span>
+                                    <span class="path2"></span>
+                                    <span class="path3"></span>
+                                    <span class="path4"></span>
+                                    <span class="path5"></span>
+                                    <span class="path6"></span>
+                                    <span class="path7"></span>
+                                </i>
+                                Detail Produk
+                            </a>
+                        </div>
+                    @endcan
+                </div>
+            @endif
 
         <!-- Modal -->
         <div class="modal fade" id="ImageModal" tabindex="-1" aria-labelledby="imageLabelModal" aria-hidden="true" wire:ignore.self>
