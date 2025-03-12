@@ -35,7 +35,7 @@ class Detail extends Component
     public $image_url;
     public $image;
     public $description;
-    public $note = "ABC";
+    public $note;
 
     public function mount()
     {
