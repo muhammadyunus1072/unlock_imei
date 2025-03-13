@@ -35,6 +35,9 @@ return new class extends Migration
         } else {
         }
 
+        $table->string('number')->comment('Transaction Number');
+        $table->unsignedBigInteger('user_id')->comment('ID User');
+
         $table->string('customer_name')->comment('Transaction Customer Name');
         $table->string('customer_email')->comment('Transaction Customer Email');
         $table->string('customer_phone')->comment('Transaction Customer Phone');
