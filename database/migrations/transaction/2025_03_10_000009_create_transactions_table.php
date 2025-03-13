@@ -44,8 +44,6 @@ return new class extends Migration
         $table->string('status')->comment('Transaction Status');
         $table->text('cancellation_reason')->nullable()->comment('Transaction Caancellation Reason');
         $table->text('snap_token')->nullable()->default(null)->comment('Snap Token');
-        $table->string('booking_code')->nullable()->default(null)->comment('Booking Code');
-        $table->dateTime('checkin_at')->nullable()->default(null)->comment('Checkin At');
 
         // Payment Method Information
         $table->unsignedBigInteger('payment_method_id')->comment('ID Payment Method');
