@@ -38,4 +38,9 @@ class Transaction extends Model
     {
         return true;
     }
+
+    public function transactionDetails()
+    {
+        return $this->hasMany(TransactionDetail::class, 'transaction_id', 'id');
+    }
 }

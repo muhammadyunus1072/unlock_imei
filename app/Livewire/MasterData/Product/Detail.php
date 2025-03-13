@@ -39,13 +39,7 @@ class Detail extends Component
 
     public function mount()
     {
-        $this->studios = auth()->user()->studios->map(function ($studio) {
-            return [
-                'id' => Crypt::encrypt($studio->id),
-                'name' => $studio->name,
-                'city' => $studio->city,
-            ];
-        });
+        $this->studios = getAccessStudio();
         
         if ($this->objId) {
             $id = Crypt::decrypt($this->objId);

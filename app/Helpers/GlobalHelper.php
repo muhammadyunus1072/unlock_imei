@@ -1,6 +1,48 @@
 <?php
 
+use App\Repositories\MasterData\Studio\StudioRepository;
 use Livewire\Component;
+use Illuminate\Support\Facades\Crypt;
+
+if (!function_exists('getAccessStudio')) {
+    function getAccessStudio()
+    {
+        $studios = auth()->user()->studios;
+        if(!$studios->count())
+        {
+            return StudioRepository::all()->map(function ($studio) {
+                return [
+                    'id' => Crypt::encrypt($studio->id),
+                    'name' => $studio->name,
+                    'city' => $studio->city,
+                ];
+            });
+        }
+        return $studios->map(function ($studio) {
+            return [
+                'id' => Crypt::encrypt($studio->id),
+                'name' => $studio->name,
+                'city' => $studio->city,
+            ];
+        });
+    }
+}
+
+if (!function_exists('simple_encrypt')) {
+    function simple_encrypt($value) {
+        $key = hash('sha256', env('APP_KEY'), true);
+        $iv = substr($key, 0, 16); // Fixed IV
+        return base64_encode(openssl_encrypt($value, 'aes-256-cbc', $key, 0, $iv));
+    }
+}
+if (!function_exists('simple_decrypt')) {
+    function simple_decrypt($encryptedValue) {
+        $key = hash('sha256', env('APP_KEY'), true);
+        $iv = substr($key, 0, 16);
+        return openssl_decrypt(base64_decode($encryptedValue), 'aes-256-cbc', $key, 0, $iv);
+    }
+}
+
 
 if (!function_exists('consoleLog')) {
     function consoleLog(Component $component, $data)

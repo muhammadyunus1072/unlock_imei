@@ -4,7 +4,6 @@ use App\Http\Controllers\Auth\AuthController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
-    Route::get('/', [AuthController::class, 'login']);
     Route::get("/login", [AuthController::class, "login"])->name("login");
     Route::get("/logout", [AuthController::class, "logout"])->name('logout');
     Route::get("/register", [AuthController::class, "register"])->name("register");
