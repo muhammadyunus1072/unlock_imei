@@ -19,9 +19,5 @@
 @stop
 
 @section('content')
-    <!--begin::Container-->
-    <div class="container"> 
-        <livewire:public.booking-review.detail>     
-    </div>
-    <!--end::Container-->   
+    <livewire:public.booking-review.detail>     
 @stop

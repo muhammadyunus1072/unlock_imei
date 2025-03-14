@@ -180,7 +180,10 @@
                  }
               </style>
               <div class="mb-n10 mb-lg-n20 z-index-2 mt-10 pb-10">
-                  @yield('content')
+                  <!--begin::Container-->
+                  <div class="container"> 
+                     @yield('content')
+                  </div>
               </div>
               <style>
                  #modal-upsell .modal-dialog {

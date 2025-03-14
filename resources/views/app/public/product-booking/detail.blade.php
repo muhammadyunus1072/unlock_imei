@@ -19,9 +19,5 @@
 @stop
 
 @section('content')
-    <!--begin::Container-->
-    <div class="container"> 
-        <livewire:public.product-booking.detail :objId="$objId">     
-    </div>
-    <!--end::Container-->   
+    <livewire:public.product-booking.detail :objId="$objId">     
 @stop

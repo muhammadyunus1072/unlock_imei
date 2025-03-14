@@ -19,16 +19,12 @@
 @stop
 
 @section('content')
-    <!--begin::Container-->
-    <div class="container">
-        <!--begin::Heading-->
-        <div class="text-center mb-4">
-            <div class="fs-5 text-muted fw-bold">Capture your every moments with</div>
-            <h3 class="fs-2hx text-dark">{{ config('template.title') }}</h3>
-        </div>
-        <!--end::Heading-->
-        <livewire:public.product.filter>     
-        <livewire:public.product.data>     
+    <!--begin::Heading-->
+    <div class="text-center mb-4">
+        <div class="fs-5 text-muted fw-bold">Capture your every moments with</div>
+        <h3 class="fs-2hx text-dark">{{ config('template.title') }}</h3>
     </div>
-    <!--end::Container-->   
+    <!--end::Heading-->
+    <livewire:public.product.filter>     
+    <livewire:public.product.data>     
 @stop

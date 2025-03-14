@@ -19,15 +19,9 @@
 @stop
 
 @section('content')
-    @if (auth()->user()->hasRole('Admin'))
-        <div class="card">
-            <div class="card-body">
-                <livewire:auth.profile>
-            </div>
+    <div class="card">
+        <div class="card-body">
+            <livewire:auth.profile>
         </div>
-    @else
-        <div class="container"> 
-            <livewire:auth.profile>    
-        </div>
-    @endif
+    </div>
 @stop
