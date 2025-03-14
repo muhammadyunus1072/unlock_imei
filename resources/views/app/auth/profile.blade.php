@@ -1,4 +1,4 @@
-@extends('app.layouts.panel')
+@extends('app.layouts.'.(auth()->user()->hasRole('Admin')?'panel':'public'))
 
 @section('title', 'Profil')
 
