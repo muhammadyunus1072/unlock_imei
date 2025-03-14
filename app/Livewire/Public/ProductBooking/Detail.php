@@ -2,11 +2,14 @@
 
 namespace App\Livewire\Public\ProductBooking;
 
+use Exception;
+use App\Helpers\Alert;
 use Livewire\Component;
 use App\Models\MasterData\Product;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Crypt;
 use App\Repositories\Booking\BookingDetailRepository;
 use App\Repositories\MasterData\Product\ProductBookingTimeRepository;
-use Illuminate\Support\Facades\Crypt;
 
 class Detail extends Component
 {
@@ -85,12 +88,12 @@ class Detail extends Component
         $this->product_booking_times[$index]['is_checked'] = !$this->product_booking_times[$index]['is_checked'];
         if($this->product_booking_times[$index]['is_checked']){
             $this->product_booking_details[$index] = [
-                'product_booking_time_time' => $this->product_booking_times[$index]['id'],
+                'product_booking_time_id' => $this->product_booking_times[$index]['id'],
                 'time' => $this->product_booking_times[$index]['time'],
-                'booking_date' => $this->booking_date,
                 'product_booking_times' => $this->product_booking_times[$index],
                 'product_details' => $this->product_detail_choice,
             ];
+            $this->dispatch('refreshFsLightbox');
         }else{
             unset($this->product_booking_details[$index]);
         }
@@ -107,6 +110,60 @@ class Detail extends Component
                     'is_checked' => false,
                 ];
             })->toArray();
+    }
+
+    public function store()
+    {
+        try {
+            
+            if(!$this->product_booking_details || !$this->booking_date)
+            {
+                throw new \Exception("Pilih Tanggal dan Waktu Booking terlebih dahulu");
+            }
+
+            $hasError = collect($this->product_booking_details)->contains(fn($booking) => 
+                collect($booking['product_details'])->doesntContain('is_checked', true)
+            );
+            
+            if($hasError)
+            {
+                throw new \Exception("Pilih background terlebih dahulu");
+            }
+
+            $booking_details = [];
+            foreach($this->product_booking_details as $index =>  $item)
+            {
+                $booking_details[] = [
+                    'product_booking_time_id' => $item['product_booking_time_id'],
+                    'time' => $item['time'],
+                    'product_booking_times' => $item['product_booking_times'],
+                    'product_details' => collect($item['product_details'])->firstWhere('is_checked', true),
+                ];
+            }
+
+            session()->put('booking_data', [
+                'data' => [
+                    'product_id' => $this->objId,
+                    'booking_date' => $this->booking_date,
+                    'booking_details' => $booking_details,
+                ],
+            ]);
+            
+            if (!auth()->check()) {
+                $this->dispatch('loginAlert');
+                return;
+            }
+
+            $this->dispatch('booking_term');
+        } catch (Exception $e) {
+            DB::rollBack();
+            Alert::fail($this, "Gagal", $e->getMessage());
+        }
+    }
+
+    public function createOrder()
+    {
+        return redirect()->route('public.booking-review', $this->objId);
     }
 
     public function render()

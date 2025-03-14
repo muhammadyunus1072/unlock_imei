@@ -43,11 +43,17 @@ if (!function_exists('simple_decrypt')) {
     }
 }
 
-
 if (!function_exists('consoleLog')) {
     function consoleLog(Component $component, $data)
     {
         $component->dispatch('consoleLog', $data);
+    }
+}
+
+if (!function_exists('calculatedAdminFee')) {
+    function calculatedAdminFee($amount, $percentage)
+    {
+        return ceil(($amount / (1 - ($percentage / 100))) - $amount);
     }
 }
 

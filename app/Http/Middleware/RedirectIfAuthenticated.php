@@ -18,9 +18,15 @@ class RedirectIfAuthenticated
     public function handle(Request $request, Closure $next, string ...$guards): Response
     {
         $guards = empty($guards) ? [null] : $guards;
-
+        
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
+                if(Auth::user()->hasRole(config('template.registration_default_role')) && session()->has('booking_data'))
+                {
+                    $booking_details = session('booking_data');
+                    return redirect()->route('public.booking-review', $booking_details['data']['product_id']);
+                }
+
                 return redirect(RouteServiceProvider::HOME);
             }
         }

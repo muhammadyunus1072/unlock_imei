@@ -54,6 +54,8 @@
             document.documentElement.setAttribute("data-bs-theme", themeMode);
         }
     </script>
+    
+
     <!--begin::App-->
     <div class="d-flex flex-column flex-root" id="kt_app_root">
         <div class="mb-20" id="home">
@@ -366,7 +368,6 @@
     <script src="{{ asset('assets/js/scripts.bundle.js') }}"></script>
 
     @livewireScripts
-
     <script>
         Livewire.on("{{ Alert::EVENT_INFO }}", (event) => {
             Swal.fire({

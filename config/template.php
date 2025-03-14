@@ -45,6 +45,11 @@ return [
                     'route' => 'product.index',
                     'icon_color' => 'success',
                 ],
+                [
+                    'text' => 'Metode Pembayaran',
+                    'route' => 'payment_method.index',
+                    'icon_color' => 'success',
+                ],
             ],
         ],
         [

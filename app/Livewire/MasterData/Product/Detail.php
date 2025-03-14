@@ -12,7 +12,6 @@ use Livewire\Attributes\Validate;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Storage;
-use App\Repositories\MasterData\Studio\StudioRepository;
 use App\Repositories\MasterData\Product\ProductRepository;
 
 class Detail extends Component

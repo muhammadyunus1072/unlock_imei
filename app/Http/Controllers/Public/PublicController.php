@@ -16,4 +16,13 @@ class PublicController extends Controller
     {
         return view('app.public.product-booking.detail', ["objId" => $request->id]);
     }
+    
+    public function booking_review(Request $request)
+    {
+        $bookingSession = session('booking_data');
+        if(!$bookingSession) {
+            return redirect()->route('public.index');
+        }
+        return view('app.public.booking-review.detail', ["objId" => $request->id]);
+    }
 }

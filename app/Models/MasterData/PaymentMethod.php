@@ -28,4 +28,12 @@ class PaymentMethod extends Model
     {
         return true;
     }
+
+    CONST TYPE_PERCENTAGE = 'percentage';
+    CONST TYPE_FIXED = 'fixed';
+
+    CONST TYPE_CHOICE = [
+        self::TYPE_PERCENTAGE => 'Persentase',
+        self::TYPE_FIXED => 'Nominal Tetap',
+    ];
 }
