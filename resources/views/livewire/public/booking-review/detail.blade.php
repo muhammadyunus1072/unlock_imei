@@ -112,24 +112,46 @@
                 {{-- Main Product --}}
                 @foreach ($booking_details as $item)
                     <div class="cart-summary__order-item">
-                    <a target="_blank" class="preview-image" href="https://app.kuystudio.id/assets/uploads/product/2025-02/7f9d037177a7b5b1298c99a261ca14f22fc3efd8.JPG"><img class="order-item__image" src="https://app.kuystudio.id/assets/uploads/product/2025-02/7f9d037177a7b5b1298c99a261ca14f22fc3efd8.JPG"></a>
-                    <div class="order-item__description">
-                        <div class="order-item__description-name">{{ $product_studio_name }}<br>{{ $product_name }}</div>
-                        <div class="order-item__description-count"> @date($booking_date) {{ \Carbon\Carbon::parse($item['time'])->format('H:i') }}</div>
-                    </div>
-                    <div class="order-item__price">Rp. @currency($product_price)</div>
+                        <a class="d-inline overlay" data-fslightbox="{{ rand() }}" href="{{ $item['product_details']['image_url'] }}" style="height: 80px !important; width: 80px !important; z-index: 99;">
+                            <!--begin::Image-->
+                            <img class="img-responsive img-detail rounded-3" width="80" height="80" src="{{ $item['product_details']['image_url'] }}">
+                            <!--end::Image-->
+                            <!--begin::Action-->
+                            <div class="overlay-layer card-rounded bg-transparent">
+                                    <i class="bi bi-eye-fill text-white fs-5 eye-button"></i>
+                            </div>
+                            <!--end::Action-->
+                        </a>
+                        <div class="order-item__description">
+                            <div class="order-item__description-name">{{ $product_studio_name }}<br>{{ $product_name }}</div>
+                            <div class="order-item__description-count"> @date($booking_date) {{ \Carbon\Carbon::parse($item['time'])->format('H:i') }}</div>
+                        </div>
+                        <div class="order-item__price">Rp. @currency($product_price)
+                            
+                        </div>
                     </div>
                 @endforeach
 
                 {{-- Background Product --}}
                 @foreach ($booking_details as $item)
                     <div class="cart-summary__order-item">
-                    <a target="_blank" class="preview-image" href="https://app.kuystudio.id/assets/uploads/addon/1c9f9041a57278b7a5ee319d048010aa5dcfe9ac.jpeg"><img class="order-item__image" src="https://app.kuystudio.id/assets/uploads/addon/1c9f9041a57278b7a5ee319d048010aa5dcfe9ac.jpeg"></a>
-                    <div class="order-item__description">
-                        <div class="order-item__description-name">{{ $item['product_details']['name'] }}</div>
-                        <div class="order-item__description-count"> @date($booking_date) {{ \Carbon\Carbon::parse($item['time'])->format('H:i') }}</div>
-                    </div>
-                    <div class="order-item__price">{{ $item['product_details']['price'] ? numberFormat($item['product_details']['price']) : 'Gratis' }}</div>
+                        <a class="d-inline overlay" data-fslightbox="{{ rand() }}" href="{{ $item['product_details']['image_url'] }}" style="height: 80px !important; width: 80px !important; z-index: 99;">
+                            <!--begin::Image-->
+                            <img class="img-responsive img-detail rounded-3" width="80" height="80" src="{{ $item['product_details']['image_url'] }}">
+                            <!--end::Image-->
+                            <!--begin::Action-->
+                            <div class="overlay-layer card-rounded bg-transparent">
+                                    <i class="bi bi-eye-fill text-white fs-5 eye-button"></i>
+                            </div>
+                            <!--end::Action-->
+                        </a>
+                        <div class="order-item__description">
+                            <div class="order-item__description-name">{{ $item['product_details']['name'] }}</div>
+                            <div class="order-item__description-count"> @date($booking_date) {{ \Carbon\Carbon::parse($item['time'])->format('H:i') }}</div>
+                        </div>
+                        <div class="order-item__price">{{ $item['product_details']['price'] ? numberFormat($item['product_details']['price']) : 'Gratis' }}
+                            
+                        </div>
                     </div>
                 @endforeach
              </div>
