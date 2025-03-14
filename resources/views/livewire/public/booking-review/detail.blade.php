@@ -167,6 +167,19 @@
 
 @push('css')
     <link href="{{ asset('assets/css/custom-homepage.css') }}" rel="stylesheet" type="text/css" />
+    <style>
+       .overlay:hover .img-detail {
+          filter: brightness(0.7);
+       }
+ 
+       .overlay:hover .eye-button {
+          filter: none !important;
+       }
+     </style>
 @endpush
 
 @include('js.imask')
+
+@push('js')
+   <script src="{{ asset('assets/plugins/custom/fslightbox-basic-3.5.1/fslightbox.js') }}"></script>
+@endPush
