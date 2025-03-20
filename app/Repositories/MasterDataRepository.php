@@ -2,6 +2,8 @@
 
 namespace App\Repositories;
 
+use Illuminate\Support\Facades\Log;
+
 abstract class MasterDataRepository
 {
     const OPERATOR = ['=', '!=', '<>', '<', '<=', '>', '>=', 'IN', 'NOT IN'];
@@ -16,7 +18,9 @@ abstract class MasterDataRepository
     public static function clauseProcess($whereClause, $orderByClause = null, $limit = null)
     {
         $query = app(static::className())->query();
+        Log::info("W ",$whereClause);
         foreach ($whereClause as $clause) {
+            Log::info($clause);
             $column = isset($clause['column']) ? $clause['column'] : $clause[0];
             if (isset($clause['operator']) || in_array($clause[1], self::OPERATOR, true)) {
                 $operator = isset($clause['operator']) ? $clause['operator'] : $clause[1];
@@ -37,6 +41,7 @@ abstract class MasterDataRepository
                     $query->orWhere($column, $operator, $value);
                 }
             } else {
+                Log::info($operator);
                 if ($operator == "IN") {
                     $query->whereIn($column, $value);
                 } else if ($operator == "NOT IN") {
