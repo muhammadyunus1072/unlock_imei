@@ -56,7 +56,7 @@ class PublicController extends Controller
                 // ['external_id' => $invoiceExternalId],
                 ['external_id' => 'STUDIO/00001/XX/III/2025'],
             ]);
-
+            Log::info('Transaction : ', $transaction->toArray());
             if (!$transaction) {
                 throw new \Exception("Transaction not found for Invoice: $invoiceExternalId");
             }
