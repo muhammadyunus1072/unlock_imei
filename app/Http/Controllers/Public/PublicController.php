@@ -62,8 +62,6 @@ class PublicController extends Controller
                 throw new \Exception("Duplicate callback ignored for Invoice: $invoiceExternalId");
             }
 
-            DB::beginTransaction();
-
             switch ($request->status) {
                 case 'EXPIRED':
                     if ($transaction->status !== Transaction::STATUS_PAID) {
@@ -85,12 +83,10 @@ class PublicController extends Controller
                     // Trigger event for further processing (e.g., email confirmation)
                     event(new TransactionPaidProcessed($transaction));
                     break;
-            }
+                }
             Log::info("Transaction updated: Invoice ID $invoiceExternalId, Status: $transaction->status");
-
-            DB::commit();
             
-
+            DB::commit();
             return response()->json(['message' => 'Callback received successfully'], 200);
         } catch (\Exception $e) {
             DB::rollBack();

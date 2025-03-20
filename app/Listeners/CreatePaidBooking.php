@@ -24,7 +24,6 @@ class CreatePaidBooking
     public function handle(TransactionPaidProcessed $event): void
     {
         try {
-            DB::beginTransaction();
 
             Log::info("Create Paid Booking");
             $transaction = $event->transaction;
@@ -44,9 +43,7 @@ class CreatePaidBooking
                 ]);
             }
 
-            DB::commit();
         } catch (\Exception $e) {
-            DB::rollBack();
             Log::error('Create Paid Booking error: ' . $e->getMessage());
         }
     }
