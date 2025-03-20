@@ -53,6 +53,7 @@ class TransactionDetail extends Model
                 $object[$prefix . "".$item] = $this->$item;
             }
         }else{
+            $object[$prefix. "booking_date"] = $this->booking_date;
             // Product Information
             $object[$prefix. "product_id"] = $this->product_id;
             $object[$prefix. "product_studio_id"] = $this->product_studio_id;
