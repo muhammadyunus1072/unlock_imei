@@ -36,21 +36,21 @@ class Product extends Model
         return true;
     }
 
-    public function saveInfo($object, $data = null, $prefix = "product")
+    public function saveInfo($object, $data = null, $prefix = "product_")
     {
         if($data)
         {
             foreach($data as $item)
             {
-                $object[$prefix . "_".$item] = $this->$item;
+                $object[$prefix . "".$item] = $this->$item;
             }
         }else{
-            $object[$prefix . "_studio_id"] = $this->studio_id;
-            $object[$prefix . "_name"] = $this->name;
-            $object[$prefix . "_description"] = $this->description;
-            $object[$prefix . "_price"] = $this->price;
-            $object[$prefix . "_image"] = $this->image;
-            $object[$prefix . "_note"] = $this->note;
+            $object[$prefix . "studio_id"] = $this->studio_id;
+            $object[$prefix . "name"] = $this->name;
+            $object[$prefix . "description"] = $this->description;
+            $object[$prefix . "price"] = $this->price;
+            $object[$prefix . "image"] = $this->image;
+            $object[$prefix . "note"] = $this->note;
         }
 
         return $object;

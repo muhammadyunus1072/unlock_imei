@@ -32,21 +32,21 @@ class Voucher extends Model
         return true;
     }
 
-    public function saveInfo($object, $data = null, $prefix = "voucher")
+    public function saveInfo($object, $data = null, $prefix = "voucher_")
     {
         if($data)
         {
             foreach($data as $item)
             {
-                $object[$prefix . "_".$item] = $this->$item;
+                $object[$prefix . "".$item] = $this->$item;
             }
         }else{
-            $object[$prefix . "_type"] = $this->type;
-            $object[$prefix . "_amount"] = $this->amount;
-            $object[$prefix . "_code"] = $this->code;
-            $object[$prefix . "_start_date"] = $this->start_date;
-            $object[$prefix . "_end_date"] = $this->end_date;
-            $object[$prefix . "_is_active"] = $this->is_active;
+            $object[$prefix . "type"] = $this->type;
+            $object[$prefix . "amount"] = $this->amount;
+            $object[$prefix . "code"] = $this->code;
+            $object[$prefix . "start_date"] = $this->start_date;
+            $object[$prefix . "end_date"] = $this->end_date;
+            $object[$prefix . "is_active"] = $this->is_active;
         }
 
         return $object;

@@ -44,34 +44,34 @@ class TransactionDetail extends Model
         });
     }
 
-    public function saveInfo($object, $data = null, $prefix = "transaction_detail")
+    public function saveInfo($object, $data = null, $prefix = "transaction_detail_")
     {
         if($data)
         {
             foreach($data as $item)
             {
-                $object[$prefix . "_".$item] = $this->$item;
+                $object[$prefix . "".$item] = $this->$item;
             }
         }else{
             // Product Information
-            $object[$prefix. "_product_id"] = $this->product_id;
-            $object[$prefix. "_product_studio_id"] = $this->product_studio_id;
-            $object[$prefix. "_product_name"] = $this->product_name;
-            $object[$prefix. "_product_description"] = $this->product_description;
-            $object[$prefix. "_product_price"] = $this->product_price;
-            $object[$prefix. "_product_image"] = $this->product_image;
-            $object[$prefix. "_product_note"] = $this->product_note;
+            $object[$prefix. "product_id"] = $this->product_id;
+            $object[$prefix. "product_studio_id"] = $this->product_studio_id;
+            $object[$prefix. "product_name"] = $this->product_name;
+            $object[$prefix. "product_description"] = $this->product_description;
+            $object[$prefix. "product_price"] = $this->product_price;
+            $object[$prefix. "product_image"] = $this->product_image;
+            $object[$prefix. "product_note"] = $this->product_note;
 
             // Product Detail Information
-            $object[$prefix. "_product_detail_id"] = $this->product_detail_id;
-            $object[$prefix. "_product_detail_name"] = $this->product_detail_name;
-            $object[$prefix. "_product_detail_description"] = $this->product_detail_description;
-            $object[$prefix. "_product_detail_price"] = $this->product_detail_price;
-            $object[$prefix. "_product_detail_image"] = $this->product_detail_image;
+            $object[$prefix. "product_detail_id"] = $this->product_detail_id;
+            $object[$prefix. "product_detail_name"] = $this->product_detail_name;
+            $object[$prefix. "product_detail_description"] = $this->product_detail_description;
+            $object[$prefix. "product_detail_price"] = $this->product_detail_price;
+            $object[$prefix. "product_detail_image"] = $this->product_detail_image;
 
             // Product Booking Time Information
-            $object[$prefix. "_product_booking_time_id"] = $this->product_booking_time_id;
-            $object[$prefix. "_product_booking_time_time"] = $this->product_booking_time_time;
+            $object[$prefix. "product_booking_time_id"] = $this->product_booking_time_id;
+            $object[$prefix. "product_booking_time_time"] = $this->product_booking_time_time;
         }
 
         return $object;

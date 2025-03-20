@@ -38,19 +38,19 @@ class PaymentMethod extends Model
         self::TYPE_FIXED => 'Nominal Tetap',
     ];
 
-    public function saveInfo($object, $data = null, $prefix = "payment_method")
+    public function saveInfo($object, $data = null, $prefix = "payment_method_")
     {
         if($data)
         {
             foreach($data as $item)
             {
-                $object[$prefix . "_".$item] = $this->$item;
+                $object[$prefix . "".$item] = $this->$item;
             }
         }else{
-            $object[$prefix . "_name"] = $this->name;
-            $object[$prefix . "_type"] = $this->type;
-            $object[$prefix . "_amount"] = $this->amount;
-            $object[$prefix . "_code"] = $this->code;
+            $object[$prefix . "name"] = $this->name;
+            $object[$prefix . "type"] = $this->type;
+            $object[$prefix . "amount"] = $this->amount;
+            $object[$prefix . "code"] = $this->code;
         }
 
         return $object;
