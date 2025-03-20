@@ -105,8 +105,6 @@ class PublicController extends Controller
     private function isValidSignature(Request $request)
     {
         $expectedToken = env('XENDIT_CALLBACK_TOKEN');
-        Log::info("TOKEN ".$expectedToken);
-        Log::info("XTOKEN ".$request->header('X-CALLBACK-TOKEN'));
         return $request->header('X-CALLBACK-TOKEN') === $expectedToken;
     }
 }
