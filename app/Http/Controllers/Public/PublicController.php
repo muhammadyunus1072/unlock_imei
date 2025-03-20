@@ -52,7 +52,7 @@ class PublicController extends Controller
             $invoiceExternalId = $request->external_id;
 
             $transaction = TransactionRepository::findBy([
-                ['external_id' => $invoiceExternalId],
+                ['external_id', $invoiceExternalId],
             ]);
             if (!$transaction) {
                 throw new \Exception("Transaction not found for Invoice: $invoiceExternalId");
