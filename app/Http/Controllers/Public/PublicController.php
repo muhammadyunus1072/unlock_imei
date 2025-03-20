@@ -40,6 +40,7 @@ class PublicController extends Controller
         try {
             // ✅ Log all incoming requests
             Log::info('Xendit Callback Received:', $request->all());
+            Log::info('Xendit Callback Received:', $request->external_id);
 
             // ✅ Verify request signature (Optional: Implement HMAC verification for security)
             if (!$this->isValidSignature($request)) {
@@ -64,7 +65,7 @@ class PublicController extends Controller
             }
 
             DB::beginTransaction();
-            
+
             switch ($request->status) {
                 case 'EXPIRED':
                     if ($transaction->status !== Transaction::STATUS_PAID) {
