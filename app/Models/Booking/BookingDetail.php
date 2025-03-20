@@ -32,7 +32,7 @@ class BookingDetail extends Model
     protected static function onBoot()
     {
         self::creating(function ($model) {
-            $model->paymentMethod->saveInfo($model);
+            $model->transactionDetail->saveInfo($model);
         });
     }
 
