@@ -40,7 +40,6 @@ class PublicController extends Controller
         try {
             // ✅ Log all incoming requests
             Log::info('Xendit Callback Received:', $request->all());
-            Log::info('Xendit Callback Received: '.$request->external_id);
 
             // ✅ Verify request signature (Optional: Implement HMAC verification for security)
             if (!$this->isValidSignature($request)) {
@@ -53,10 +52,8 @@ class PublicController extends Controller
             $invoiceExternalId = $request->external_id;
 
             $transaction = TransactionRepository::findBy([
-                // ['external_id' => $invoiceExternalId],
-                ['external_id' => 'STUDIO/00001/XX/III/2025'],
+                ['external_id' => $invoiceExternalId],
             ]);
-            Log::info('Transaction : ', $transaction->toArray());
             if (!$transaction) {
                 throw new \Exception("Transaction not found for Invoice: $invoiceExternalId");
             }
