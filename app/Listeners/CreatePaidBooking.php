@@ -40,7 +40,7 @@ class CreatePaidBooking
             {
                 BookingDetailRepository::create([
                     'booking_id' => $booking->id,
-                    'transaction_detail_id' => $detail->transaction_detail_id,
+                    'transaction_detail_id' => $detail->id,
                 ]);
             }
 

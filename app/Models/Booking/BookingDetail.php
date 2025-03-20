@@ -2,7 +2,6 @@
 
 namespace App\Models\Booking;
 
-use Illuminate\Support\Facades\Log;
 use Sis\TrackHistory\HasTrackHistory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Transaction\TransactionDetail;
@@ -34,7 +33,6 @@ class BookingDetail extends Model
     {
         self::creating(function ($model) {
             $model->transactionDetail->saveInfo($model);
-            Log::info($model->attributes);
         });
     }
 
