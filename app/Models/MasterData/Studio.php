@@ -32,4 +32,25 @@ class Studio extends Model
     {
         return true;
     }
+
+    public function saveInfo($object, $data = null, $prefix = "studio")
+    {
+        if($data)
+        {
+            foreach($data as $item)
+            {
+                $object[$prefix . "_".$item] = $this->$item;
+            }
+        }else{
+            $object[$prefix . "_name"] = $this->name;
+            $object[$prefix . "_description"] = $this->desrirption;
+            $object[$prefix . "_latitude"] = $this->latitude;
+            $object[$prefix . "_longitude"] = $this->longitude;
+            $object[$prefix . "_map_zoom"] = $this->map_zoom;
+            $object[$prefix . "_city"] = $this->city;
+            $object[$prefix . "_address"] = $this->address;
+        }
+
+        return $object;
+    }
 }

@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
+use Xendit\Configuration;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -20,6 +21,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Configuration::setXenditKey(env('XENDIT_SECRET_KEY'));
+
         $this->loadMigrationsFrom([
             database_path('migrations'), // Default
             database_path('migrations/user'),

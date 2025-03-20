@@ -120,9 +120,17 @@ class Datatable extends Component
                 'name' => 'Akses',
                 'render' => function ($item) {
                     $html = "<ul class='list-group list-group-flush'>";
-                    foreach ($item->permissions as $permission) {
+                    foreach ($item->permissions->take(5) as $permission) {
                         $translatedName = PermissionHelper::translate($permission->name);
                         $html .= "<li class='list-group-item'>$translatedName</li>";
+                    }
+                    if($item->permissions->count() > 5)
+                    {
+                        $html .= "<li class='list-group-item text-danger'>Dan masih banyak lagi</li>";
+                    }
+                    if(!$item->permissions->count())
+                    {
+                        $html .= "<li class='list-group-item text-danger'>Tidak memiliki akses</li>";
                     }
                     $html .= "</ul>";
                     return $html;

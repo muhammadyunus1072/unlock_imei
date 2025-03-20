@@ -119,6 +119,10 @@ class Datatable extends Component
                 'name' => 'Nama Metode Pembayaran',
             ],
             [
+                'key' => 'code',
+                'name' => 'Kode',
+            ],
+            [
                 'key' => 'type',
                 'name' => 'Jenis Biaya Admin',
                 'render' => function($item)
@@ -131,7 +135,7 @@ class Datatable extends Component
                 'name' => 'Nilai Biaya Admin',
                 'render' => function($item)
                 {
-                    return "Rp ".numberFormat($item->amount);
+                    return PaymentMethod::TYPE_FIXED === $item->type ? "Rp ".numberFormat($item->amount) : numberFormat($item->amount)." %";
                 }
             ],
         ];

@@ -27,10 +27,17 @@ class ProductBookingTime extends Model
     {
         return true;
     }
-
-    public function saveInfo($object, $prefix = "product_booking_time")
+    public function saveInfo($object, $data = null, $prefix = "product_booking_time")
     {
-        $object[$prefix . 'time'] = $this->time;
+        if($data)
+        {
+            foreach($data as $item)
+            {
+                $object[$prefix . "_".$item] = $this->$item;
+            }
+        }else{
+            $object[$prefix . "_time"] = $this->time;
+        }
 
         return $object;
     }

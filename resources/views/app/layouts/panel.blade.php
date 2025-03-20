@@ -263,7 +263,7 @@
             Swal.fire({
                 icon: event[0],
                 title: event[1],
-                text: event[2],
+                html: event[2],
             });
         });
 
@@ -275,7 +275,7 @@
             Swal.fire({
                 icon: event[0],
                 title: event[1],
-                text: event[2],
+                html: event[2],
                 showCancelButton: true,
                 confirmButtonColor: "#3085d6",
                 cancelButtonColor: "#d33",

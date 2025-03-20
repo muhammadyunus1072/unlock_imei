@@ -8,7 +8,7 @@ use Livewire\Component;
 class Filter extends Component
 {
     public $roles = [];
-    public $role;
+    public $role = 'Seluruh';
 
     public function mount()
     {

@@ -32,13 +32,20 @@ class ProductDetail extends Model
     {
         return true;
     }
-
-    public function saveInfo($object, $prefix = "product_detail")
+    public function saveInfo($object, $data = null, $prefix = "product_detail")
     {
-        $object[$prefix . 'name'] = $this->name;
-        $object[$prefix . 'description'] = $this->description;
-        $object[$prefix . 'price'] = $this->price;
-        $object[$prefix . 'image'] = $this->image;
+        if($data)
+        {
+            foreach($data as $item)
+            {
+                $object[$prefix . "_".$item] = $this->$item;
+            }
+        }else{
+            $object[$prefix . "_name"] = $this->name;
+            $object[$prefix . "_description"] = $this->description;
+            $object[$prefix . "_price"] = $this->price;
+            $object[$prefix . "_image"] = $this->image;
+        }
 
         return $object;
     }

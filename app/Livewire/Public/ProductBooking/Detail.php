@@ -90,7 +90,7 @@ class Detail extends Component
             $this->product_booking_details[$index] = [
                 'product_booking_time_id' => $this->product_booking_times[$index]['id'],
                 'time' => $this->product_booking_times[$index]['time'],
-                'product_booking_times' => $this->product_booking_times[$index],
+                'product_booking_time' => $this->product_booking_times[$index],
                 'product_details' => $this->product_detail_choice,
             ];
             $this->dispatch('refreshFsLightbox');
@@ -116,6 +116,11 @@ class Detail extends Component
     {
         try {
             
+            if (!auth()->check()) {
+                $this->dispatch('loginAlert');
+                return;
+            }
+            
             if(!$this->product_booking_details || !$this->booking_date)
             {
                 throw new \Exception("Pilih Tanggal dan Waktu Booking terlebih dahulu");
@@ -134,10 +139,8 @@ class Detail extends Component
             foreach($this->product_booking_details as $index =>  $item)
             {
                 $booking_details[] = [
-                    'product_booking_time_id' => $item['product_booking_time_id'],
-                    'time' => $item['time'],
-                    'product_booking_times' => $item['product_booking_times'],
-                    'product_details' => collect($item['product_details'])->firstWhere('is_checked', true),
+                    'product_booking_time' => $item['product_booking_time'],
+                    'product_detail' => collect($item['product_details'])->firstWhere('is_checked', true),
                 ];
             }
 
@@ -148,13 +151,9 @@ class Detail extends Component
                     'booking_details' => $booking_details,
                 ],
             ]);
-            
-            if (!auth()->check()) {
-                $this->dispatch('loginAlert');
-                return;
-            }
 
-            $this->dispatch('booking_term');
+            // $this->dispatch('booking_term');
+            $this->createOrder();
         } catch (Exception $e) {
             DB::rollBack();
             Alert::fail($this, "Gagal", $e->getMessage());

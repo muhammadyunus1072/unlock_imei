@@ -31,12 +31,15 @@
                <div class="box-time">
                   <div class="nav nav-pills nav-pills-custom mb-3" role="tablist">
                      @foreach ($product_booking_times as $index => $item)
-                        @if (!$item['booking_detail_id'] && $item['is_checked'])
-                           {{-- Chosen --}}
-                           <div wire:click="handleBookingTime('{{ Crypt::encrypt($index) }}')" class="card mb-2 shadow-none border-dashed-f4 rounded-3 mh-0px mx-1 bg-blocked-30" style="width: 78px;"> <label class="select-time p-2 select-booking-time-30 times-checkbox-checked" data-time="19:00:00" data-key="30"> <label class="mx-3 align-middle cursor-pointer"> <span class="font-size-12px fw-bold cursor-pointer"></span>{{ \Carbon\Carbon::parse($item['time'])->format('H:i') }} </label> <input class="booking-times" type="checkbox" name="times[]" value="19:00:00"></label> </div>
-                        @elseif(!$item['booking_detail_id'] && !$item['is_checked'])
-                           {{-- Availabel --}}
-                           <div wire:click="handleBookingTime('{{ Crypt::encrypt($index) }}')" class="card mb-2 shadow-none border-dashed-f4 rounded-3 mh-0px mx-1 bg-blocked-25" style="width: 78px;"> <label class="select-time p-2 select-booking-time-25" data-time="17:20:00" data-key="25"> <label class="mx-3 align-middle cursor-pointer"> <span class="font-size-12px fw-bold cursor-pointer"></span>{{ \Carbon\Carbon::parse($item['time'])->format('H:i') }} </label> <input class="booking-times" type="checkbox" name="times[]" value="17:20:00"></label> </div>
+                        @if (!$item['booking_detail_id'])
+                           <div class="card mb-2 shadow-none border-dashed-f4 rounded-3 mh-0px mx-1 bg-blocked-30" style="width: 78px;" wire:click="handleBookingTime('{{ Crypt::encrypt($index) }}')" > 
+                              <label class="select-time p-2 select-booking-time-30 {{ ($item['is_checked']) ? 'times-checkbox-checked' : '' }}" data-time="19:00:00" data-key="30"> 
+                                 <label class="mx-3 align-middle cursor-pointer"> 
+                                    <span class="font-size-12px fw-bold cursor-pointer"></span>
+                                    {{ \Carbon\Carbon::parse($item['time'])->format('H:i') }} 
+                                 </label> 
+                              </label> 
+                           </div>
                         @else
                            {{-- Booked --}}
                            <div class="card mb-2 shadow-none border-dashed-f4 rounded-3 mh-0px mx-1 bg-blocked-0" style="background: #e3e3e3; width: 78px;" disabled="true"> <label class="blocking-time p-2 select-booking-time-0" data-time="09:00:00" data-key="0"> <label class="mx-3 align-middle cursor-default"> <span class="font-size-12px fw-bold cursor-default"></span>{{ \Carbon\Carbon::parse($item['time'])->format('H:i') }} </label> <input class="booking-times" type="checkbox" name="times[]" value="09:00:00"></label> </div>
@@ -159,17 +162,17 @@
       .product-detail * { 
          cursor: pointer; 
       }
-      .swal2-title {
+      .custom-swal2-title {
          font-size: 1.5em;
          margin-top: 4px;
       }
 
-      #swal2-html-container {
+      #swal2-html-container.custom-swal2-html-container {
          padding: 5px;
          font-size: 1.2em;
          border: 1px solid #ccc;
          border-color: #ccc;
-      }
+      } 
     </style>
 @endpush
 
@@ -224,6 +227,10 @@
             showCancelButton: true,
             confirmButtonText: "Lanjutkan",
             cancelButtonText: "Batal",
+            customClass: {
+               title: "custom-swal2-title",
+               htmlContainer: "custom-swal2-html-container",
+            },
             width: 700,
             didOpen: () => {
                // Tambahkan event listener untuk tombol scroll

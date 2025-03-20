@@ -21,9 +21,9 @@ class Alert
         $component->dispatch(self::EVENT_INFO, self::ICON_SUCCESS, $title, $message);
     }
 
-    public static function fail(Component $component, $title, $message)
+    public static function fail(Component $component, $title, $message, $eventConfirmName = null)
     {
-        $component->dispatch(self::EVENT_INFO, self::ICON_ERROR, $title, $message);
+        $component->dispatch(self::EVENT_INFO, self::ICON_ERROR, $title, $message, $eventConfirmName);
     }
 
     public static function confirmation(

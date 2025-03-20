@@ -430,8 +430,13 @@
             Swal.fire({
                 icon: event[0],
                 title: event[1],
-                text: event[2],
-            });
+                html: event[2],
+            }).then((result) => {
+               if(event[3])
+               {
+                  Livewire.dispatch(event[3]);
+               }
+            });;
         });
 
         Livewire.on("{{ Alert::EVENT_CONSOLE_LOG }}", (event) => {
@@ -442,7 +447,7 @@
             Swal.fire({
                 icon: event[0],
                 title: event[1],
-                text: event[2],
+                html: event[2],
                 showCancelButton: true,
                 confirmButtonColor: "#3085d6",
                 cancelButtonColor: "#d33",

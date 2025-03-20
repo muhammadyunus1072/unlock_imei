@@ -26,6 +26,9 @@ class Detail extends Component
     #[Validate('required', message: 'Nilai Biaya Admin Harus Diisi', onUpdate: false)]
     public $amount;
 
+    #[Validate('required', message: 'Kode Harus Diisi', onUpdate: false)]
+    public $code;
+
     public $type_choices = [];
 
     public function mount()
@@ -36,6 +39,7 @@ class Detail extends Component
             $this->name = $product->name;
             $this->type = $product->type;
             $this->amount = $product->amount;
+            $this->code = $product->code;
         }
 
         $this->type_choices = PaymentMethod::TYPE_CHOICE;
@@ -67,6 +71,7 @@ class Detail extends Component
             $validatedData = [
                 'name' => $this->name,
                 'type' => $this->type,
+                'code' => $this->code,
                 'amount' => imaskToValue($this->amount),
             ];
             if ($this->objId) {

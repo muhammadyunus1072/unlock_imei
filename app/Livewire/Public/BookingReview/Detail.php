@@ -6,13 +6,14 @@ use Exception;
 use App\Helpers\Alert;
 use App\Models\MasterData\PaymentMethod;
 use Livewire\Component;
-use App\Models\MasterData\Product;
+use App\Models\Transaction\Transaction;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Crypt;
-use App\Repositories\Booking\BookingDetailRepository;
+use Livewire\Attributes\On;
 use App\Repositories\MasterData\PaymentMethod\PaymentMethodRepository;
-use App\Repositories\MasterData\Product\ProductBookingTimeRepository;
 use App\Repositories\MasterData\Product\ProductRepository;
+use App\Repositories\Transaction\Transaction\TransactionDetailRepository;
+use App\Repositories\Transaction\Transaction\TransactionRepository;
 
 class Detail extends Component
 {
@@ -84,10 +85,16 @@ class Detail extends Component
         foreach($this->booking_details as $booking_detail)
         {
             $subtotal += $this->product_price;
-            $subtotal += $booking_detail['product_details']['price'];
+            $subtotal += $booking_detail['product_detail']['price'];
         }
 
         $this->subtotal = $subtotal;
+    }
+
+    #[On('on-dialog-confirm')]
+    public function onDialogConfirm()
+    {
+        $this->redirectRoute('public.product-booking', $this->objId);
     }
 
     public function store()
@@ -95,11 +102,67 @@ class Detail extends Component
         try {
             $phone = preg_replace('/[^\d]/', '', $this->phone);
             if (!preg_match("/^8[0-9]{9,11}$/", $phone) || (strlen($phone) < 9 || strlen($phone) > 11)) {
-                Alert::fail($this, 'Gagal', 'Format No Telp tidak sesuai, contoh: +62 8XX-XXX-XXX');
-                return;
+                throw new \Exception("Format No Telp tidak sesuai,<br>Contoh: +62 8XX-XXXX-XXXX");
             }
+
+            if(!$this->payment_method)
+            {
+                throw new \Exception("Pilih Metode Pembayaran terlebih dahulu");
+            }
+
+            DB::beginTransaction();
+
+            // 1️⃣ Check if any booking slot is already taken and lock them
+            foreach ($this->booking_details as $booking) {
+
+                if ($booking['product_booking_time']['booking_detail_id']) {
+                    throw new \Exception("Maaf, jam yang kamu pilih sudah tidak tersedia. Silahkan memilih jam booking yang lain.");
+                }
+
+                $exists = DB::table('transaction_details')
+                    ->join('transactions', 'transactions.id', '=', 'transaction_details.transaction_id')
+                    ->where('transaction_details.booking_date', $this->booking_date)
+                    ->where('transaction_details.product_id', Crypt::decrypt($this->objId))
+                    ->where('transaction_details.product_detail_id', Crypt::decrypt($booking['product_detail']['id']))
+                    ->where('transaction_details.product_booking_time_id', Crypt::decrypt($booking['product_booking_time']['id']))
+                    ->whereIn('transactions.status', ['pending', 'paid'])
+                    ->lockForUpdate() // ✅ Lock slot before creating transaction
+                    ->exists();
+
+                if ($exists) {
+                    throw new \Exception("Maaf, jam yang kamu pilih sudah tidak tersedia. Silahkan memilih jam booking yang lain.");
+                }
+            }
+
+            // 2️⃣ Create the transaction after ensuring no conflicts
+            $transaction = TransactionRepository::create([
+                'user_id' => auth()->id(),
+                'customer_name' => auth()->user()->name,
+                'customer_email' => auth()->user()->email,
+                'customer_phone' => $phone,
+                'customer_label' => 'Customer',
+                'grand_total' => $this->grand_total,
+                'payment_method_id' => Crypt::decrypt($this->payment_method), // Example
+                'voucher_id' => null,
+            ]);
+
+            // 3️⃣ Insert booking details
+            foreach ($this->booking_details as $booking) {
+                TransactionDetailRepository::create([
+                    'transaction_id' => $transaction->id,
+                    'booking_date' => $this->booking_date,
+                    'product_id' => Crypt::decrypt($this->objId),
+                    'product_detail_id' => Crypt::decrypt($booking['product_detail']['id']),
+                    'product_booking_time_id' => Crypt::decrypt($booking['product_booking_time']['id']),
+                ]);
+            }
+            $transaction->createInvoice();
+
+            DB::commit();
+            return redirect()->away($transaction->checkout_link);
         } catch (Exception $e) {
             DB::rollBack();
+            // Alert::fail($this, "Gagal", $e->getMessage(), "on-dialog-confirm");
             Alert::fail($this, "Gagal", $e->getMessage());
         }
     }

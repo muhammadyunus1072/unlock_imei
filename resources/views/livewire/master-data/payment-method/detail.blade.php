@@ -12,6 +12,16 @@
                 @enderror
             </div>
             <div class="col-md-10 mb-4">
+                <label>Kode</label>
+                <input placeholder="Kode" type="text" class="form-control @error('code') is-invalid @enderror" wire:model="code" />
+    
+                @error('code')
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
+                @enderror
+            </div>
+            <div class="col-md-10 mb-4">
                 <label>Jenis Biaya Admin</label>
                 <select class="form-select w-100" wire:model='type'>
                     @php $isFound = false; @endphp

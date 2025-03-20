@@ -2,6 +2,7 @@
 
 namespace App\Models\Booking;
 
+use App\Models\Transaction\TransactionDetail;
 use Sis\TrackHistory\HasTrackHistory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -12,11 +13,8 @@ class BookingDetail extends Model
     use HasFactory, SoftDeletes, HasTrackHistory;
 
     protected $fillable = [
+        'transaction_detail_id',
         'booking_id',
-        'product_id',
-        'booking_date',
-        'product_detail_id',
-        'product_booking_time_id',
     ];
     
     protected $guarded = ['id'];
@@ -29,5 +27,22 @@ class BookingDetail extends Model
     public function isEditable()
     {
         return true;
+    }
+
+    protected static function onBoot()
+    {
+        self::creating(function ($model) {
+            $model->paymentMethod->saveInfo($model);
+        });
+    }
+
+    public function booking()
+    {
+        return $this->belongsTo(Booking::class, 'booking_id', 'id');
+    }
+
+    public function transactionDetail()
+    {
+        return $this->belongsTo(TransactionDetail::class, 'transaction_detail_id', 'id');
     }
 }

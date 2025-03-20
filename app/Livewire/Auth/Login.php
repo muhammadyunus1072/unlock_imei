@@ -45,11 +45,17 @@ class Login extends Component
         }
 
         Auth::loginUsingId($user->id);
-        if(Auth::user()->hasRole(config('template.registration_default_role')) && session()->has('booking_data'))
+        if(Auth::user()->hasRole(config('template.registration_default_role')))
         {
-            $booking_details = session('booking_data');
-            $this->redirectRoute('public.booking-review', $booking_details['data']['product_id']);
-            return;
+            if(session()->has('booking_data'))
+            {
+                $booking_details = session('booking_data');
+                $this->redirectRoute('public.booking-review', $booking_details['data']['product_id']);
+                return;
+            }else{
+                $this->redirectRoute('public.index');
+                return;
+            }
         }
         $this->redirectRoute('dashboard.index');
     }

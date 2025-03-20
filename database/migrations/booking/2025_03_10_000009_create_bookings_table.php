@@ -39,7 +39,7 @@ return new class extends Migration
         $table->unsignedBigInteger('transaction_id')->comment('ID Transaction');
         $table->string("transaction_number")->comment('Transaction Number');
         
-        $table->unsignedBigInteger('user_id')->comment('ID Transaction');
+        $table->unsignedBigInteger('user_id')->comment('ID User');
 
         $table->bigInteger("created_by")->unsigned()->nullable();
         $table->bigInteger("updated_by")->unsigned()->nullable();

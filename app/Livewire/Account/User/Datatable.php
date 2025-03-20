@@ -21,7 +21,7 @@ class Datatable extends Component
     public $isCanDelete;
 
     // Filter
-    public $role;
+    public $role = 'Seluruh';
 
     // Delete Dialog
     public $targetDeleteId;

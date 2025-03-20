@@ -37,11 +37,11 @@ return new class extends Migration
         
         // Booking Information
         $table->unsignedBigInteger('booking_id')->comment('ID Booking');
-
+        
         // Product Information
+        $table->dateTime('booking_date')->comment('Transaction Booking Date');
         $table->unsignedBigInteger('product_id')->comment('ID Product');
         $table->unsignedBigInteger('product_studio_id')->comment('Product ID Studio');
-        $table->dateTime('booking_date')->comment('Transaction Booking Date');
         $table->string('product_name')->comment('Product Name');
         $table->text('product_description')->nullable()->comment('Product Description');
         $table->double('product_price')->comment('Product Price');

@@ -18,9 +18,9 @@
                 <label>No Whatsapp</label>
                 <div class="input-group" wire:ignore>
                     <span class="input-group-text" id="basic-addon1">+62</span>
-                    <input type="text" class="form-control phone @error('phone') is-invalid @enderror" name="phone" model-name="phone" min="1" placeholder="85X-XXXX-XXXX" aria-label="phone" aria-describedby="basic-addon1">
+                    <input type="text" class="form-control phone @error('phone') is-invalid @enderror" name="phone" model-name="phone" min="1" placeholder="8XX-XXXX-XXXX" aria-label="phone" aria-describedby="basic-addon1">
                 </div>
-                <div class="form-text" id="basic-addon4">Contoh +62 8XX-XXX-XXX</div>
+                <div class="form-text" id="basic-addon4">Contoh +62 8XX-XXXX-XXXX</div>
             </div>
 
             <div class="form-group mt-5" id="container-payment-method">
@@ -112,9 +112,9 @@
                 {{-- Main Product --}}
                 @foreach ($booking_details as $item)
                     <div class="cart-summary__order-item">
-                        <a class="d-inline overlay" data-fslightbox="{{ rand() }}" href="{{ $item['product_details']['image_url'] }}" style="height: 80px !important; width: 80px !important; z-index: 99;">
+                        <a class="d-inline overlay" data-fslightbox="{{ rand() }}" href="{{ $item['product_detail']['image_url'] }}" style="height: 80px !important; width: 80px !important; z-index: 99;">
                             <!--begin::Image-->
-                            <img class="img-responsive img-detail rounded-3" width="80" height="80" src="{{ $item['product_details']['image_url'] }}">
+                            <img class="img-responsive img-detail rounded-3" width="80" height="80" src="{{ $item['product_detail']['image_url'] }}">
                             <!--end::Image-->
                             <!--begin::Action-->
                             <div class="overlay-layer card-rounded bg-transparent">
@@ -124,7 +124,7 @@
                         </a>
                         <div class="order-item__description">
                             <div class="order-item__description-name">{{ $product_studio_name }}<br>{{ $product_name }}</div>
-                            <div class="order-item__description-count"> @date($booking_date) {{ \Carbon\Carbon::parse($item['time'])->format('H:i') }}</div>
+                            <div class="order-item__description-count"> @date($booking_date) {{ \Carbon\Carbon::parse($item['product_booking_time']['time'])->format('H:i') }}</div>
                         </div>
                         <div class="order-item__price">Rp. @currency($product_price)
                             
@@ -135,9 +135,9 @@
                 {{-- Background Product --}}
                 @foreach ($booking_details as $item)
                     <div class="cart-summary__order-item">
-                        <a class="d-inline overlay" data-fslightbox="{{ rand() }}" href="{{ $item['product_details']['image_url'] }}" style="height: 80px !important; width: 80px !important; z-index: 99;">
+                        <a class="d-inline overlay" data-fslightbox="{{ rand() }}" href="{{ $item['product_detail']['image_url'] }}" style="height: 80px !important; width: 80px !important; z-index: 99;">
                             <!--begin::Image-->
-                            <img class="img-responsive img-detail rounded-3" width="80" height="80" src="{{ $item['product_details']['image_url'] }}">
+                            <img class="img-responsive img-detail rounded-3" width="80" height="80" src="{{ $item['product_detail']['image_url'] }}">
                             <!--end::Image-->
                             <!--begin::Action-->
                             <div class="overlay-layer card-rounded bg-transparent">
@@ -146,22 +146,16 @@
                             <!--end::Action-->
                         </a>
                         <div class="order-item__description">
-                            <div class="order-item__description-name">{{ $item['product_details']['name'] }}</div>
-                            <div class="order-item__description-count"> @date($booking_date) {{ \Carbon\Carbon::parse($item['time'])->format('H:i') }}</div>
+                            <div class="order-item__description-name">{{ $item['product_detail']['name'] }}</div>
+                            <div class="order-item__description-count"> @date($booking_date) {{ \Carbon\Carbon::parse($item['product_booking_time']['time'])->format('H:i') }}</div>
                         </div>
-                        <div class="order-item__price">{{ $item['product_details']['price'] ? numberFormat($item['product_details']['price']) : 'Gratis' }}
+                        <div class="order-item__price">{{ $item['product_detail']['price'] ? numberFormat($item['product_detail']['price']) : 'Gratis' }}
                             
                         </div>
                     </div>
                 @endforeach
              </div>
         </div>
-    </div>
-    <!-- Popup Modal -->
-    <div class="modal-background"></div>
-    <div class="modal-popup">
-        <div class="modal-popup__icon-close"></div>
-        <iframe id="iframe-invoice" class="iframe-invoice" title="Invoice"></iframe>
     </div>
 </div>
 
