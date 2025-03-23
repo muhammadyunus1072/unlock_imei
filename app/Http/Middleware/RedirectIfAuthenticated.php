@@ -21,10 +21,15 @@ class RedirectIfAuthenticated
         
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
-                if(Auth::user()->hasRole(config('template.registration_default_role')) && session()->has('booking_data'))
+                if(Auth::user()->hasRole(config('template.registration_default_role')))
                 {
-                    $booking_details = session('booking_data');
-                    return redirect()->route('public.booking-review', $booking_details['data']['product_id']);
+                    if(session()->has('booking_data'))
+                    {
+                        $booking_details = session('booking_data');
+                        return redirect()->route('public.booking-review', $booking_details['data']['product_id']);
+                    }else{
+                        return redirect()->route('public.index');
+                    }
                 }
 
                 return redirect(RouteServiceProvider::HOME);
