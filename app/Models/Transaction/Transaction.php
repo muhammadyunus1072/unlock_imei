@@ -35,6 +35,7 @@ class Transaction extends Model
         'voucher_id',
         'external_id',
         'checkout_link',
+        'scanned_at',
     ];
     
     protected $guarded = ['id'];
