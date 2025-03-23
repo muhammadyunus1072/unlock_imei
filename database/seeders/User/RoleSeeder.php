@@ -20,5 +20,6 @@ class RoleSeeder extends Seeder
                 $role->givePermissionTo(PermissionHelper::transform($access, $type));
             }
         }
+        $role = Role::create(['name' => config('template.registration_default_role')]);
     }
 }
