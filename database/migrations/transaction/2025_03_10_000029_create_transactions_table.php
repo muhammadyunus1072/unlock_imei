@@ -46,7 +46,6 @@ return new class extends Migration
         $table->double('grand_total')->comment('Transaction Grand Total');
         $table->string('status')->comment('Transaction Status');
         $table->text('cancellation_reason')->nullable()->comment('Transaction Caancellation Reason');
-        $table->text('snap_token')->nullable()->default(null)->comment('Snap Token');
 
         // Payment Method Information
         $table->unsignedBigInteger('payment_method_id')->comment('ID Payment Method');

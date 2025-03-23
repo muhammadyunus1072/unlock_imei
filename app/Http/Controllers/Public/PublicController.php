@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\Public;
 
-use App\Events\TransactionPaidProcessed;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Crypt;
 use App\Models\Transaction\Transaction;
+use App\Events\TransactionPaidProcessed;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Illuminate\Contracts\Encryption\DecryptException;
 use App\Repositories\Transaction\Transaction\TransactionRepository;
 
 class PublicController extends Controller
@@ -19,6 +22,29 @@ class PublicController extends Controller
         // https://app.kuystudio.id/booking/review/530673e4-d3e8-48b4-ad35-bae73f3b32b8
         // https://app.kuystudio.id/booking/review/2217f6c6-7874-4ce2-803d-d5e5c639fd0f
         return view('app.public.product.index');
+    }
+    public function transaction()
+    {
+        return view('app.public.transaction.index');
+    }
+    
+    public function generate(Request $request)
+    {
+        try {
+            $transaction = TransactionRepository::findBy([
+                ['id', Crypt::decrypt($request->id)]
+            ]);
+            
+            if(!$transaction || $transaction->status !== Transaction::STATUS_PAID || !$transaction->booking_code)
+            {
+                return redirect()->route('public.index');
+            }
+            $qrCode = QrCode::size(400)->generate($transaction->booking_code);
+
+            return view('app.service.generate-qr.index', ["qrCode" => $qrCode, "code" => $transaction->booking_code]);
+        } catch (DecryptException $e) {
+            return redirect()->route('public.index');
+        }
     }
     
     public function product_booking(Request $request)
@@ -55,11 +81,11 @@ class PublicController extends Controller
                 ['external_id', $invoiceExternalId],
             ]);
             if (!$transaction) {
-                throw new \Exception("Transaction not found for Invoice: $invoiceExternalId");
+                throw new \Exception("Transaction not found for Invoice: $invoiceExternalId", 404);
             }
 
             if (in_array($transaction->status, ['paid'])) {
-                throw new \Exception("Duplicate callback ignored for Invoice: $invoiceExternalId");
+                throw new \Exception("Duplicate callback ignored for Invoice: $invoiceExternalId", 401);
             }
 
             switch ($request->status) {
@@ -78,10 +104,12 @@ class PublicController extends Controller
                     }
         
                     $transaction->status = Transaction::STATUS_PAID;
+                    $transaction->booking_code = substr(strtoupper(md5(uniqid() . 1)), 0, 3) . str_pad($transaction->id, 4, '0', STR_PAD_LEFT);;
+                    $transaction->scanned_at = null;
                     $transaction->save();
         
                     // Trigger event for further processing (e.g., email confirmation)
-                    event(new TransactionPaidProcessed($transaction));
+                    // event(new TransactionPaidProcessed($transaction));
                     break;
                 }
             Log::info("Transaction updated: Invoice ID $invoiceExternalId, Status: $transaction->status");
@@ -91,7 +119,7 @@ class PublicController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Xendit callback error: ' . $e->getMessage());
-            return response()->json(['message' => 'Error processing callback'], 500);
+            return response()->json(['message' => 'Error processing callback'], $e->getCode());
         }
     }
 

@@ -30,30 +30,35 @@ class PermissionHelper
         'AccessAccount' => AccessAccount::class,
         'AccessMasterData' => AccessMasterData::class,
         'AccessTransaction' => AccessTransaction::class,
+        'AccessService' => AccessService::class,
     ];
 
     const ACCESS_GROUPS = [
         'Utama' => AccessAccount::ALL,
         'MasterData' => AccessMasterData::ALL,
         'Transaction' => AccessTransaction::ALL,
+        'Service' => AccessService::ALL,
     ];
 
     const ACCESS_ALL = [
         ...AccessAccount::ALL,
         ...AccessMasterData::ALL,
         ...AccessTransaction::ALL,
+        ...AccessService::ALL,
     ];
 
     const ACCESS_TYPE_ALL = [
         ...AccessAccount::TYPE_ALL,
         ...AccessMasterData::TYPE_ALL,
         ...AccessTransaction::TYPE_ALL,
+        ...AccessService::TYPE_ALL,
     ];
 
     const ACCESS_TRANSLATE = [
         ...AccessAccount::TRANSLATE,
         ...AccessMasterData::TRANSLATE,
         ...AccessTransaction::TRANSLATE,
+        ...AccessService::TRANSLATE,
     ];
 
     /*

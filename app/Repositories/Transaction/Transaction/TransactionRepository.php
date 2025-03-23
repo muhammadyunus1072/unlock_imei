@@ -19,8 +19,12 @@ class TransactionRepository extends MasterDataRepository
             ->first();
     }
 
-    public static function datatable()
+    public static function datatable($status)
     {
-        return Transaction::query();
+        return Transaction::when($status != 'Seluruh', function($query) use ($status)
+            {
+                $query->where('status', '=', $status);
+            }
+        );
     }
 }

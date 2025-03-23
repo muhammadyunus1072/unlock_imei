@@ -54,6 +54,18 @@ return [
         ],
         [
             // 'id' => 'menu_admin'
+            'text' => 'Layanan',
+            'icon' => 'ki-duotone ki-shield-tick',
+            'submenu' => [
+                [
+                    'text' => 'Scanner QR',
+                    'route' => 'scanner.index',
+                    'icon_color' => 'success',
+                ],
+            ],
+        ],
+        [
+            // 'id' => 'menu_admin'
             'text' => 'Admin',
             'icon' => 'ki-duotone ki-shield-tick',
             'submenu' => [

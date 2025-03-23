@@ -60,7 +60,7 @@
     <div class="d-flex flex-column flex-root" id="kt_app_root">
         <div class="mb-20" id="home">
            <div class="bgi-no-repeat bgi-size-contain bgi-position-x-center bgi-position-y-bottom landing-light-bg">
-              <div class="landing-header" data-kt-sticky="true" data-kt-sticky-name="landing-header" data-kt-sticky-offset="{default: '200px', lg: '300px'}">
+              <div class="landing-header" id="navbar" data-kt-sticky="true" data-kt-sticky-name="landing-header" data-kt-sticky-offset="{default: '200px', lg: '300px'}">
                  <div class="container">
                     <div class="d-flex align-items-center justify-content-between">
                        <div class="d-flex align-items-center flex-equal">
@@ -139,6 +139,11 @@
                                                 class="menu-link px-5">Profil</a>
                                        </div>
                                     @endif
+
+                                    <div class="menu-item px-5">
+                                          <a href="{{ route('public.transaction', ['id' => Crypt::encrypt(rand(0, 100))]) }}"
+                                             class="menu-link px-5">Data Transaksi</a>
+                                    </div>
                                     <!--end::Menu item-->
 
                                     <!--begin::Menu item-->
@@ -387,7 +392,7 @@
               </div>
            </div>
         </div>
-        <div class="mt-auto">
+        <div class="mt-auto" id="footer">
            <div class="landing-dark-bg">
               <div class="landing-dark-separator"></div>
               <div class="container">

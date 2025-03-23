@@ -7,6 +7,7 @@ use App\Services\XenditService;
 use App\Helpers\NumberGenerator;
 use App\Models\MasterData\Voucher;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Crypt;
 use Sis\TrackHistory\HasTrackHistory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\MasterData\PaymentMethod;
@@ -49,22 +50,28 @@ class Transaction extends Model
     }
 
     // Initial status
-    const STATUS_PENDING = 'pending'; // Waiting for payment
+    const STATUS_PENDING = 'PENDING'; // Waiting for payment
 
     // Xendit-specific statuses
-    const STATUS_PAID = 'paid'; // Payment successful
-    const STATUS_EXPIRED = 'expired'; // Payment expired (e.g., virtual account expired)
-    const STATUS_FAILED = 'failed'; // Payment failed (e.g., insufficient funds, declined)
-    const STATUS_CANCELED = 'canceled'; // User or system canceled transaction
+    const STATUS_PAID = 'PAID'; // Payment successful
+    const STATUS_EXPIRED = 'EXPIRED'; // Payment expired (e.g., virtual account expired)
+    const STATUS_FAILED = 'FAILED'; // Payment failed (e.g., insufficient funds, declined)
+    const STATUS_CANCELED = 'CANCELED'; // User or system canceled transaction
 
     // Refund-related statuses
-    const STATUS_REFUND_REQUESTED = 'refund_requested'; // User requested a refund
-    const STATUS_REFUNDED = 'refunded'; // Payment refunded successfully
-    const STATUS_PARTIALLY_REFUNDED = 'partially_refunded'; // Partial refund issued
+    const STATUS_REFUND_REQUESTED = 'REFUND_REQUESTED'; // User requested a refund
+    const STATUS_REFUNDED = 'REFUNDED'; // Payment refunded successfully
+    const STATUS_PARTIALLY_REFUNDED = 'PARTIALLY_REFUNDED'; // Partial refund issued
 
     // Settlement & Completion
-    const STATUS_SETTLED = 'settled'; // Payment settled (confirmed by the bank)
-    const STATUS_COMPLETED = 'completed'; // Order/service fulfilled after payment
+    const STATUS_SETTLED = 'SETTLED'; // Payment settled (confirmed by the bank)
+    const STATUS_COMPLETED = 'COMPLETED'; // Order/service fulfilled after payment
+
+    const STATUS_CHOICE = [
+        self::STATUS_PENDING => self::STATUS_PENDING,
+        self::STATUS_PAID => self::STATUS_PAID,
+        self::STATUS_EXPIRED => self::STATUS_EXPIRED,
+    ];
 
     protected static function onBoot()
     {
@@ -98,6 +105,53 @@ class Transaction extends Model
         }
     }
 
+    public function getStatusBadge(): string
+    {
+        $badges = [
+            'warning' => [self::STATUS_PENDING],
+            'success' => [self::STATUS_PAID],
+            'danger' => [self::STATUS_EXPIRED],
+            'dark' => [self::STATUS_EXPIRED],
+            'secondary' => [self::STATUS_CANCELED],
+            'info' => [self::STATUS_CANCELED],
+        ];
+
+        $status = $this->status;
+        
+        // Find the corresponding badge class
+        $badgeColor = array_keys(array_filter($badges, fn($statuses) => in_array($status, $statuses, true)))[0] ?? 'secondary';
+
+        return "<span class='badge badge-{$badgeColor}'>" . strtoupper($status) . "</span>";
+    }
+
+    public function getAction(): string
+    {
+        $html = '';
+        switch ($this->status) {
+            case self::STATUS_PENDING:
+                $html = "<div class='col-auto mb-2'>
+                            <a class='btn btn-success btn-sm w-100' href='{$this->checkout_link}'>
+                                Bayar Sekarang
+                            </a>
+                        </div>";
+                break;
+
+            case self::STATUS_PAID:
+                $route = route('service.generate', ['id' => Crypt::encrypt($this->id)]);
+                $html = "<div class='col-auto mb-2'>
+                            <a class='btn btn-primary btn-sm w-100' href='{$route}' target='_BLANK'>
+                                Generate QR-Code
+                            </a>
+                        </div>";
+                break;
+            
+            default:
+                $html = '<p class="text-center fw-bold fs-3"> - </p>';
+                break;
+        }
+        return $html;
+    }
+
     public function transactionDetails()
     {
         return $this->hasMany(TransactionDetail::class, 'transaction_id', 'id');
@@ -105,7 +159,7 @@ class Transaction extends Model
 
     public function transactionDetailSample()
     {
-        return $this->belongsTo(TransactionDetail::class, 'id', 'transaction_id');
+        return $this->belongsTo(TransactionDetail::class, 'id', 'transaction_id')->orderBy('product_booking_time_time', 'ASC');
     }
 
     public function voucher()

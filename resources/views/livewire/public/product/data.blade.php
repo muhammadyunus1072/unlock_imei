@@ -23,10 +23,21 @@
         </div>
      </div>
     @endforeach
+
+    <div class="row justify-content-center mt-3">
+        <div class="col-auto">
+            {{ $data->links(data: ['scrollTo' => false]) }}
+        </div>
+    </div>
 </div>
 
 @push('css')
     <link href="{{ asset('assets/css/custom-homepage.css') }}" rel="stylesheet" type="text/css" />
+    <style>
+        p.small.text-muted{
+            display: none;
+        }
+    </style>
 @endpush
 
 @push('js')
