@@ -9,6 +9,8 @@ return [
 
     'logo_panel' => 'files/images/logo_long.png',
     'logo_panel_background' => 'white',
+    
+    'admin_role' => env('ADMIN_ROLE', 'Admin'),
 
     'registration_route' => 'register',
     'registration_default_role' => 'Member',
@@ -48,6 +50,30 @@ return [
                 [
                     'text' => 'Metode Pembayaran',
                     'route' => 'payment_method.index',
+                    'icon_color' => 'success',
+                ],
+            ],
+        ],
+        [
+            // 'id' => 'menu_admin'
+            'text' => 'Transaksi',
+            'icon' => 'ki-duotone ki-shield-tick',
+            'submenu' => [
+                [
+                    'text' => 'Management Transaksi',
+                    'route' => 'transaction.index',
+                    'icon_color' => 'success',
+                ],
+            ],
+        ],
+        [
+            // 'id' => 'menu_admin'
+            'text' => 'Laporan',
+            'icon' => 'ki-duotone ki-shield-tick',
+            'submenu' => [
+                [
+                    'text' => 'Laporan - Transaksi',
+                    'route' => 'transaction_report.index',
                     'icon_color' => 'success',
                 ],
             ],

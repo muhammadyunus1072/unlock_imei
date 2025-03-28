@@ -27,6 +27,11 @@ class PublicController extends Controller
     {
         return view('app.public.transaction.index');
     }
+
+    public function contact()
+    {
+        return view('app.public.contact.index');
+    }
     
     public function generate(Request $request)
     {

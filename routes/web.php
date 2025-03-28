@@ -21,6 +21,7 @@ Route::group([], __DIR__ . '/web/MasterData.php');
 Route::group([], __DIR__ . '/web/Service.php');
 Route::group([], __DIR__ . '/web/Transaction.php');
 Route::group([], __DIR__ . '/web/Public.php');
+Route::group([], __DIR__ . '/web/Report.php');
 
 Route::middleware(['auth', 'access_permission'])->group(function () {
     Route::group(["controller" => DashboardController::class, "prefix" => "dashboard", "as" => "dashboard."], function () {

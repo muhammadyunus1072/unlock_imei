@@ -22,6 +22,14 @@ class Voucher extends Model
     
     protected $guarded = ['id'];
 
+    CONST TYPE_PERCENTAGE = 'percentage';
+    CONST TYPE_FIXED = 'fixed';
+
+    CONST TYPE_CHOICE = [
+        self::TYPE_PERCENTAGE => 'Persentase',
+        self::TYPE_FIXED => 'Nominal Tetap',
+    ];
+    
     public function isDeletable()
     {
         return true;

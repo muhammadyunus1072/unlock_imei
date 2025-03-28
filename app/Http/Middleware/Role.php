@@ -14,9 +14,7 @@ class Role
             return redirect('/login');
         }
 
-        $user = Auth::user();
-
-        if($user->hasRole($role))
+        if(auth()->user()->hasRole($role))
             return $next($request);
         else
             abort(404);

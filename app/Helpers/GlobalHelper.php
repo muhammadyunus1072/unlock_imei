@@ -1,8 +1,10 @@
 <?php
 
-use App\Repositories\MasterData\Studio\StudioRepository;
 use Livewire\Component;
+use App\Helpers\FilePathHelper;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Storage;
+use App\Repositories\MasterData\Studio\StudioRepository;
 
 if (!function_exists('getAccessStudio')) {
     function getAccessStudio()
@@ -33,6 +35,11 @@ if (!function_exists('simple_encrypt')) {
         $key = hash('sha256', env('APP_KEY'), true);
         $iv = substr($key, 0, 16); // Fixed IV
         return base64_encode(openssl_encrypt($value, 'aes-256-cbc', $key, 0, $iv));
+    }
+}
+if (!function_exists('generateUrl')) {
+    function generateUrl($url, $path) {
+        return Storage::url($path . $url);
     }
 }
 if (!function_exists('simple_decrypt')) {

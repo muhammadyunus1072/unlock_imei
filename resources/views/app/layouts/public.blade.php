@@ -72,7 +72,7 @@
                                 </svg>
                              </span>
                           </button>
-                          <a href="https://app.kuystudio.id/">
+                          <a href="{{ route('public.index') }}">
                           <img alt="Logo" src="{{ asset(config('template.logo_panel')) }}" class="logo-default h-35px h-lg-45px">
                           <img alt="Logo" src="{{ asset(config('template.logo_panel')) }}" class="logo-sticky h-35px h-lg-45px">
                           </a>
@@ -81,19 +81,19 @@
                           <div class="d-lg-block p-5 p-lg-0" data-kt-drawer="true" data-kt-drawer-name="landing-menu" data-kt-drawer-activate="{default: true, lg: false}" data-kt-drawer-overlay="true" data-kt-drawer-width="200px" data-kt-drawer-direction="start" data-kt-drawer-toggle="#kt_landing_menu_toggle" data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_body', lg: '#kt_header_nav_wrapper'}" style="">
                              <div class="menu menu-column flex-nowrap menu-rounded menu-lg-row menu-title-gray-500 menu-state-title-primary nav nav-flush fs-5 fw-semibold" id="kt_landing_menu">
                                 <!-- <div class="menu-item">
-                                   <a class="menu-link nav-link py-3 px-4 px-xxl-6" href="https://app.kuystudio.id/">Home</a>
+                                   <a class="menu-link nav-link py-3 px-4 px-xxl-6" href="#">Home</a>
                                    </div> -->
                                 <!-- <div class="menu-item">
                                    <a target="_blank" class="menu-link nav-link py-3 px-4 px-xxl-6" href="https://kuystudio.id/about">About Us</a>
                                    </div> -->
                                 <div class="menu-item">
-                                   <a target="_blank" class="menu-link nav-link py-3 px-4 px-xxl-6" href="">Gallery</a>
+                                   <a class="menu-link nav-link py-3 px-4 px-xxl-6" href="{{ route('public.index') }}">Booking</a>
                                 </div>
+                                {{-- <div class="menu-item">
+                                   <a class="menu-link nav-link py-3 px-4 px-xxl-6" href="">Pricelist</a>
+                                </div> --}}
                                 <div class="menu-item">
-                                   <a target="_blank" class="menu-link nav-link py-3 px-4 px-xxl-6" href="">Pricelist</a>
-                                </div>
-                                <div class="menu-item">
-                                   <a target="_blank" class="menu-link nav-link py-3 px-4 px-xxl-6" href="">Contact</a>
+                                   <a class="menu-link nav-link py-3 px-4 px-xxl-6" href="{{ route('public.contact')}}">Contact</a>
                                 </div>
                              </div>
                           </div>
@@ -133,6 +133,12 @@
                                     <!--end::Menu item-->
 
                                     <!--begin::Menu item-->
+                                    @if (auth()->user()->hasRole(config('template.admin_role')))
+                                       <div class="menu-item px-5">
+                                             <a href="{{ route('dashboard.index') }}"
+                                                class="menu-link px-5">Dashboard</a>
+                                       </div>
+                                    @endif
                                     @if (config('template.profile_route'))
                                        <div class="menu-item px-5">
                                              <a href="{{ route(config('template.profile_route')) }}"
@@ -398,7 +404,7 @@
               <div class="container">
              <div class="d-flex flex-column flex-md-row flex-stack py-7 py-lg-10">
                 <div class="d-flex align-items-center order-2 order-md-1">
-                   <a href="https://app.kuystudio.id/">
+                   <a href="{{ route('public.index')}}">
                    <img alt="Logo" src="{{ asset(config('template.logo_panel')) }}" class="h-25px h-md-35px bg-white">
                    </a>
                    <span class="mx-5 fs-6 fw-semibold text-white pt-1" href="https://dev.kuystudio.id">© 2025 {{ config('template.title')}}.</span>

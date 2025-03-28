@@ -170,6 +170,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
         Mews\Captcha\CaptchaServiceProvider::class,
+        Maatwebsite\Excel\ExcelServiceProvider::class,
     ])->toArray(),
 
     /*
@@ -189,6 +190,7 @@ return [
         'PermissionHelper' => App\Permissions\PermissionHelper::class,
         'NumberFormatter' => App\Helpers\NumberFormatter::class,
         'Alert' => App\Helpers\Alert::class,
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         ...App\Permissions\PermissionHelper::ACCESS_ALIASES,
     ])->toArray(),
 

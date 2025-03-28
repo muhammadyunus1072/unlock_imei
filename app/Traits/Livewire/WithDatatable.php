@@ -96,7 +96,7 @@ trait WithDatatable
         $sortDirection = $this->sortDirection;
 
         $query->when($search, function ($query) use ($search, $columns) {
-            $query->where(function ($query) use ($columns, $search) {
+            $query->orWhere(function ($query) use ($columns, $search) {
                 foreach ($columns as $col) {
                     if (
                         isset($col['key'])

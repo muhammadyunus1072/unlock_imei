@@ -31,6 +31,7 @@ class PermissionHelper
         'AccessMasterData' => AccessMasterData::class,
         'AccessTransaction' => AccessTransaction::class,
         'AccessService' => AccessService::class,
+        'AccessReport' => AccessReport::class,
     ];
 
     const ACCESS_GROUPS = [
@@ -38,6 +39,7 @@ class PermissionHelper
         'MasterData' => AccessMasterData::ALL,
         'Transaction' => AccessTransaction::ALL,
         'Service' => AccessService::ALL,
+        'Service' => AccessReport::ALL,
     ];
 
     const ACCESS_ALL = [
@@ -45,6 +47,7 @@ class PermissionHelper
         ...AccessMasterData::ALL,
         ...AccessTransaction::ALL,
         ...AccessService::ALL,
+        ...AccessReport::ALL,
     ];
 
     const ACCESS_TYPE_ALL = [
@@ -52,6 +55,7 @@ class PermissionHelper
         ...AccessMasterData::TYPE_ALL,
         ...AccessTransaction::TYPE_ALL,
         ...AccessService::TYPE_ALL,
+        ...AccessReport::TYPE_ALL,
     ];
 
     const ACCESS_TRANSLATE = [
@@ -59,6 +63,7 @@ class PermissionHelper
         ...AccessMasterData::TRANSLATE,
         ...AccessTransaction::TRANSLATE,
         ...AccessService::TRANSLATE,
+        ...AccessReport::TRANSLATE,
     ];
 
     /*

@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Crypt;
 use Sis\TrackHistory\HasTrackHistory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\MasterData\PaymentMethod;
+use App\Models\User;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -122,6 +123,7 @@ class Transaction extends Model
         // Find the corresponding badge class
         $badgeColor = array_keys(array_filter($badges, fn($statuses) => in_array($status, $statuses, true)))[0] ?? 'secondary';
 
+        return $badgeColor;
         return "<span class='badge badge-{$badgeColor}'>" . strtoupper($status) . "</span>";
     }
 
@@ -166,6 +168,16 @@ class Transaction extends Model
     public function voucher()
     {
         return $this->belongsTo(Voucher::class, 'voucher_id', 'id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by', 'id');
     }
 
     public function paymentMethod()

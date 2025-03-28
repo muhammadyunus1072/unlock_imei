@@ -1,4 +1,27 @@
 <div>
+    {{-- EXPORT DATA --}}
+    @if (isset($showExport) && $showExport)
+        <div class="row align-items-center">
+            <div class="col-auto">
+                <label>Export Data:</label>
+            </div>
+            <div class="col-auto">
+                <button class="btn btn-light-success btn-sm"
+                    wire:click="datatableExport('{{ App\Exports\LivewireDatatableExport::EXPORT_EXCEL }}')">
+                    <i class="fa fa-file-excel"></i>
+                    Export Excel
+                </button>
+            </div>
+            <div class="col-auto">
+                <button class="btn btn-light-danger btn-sm"
+                    wire:click="datatableExport('{{ App\Exports\LivewireDatatableExport::EXPORT_PDF }}')">
+                    <i class="fa fa-file-pdf"></i>
+                    Export PDF
+                </button>
+            </div>
+        </div>
+        <hr>
+    @endif
     <div class="row justify-content-between mb-3">
         <div class="col-auto mb-2 {{ !isset($show_filter) || $show_filter == true ? '' : 'd-none' }}">
             <label>Show</label>

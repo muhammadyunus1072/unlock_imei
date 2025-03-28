@@ -87,6 +87,6 @@ trait WithChartJs
 
     public function render()
     {
-        return view($this->getView());
+        return view($this->getView(), ['config' => $this->config]);
     }
 }

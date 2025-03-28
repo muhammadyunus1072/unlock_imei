@@ -54,7 +54,7 @@ class Datatable extends Component
                 'render' => function($item)
                 {
                     $html = "<p class='mb-0'>{$item->payment_method_name}</p>";
-                    $html .= $item->getStatusBadge();
+                    $html .= "<span class='badge badge-{$item->getStatusBadge()}'>" . $item->status . "</span>";
 
                     return $html;
                 }
