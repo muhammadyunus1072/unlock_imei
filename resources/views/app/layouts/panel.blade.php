@@ -185,7 +185,7 @@
                     <div class="app-sidebar-logo px-6" id="kt_app_sidebar_logo">
 
                         <!--begin::Logo image-->
-                        <a href="{{ route('dashboard.index') }}">
+                        <a href="{{ route('public.index') }}">
                             <img alt="Logo" src="{{ asset(config('template.logo_panel')) }}"
                                 class="h-50px app-sidebar-logo-default p-1 rounded bg-{{ config('template.logo_panel_background') }}">
                             <img alt="Logo" src="{{ asset(config('template.logo_auth')) }}"
