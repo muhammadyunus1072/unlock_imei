@@ -7,10 +7,7 @@ use Carbon\Carbon;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use App\Models\MasterData\Product;
-use Illuminate\Support\Facades\Crypt;
 use App\Models\Transaction\Transaction;
-use App\Models\MasterData\ProductDetail;
-use App\Models\MasterData\ProductBookingTime;
 use App\Models\Transaction\TransactionDetail;
 
 class TransactionSeeder extends Seeder
