@@ -78,6 +78,7 @@ class SummaryRepository
         return Transaction::selectRaw('DATE(created_at) as transaction_date, COUNT(*) as transaction_amount, SUM(grand_total) as transaction_value')
         ->whereMonth('created_at', now()->month)
         ->groupBy('transaction_date')
+        ->where('status', Transaction::STATUS_PAID)
         ->orderBy('transaction_date')
         ->get();
     }

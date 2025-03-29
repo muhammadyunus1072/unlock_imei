@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Transaction\Transaction;
 
+use Carbon\Carbon;
 use App\Helpers\Alert;
 use Livewire\Component;
 use Livewire\Attributes\On;
@@ -15,6 +16,8 @@ class Filter extends Component
 {
     public $statuses = [];
     public $status = 'Seluruh';
+    public $dateStart;
+    public $dateEnd;
     public $isCanDelete;
     public $targetDeleteId;
 
@@ -22,12 +25,17 @@ class Filter extends Component
     {
         $this->statuses = Transaction::STATUS_CHOICE;
         $this->isCanDelete = UserRepository::authenticatedUser()->hasPermissionTo(PermissionHelper::transform(AccessTransaction::TRANSACTION, PermissionHelper::TYPE_DELETE));
+
+        $this->dateStart = Carbon::now()->startOfMonth()->format('Y-m-d');
+        $this->dateEnd = Carbon::now()->endOfMonth()->format('Y-m-d');
     }
 
     public function updated()
     {
         $this->dispatch('datatable-add-filter', [
-            'status' => $this->status
+            'status' => $this->status,
+            'dateStart' => $this->dateStart,
+            'dateEnd' => $this->dateEnd,
         ]);
     }
 

@@ -3,6 +3,7 @@
 namespace App\Helpers;
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class NumberGenerator
 {
@@ -32,7 +33,7 @@ class NumberGenerator
                     ->whereYear('created_at', '=', $year_now);
             })
             ->when($resetType == self::RESET_TYPE_DAILY, function ($query) {
-                $query->whereDate('created_at', '=', now()->toDateString());
+                $query->whereDate('created_at', '=', now());
             })
             ->orderBy('id', 'DESC')
             ->first();
@@ -52,7 +53,7 @@ class NumberGenerator
 
         // Roman Day
         $roman_day = RomanConverter::toRoman($day_now);
-
+        Log::debug("NUMBER GENERATE ".$currentNumber);
         // Generate Format Number
         $formats = [
             self::RESET_TYPE_YEARLY => "$code/$currentNumber/$year_now",

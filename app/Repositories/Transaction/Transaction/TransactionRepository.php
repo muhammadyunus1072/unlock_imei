@@ -19,14 +19,12 @@ class TransactionRepository extends MasterDataRepository
             ->first();
     }
 
-    public static function datatableTransaction($search, $status)
+    public static function datatable($search, $status, $dateStart, $dateEnd, $allUser = false)
     {
-        return Transaction::select(
-            'transactions.*',
-        )
-            ->when($status != 'Seluruh', function($query) use ($status){
+        return Transaction::when($status != 'Seluruh', function($query) use ($status){
                 $query->where('status', '=', $status);
             })
+            ->whereBetween('created_at', ["$dateStart 00:00:00", "$dateEnd 23:59:59"])
             ->when($search, function($query) use($search) {
                 $query->where(function($whereQuery) use($search) {
                     $whereQuery->orWhere('customer_email', env('QUERY_LIKE'), '%' . $search . '%')
@@ -42,15 +40,8 @@ class TransactionRepository extends MasterDataRepository
             })
             ->when(auth()->user()->hasRole(config('template.registration_default_role')), function($query) {
                 $query->where('user_id', auth()->user()->id);
-            });
-    }
-
-    public static function datatable($status)
-    {
-        return Transaction::when($status != 'Seluruh', function($query) use ($status){
-                $query->where('status', '=', $status);
             })
-            ->when(auth()->user()->hasRole(config('template.registration_default_role')), function($query) {
+            ->when(auth()->user()->hasRole(config('template.admin_role')) && !$allUser, function($query) {
                 $query->where('user_id', auth()->user()->id);
             });
     }

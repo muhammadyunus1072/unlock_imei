@@ -14,6 +14,14 @@ class Datatable extends Component
     use WithDatatable;
 
     public $status = 'Seluruh';
+    public $dateStart;
+    public $dateEnd;
+
+    public function onMount()
+    {
+        $this->dateStart = Carbon::now()->startOfMonth()->format('Y-m-d');
+        $this->dateEnd = Carbon::now()->endOfMonth()->format('Y-m-d');
+    }
 
     public function getColumns(): array
     {
@@ -88,7 +96,7 @@ class Datatable extends Component
 
     public function getQuery(): Builder
     {
-        return TransactionRepository::datatable($this->status);
+        return TransactionRepository::datatable($this->search, $this->status, $this->dateStart, $this->dateEnd, false);
     }
 
     public function getView(): string

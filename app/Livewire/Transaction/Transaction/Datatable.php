@@ -24,6 +24,9 @@ class Datatable extends Component
     public $isCanUpdateBookingTime;
     public $isCanUpdateDetail;
 
+    public $dateStart;
+    public $dateEnd;
+
     // Delete Dialog
     public $targetDeleteId;
 
@@ -33,6 +36,9 @@ class Datatable extends Component
     {
         $authUser = UserRepository::authenticatedUser();
         $this->isCanUpdate = $authUser->hasPermissionTo(PermissionHelper::transform(AccessTransaction::TRANSACTION, PermissionHelper::TYPE_UPDATE));
+
+        $this->dateStart = Carbon::now()->startOfMonth()->format('Y-m-d');
+        $this->dateEnd = Carbon::now()->endOfMonth()->format('Y-m-d');
     }
 
     #[On('on-delete-dialog-confirm')]
@@ -197,7 +203,7 @@ class Datatable extends Component
 
     public function getQuery(): Builder
     {
-        return TransactionRepository::datatableTransaction($this->search, $this->status);
+        return TransactionRepository::datatable($this->search, $this->status, $this->dateStart, $this->dateEnd, true);
     }
 
     public function getView(): string
