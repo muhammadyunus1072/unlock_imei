@@ -87,11 +87,6 @@ class Transaction extends Model
             $model->number = NumberGenerator::generate(self::class, 'STUDIO');
             $model->external_id = $model->number;
 
-            if($model->invoice_id)
-            {
-                $model->invoice->saveInfo($model);
-            }
-
             $model->paymentMethod->saveInfo($model);
         });
     }
