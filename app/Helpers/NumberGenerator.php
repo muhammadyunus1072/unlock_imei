@@ -45,14 +45,17 @@ class NumberGenerator
         }
 
         // Get Current Number
-        $currentNumber = strval($lastNumber + 1);
-        $currentNumber = str_pad($currentNumber, $zeroPad, "0", STR_PAD_LEFT);
+        $c = strval($lastNumber + 1);
+        $currentNumber = str_pad($c, $zeroPad, "0", STR_PAD_LEFT);
 
         // Roman Month
         $roman_month = RomanConverter::toRoman($month_now);
 
         // Roman Day
         $roman_day = RomanConverter::toRoman($day_now);
+        Log::debug("NUMBER LAST ".$lastModel->number);
+        Log::debug("NUMBER LAST N ".$lastNumber);
+        Log::debug("NUMBER C ".$c);
         Log::debug("NUMBER GENERATE ".$currentNumber);
         // Generate Format Number
         $formats = [
