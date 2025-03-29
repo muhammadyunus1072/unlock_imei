@@ -85,10 +85,7 @@ class Transaction extends Model
     {
         self::creating(function ($model) {
             $model->number = NumberGenerator::generate(self::class, 'STUDIO');
-            Log::debug('Generated Number: ' . $model->number);
-            Log::debug('------');
             $model->external_id = $model->number;
-
             $model->paymentMethod->saveInfo($model);
         });
         
