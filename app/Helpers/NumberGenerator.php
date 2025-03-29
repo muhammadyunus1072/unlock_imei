@@ -58,13 +58,13 @@ class NumberGenerator
         Log::debug("NUMBER C ".$c);
         Log::debug("NUMBER GENERATE ".$currentNumber);
         // Generate Format Number
-        $formats = [
-            self::RESET_TYPE_YEARLY => "$code/$currentNumber/$year_now",
-            self::RESET_TYPE_MONTHLY => "$code/$currentNumber/$roman_month/$year_now",
-            self::RESET_TYPE_DAILY => "$code/$currentNumber/$roman_day/$roman_month/$year_now",
-        ];
+        // $formats = [
+        //     self::RESET_TYPE_YEARLY => "$code/$currentNumber/$year_now",
+        //     self::RESET_TYPE_MONTHLY => "$code/$currentNumber/$roman_month/$year_now",
+        //     self::RESET_TYPE_DAILY => "$code/$currentNumber/$roman_day/$roman_month/$year_now",
+        // ];
     
-        return $formats[$resetType];
+        return "$code/$currentNumber/$roman_day/$roman_month/$year_now";
     }
 
 
