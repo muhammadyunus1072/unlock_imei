@@ -54,18 +54,20 @@ class NumberGenerator
 
         // Roman Day
         $roman_day = RomanConverter::toRoman($day_now);
-        Log::debug("NUMBER LAST ".(!empty($lastModel) ? $lastModel->number : 0));
-        Log::debug("NUMBER LAST N ".$lastNumber);
+        Log::debug("NUMBER A ".(!empty($lastModel) ? $lastModel->number : 0));
+        Log::debug("NUMBER B ".$lastNumber);
         Log::debug("NUMBER C ".$c);
-        Log::debug("NUMBER GENERATE ".$currentNumber);
+        Log::debug("NUMBER D ".$currentNumber);
+        $generate = "$code/$currentNumber/$roman_day/$roman_month/$year_now";
+        Log::debug("NUMBER R ".$generate);
         // Generate Format Number
-        $formats = [
-            self::RESET_TYPE_YEARLY => "$code/$currentNumber/$year_now",
-            self::RESET_TYPE_MONTHLY => "$code/$currentNumber/$roman_month/$year_now",
-            self::RESET_TYPE_DAILY => "$code/$currentNumber/$roman_day/$roman_month/$year_now",
-        ];
+        // $formats = [
+        //     self::RESET_TYPE_YEARLY => "$code/$currentNumber/$year_now",
+        //     self::RESET_TYPE_MONTHLY => "$code/$currentNumber/$roman_month/$year_now",
+        //     self::RESET_TYPE_DAILY => "$code/$currentNumber/$roman_day/$roman_month/$year_now",
+        // ];
     
-        return $formats[$resetType];
+        return $generate;
     }
 
 

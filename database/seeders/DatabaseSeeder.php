@@ -23,18 +23,18 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            PermissionSeeder::class,
-            RoleSeeder::class,
-            UserSeeder::class,
+            // PermissionSeeder::class,
+            // RoleSeeder::class,
+            // UserSeeder::class,
         ]);
 
         // DEMO
         $this->call([
-            PaymentMethodSeeder::class,
-            StudioSeeder::class,
-            ProductSeeder::class,
-            ProductDetailSeeder::class,
-            ProductBookingTimeSeeder::class,
+            // PaymentMethodSeeder::class,
+            // StudioSeeder::class,
+            // ProductSeeder::class,
+            // ProductDetailSeeder::class,
+            // ProductBookingTimeSeeder::class,
             TransactionSeeder::class,
         ]);
     }
