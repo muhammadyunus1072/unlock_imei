@@ -62,9 +62,11 @@ class WeeklySummary extends Component
         $data = $sortedLabels->map(function($enDay) use ($weeklyData, $labels) {
             return $weeklyData->where('transaction_day', $enDay)->first()->transaction_amount ?? 0; 
         });
-        
+        $indoLabels = $sortedLabels->map(function($day) use ($labels) {
+            return $labels[$day];
+        });
         return [
-            'labels' => $sortedLabels->values(),
+            'labels' => $indoLabels,
             'datasets' => [
                 [
                     'label' => 'Total Transaksi',
