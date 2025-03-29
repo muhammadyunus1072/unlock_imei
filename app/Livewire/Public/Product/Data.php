@@ -13,7 +13,7 @@ class Data extends Component
     use WithPagination;
 
     protected $paginationTheme = 'bootstrap';
-    public $length = 2;
+    public $length = 12;
 
     public $sortBy = 'name';
     public $sortDirection = 'asc';
@@ -26,8 +26,7 @@ class Data extends Component
         return Product::when($this->studio_id !== 'all', function ($query) {
             return $query->where('studio_id', Crypt::decrypt($this->studio_id));
         })
-        ->orderBy($this->sortBy, $this->sortDirection)
-        ->paginate($this->length);
+        ->orderBy($this->sortBy, $this->sortDirection);
     }
 
     #[On('datatable-add-filter')]
@@ -36,12 +35,13 @@ class Data extends Component
         foreach ($filter as $key => $value) {
             $this->$key = $value;
         }
+        $this->resetPage();
     }
 
     public function render()
     {
         return view('livewire.public.product.data', [
-            'data' => $this->getProducts(),
+            'data' => $this->getProducts()->paginate($this->length),
         ]);
     }
 }

@@ -37,6 +37,12 @@ class Transaction extends Model
         'external_id',
         'checkout_link',
         'scanned_at',
+        'subtotal',
+        'admin_fee',
+        'discount',
+
+        // Seeder
+        'created_at',
     ];
     
     protected $guarded = ['id'];
@@ -79,7 +85,7 @@ class Transaction extends Model
     {
         self::creating(function ($model) {
             $model->number = NumberGenerator::generate(self::class, 'STUDIO');
-            $model->status = self::STATUS_PENDING;
+            // $model->status = self::STATUS_PENDING;
             $model->external_id = $model->number;
 
             if($model->invoice_id)

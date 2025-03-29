@@ -2,12 +2,13 @@
 
 namespace App\Models\Transaction;
 
-use App\Models\MasterData\Product;
-use App\Models\MasterData\ProductBookingTime;
-use App\Models\MasterData\ProductDetail;
 use App\Models\MasterData\Studio;
+use App\Models\MasterData\Product;
+use Illuminate\Support\Facades\DB;
 use Sis\TrackHistory\HasTrackHistory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\MasterData\ProductDetail;
+use App\Models\MasterData\ProductBookingTime;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -76,6 +77,18 @@ class TransactionDetail extends Model
         }
 
         return $object;
+    }
+
+    public static function isNotAvailable($booking_date, $product_id, $product_booking_time_id)
+    {
+        return self::join('transactions', 'transactions.id', '=', 'transaction_details.transaction_id')
+            ->where('transaction_details.booking_date', $booking_date)
+            ->where('transaction_details.product_id', $product_id)
+            ->where('transaction_details.product_booking_time_id', $product_booking_time_id)
+            ->whereIn('transactions.status', [Transaction::STATUS_PENDING, Transaction::STATUS_PAID])
+            ->where('transaction_details.deleted_at', null)
+            ->lockForUpdate() // ✅ Lock slot before creating transaction
+            ->exists();
     }
 
     public function transaction()

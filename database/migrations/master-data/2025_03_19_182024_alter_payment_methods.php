@@ -13,9 +13,11 @@ return new class extends Migration
     {
         Schema::table('payment_methods', function (Blueprint $table) {
             $table->string('code')->comment('Payment Method Code');
+            $table->boolean('is_active')->comment('Is Active')->default(false);
         });
         Schema::table('_history_payment_methods', function (Blueprint $table) {
             $table->string('code')->comment('Payment Method Code');
+            $table->boolean('is_active')->comment('Is Active')->default(false);
         });
     }
 
@@ -26,9 +28,11 @@ return new class extends Migration
     {
         Schema::table('payment_methods', function (Blueprint $table) {
             $table->dropColumn('code');
+            $table->dropColumn('is_active');
         });
         Schema::table('_history_payment_methods', function (Blueprint $table) {
             $table->dropColumn('code');
+            $table->dropColumn('is_active');
         });
     }
 };

@@ -22,5 +22,19 @@ class UserSeeder extends Seeder
         ]);
 
         $user->assignRole('Admin');
+
+        $faker = \Faker\Factory::create('id_ID');
+
+        for($i = 0; $i < 50; $i ++)
+        {
+            $user = User::create([
+                'name' => $faker->name(),
+                'username' => $faker->userName(),
+                'email' => $faker->email(),
+                'password' => Hash::make("123"),
+            ]);
+    
+            $user->assignRole(config('template.registration_default_role'));
+        }
     }
 }

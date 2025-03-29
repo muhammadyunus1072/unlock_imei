@@ -7,6 +7,7 @@ use App\Helpers\Alert;
 use App\Models\MasterData\PaymentMethod;
 use Livewire\Component;
 use App\Models\Transaction\Transaction;
+use App\Models\Transaction\TransactionDetail;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Crypt;
 use Livewire\Attributes\On;
@@ -31,6 +32,8 @@ class Detail extends Component
 
     public $subtotal;
     public $grand_total;
+    public $admin_fee;
+    public $discount = 0;
 
     // Input
     public $phone;
@@ -72,9 +75,11 @@ class Detail extends Component
 
         if($selectedPayment['type'] === PaymentMethod::TYPE_PERCENTAGE)
         {
-            $this->grand_total = $this->subtotal + calculatedAdminFee($this->subtotal, $selectedPayment['amount']);
+            $this->admin_fee = calculatedAdminFee($this->subtotal, $selectedPayment['amount']);
+            $this->grand_total = $this->subtotal + $this->admin_fee - $this->discount;
         }else{
-            $this->grand_total = $this->subtotal + $selectedPayment['amount'];
+            $this->admin_fee = $selectedPayment['amount'];
+            $this->grand_total = $this->subtotal + $this->admin_fee - $this->discount;
         }
     }
 
@@ -118,18 +123,13 @@ class Detail extends Component
                 if ($booking['product_booking_time']['booking_detail_id']) {
                     throw new \Exception("Maaf, jam yang kamu pilih sudah tidak tersedia. Silahkan memilih jam booking yang lain.");
                 }
+                $isNotAvailable = TransactionDetail::isNotAvailable(
+                    $this->booking_date, 
+                    Crypt::decrypt($this->objId), 
+                    Crypt::decrypt($booking['product_booking_time']['id'])
+                );
 
-                $exists = DB::table('transaction_details')
-                    ->join('transactions', 'transactions.id', '=', 'transaction_details.transaction_id')
-                    ->where('transaction_details.booking_date', $this->booking_date)
-                    ->where('transaction_details.product_id', Crypt::decrypt($this->objId))
-                    ->where('transaction_details.product_detail_id', Crypt::decrypt($booking['product_detail']['id']))
-                    ->where('transaction_details.product_booking_time_id', Crypt::decrypt($booking['product_booking_time']['id']))
-                    ->whereIn('transactions.status', ['pending', 'paid'])
-                    ->lockForUpdate() // ✅ Lock slot before creating transaction
-                    ->exists();
-
-                if ($exists) {
+                if ($isNotAvailable) {
                     throw new \Exception("Maaf, jam yang kamu pilih sudah tidak tersedia. Silahkan memilih jam booking yang lain.");
                 }
             }
@@ -141,9 +141,13 @@ class Detail extends Component
                 'customer_email' => auth()->user()->email,
                 'customer_phone' => $phone,
                 'customer_label' => 'Customer',
-                'grand_total' => $this->grand_total,
+                'subtotal' => $this->subtotal,
                 'payment_method_id' => Crypt::decrypt($this->payment_method), // Example
                 'voucher_id' => null,
+                'grand_total' => $this->grand_total,
+                'subtotal' => $this->subtotal,
+                'admin_fee' => $this->admin_fee,
+                'discount' => $this->discount,
             ]);
 
             // 3️⃣ Insert booking details

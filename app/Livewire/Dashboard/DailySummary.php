@@ -29,7 +29,7 @@ class DailySummary extends Component
     public function render()
     {
         return view('livewire.dashboard.daily-summary', [
-            'data' => $this->getTransactionDaily()->paginate(1),
+            'data' => $this->getTransactionDaily()->paginate(10),
         ]);
     }
 }
