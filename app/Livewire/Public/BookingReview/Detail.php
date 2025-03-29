@@ -54,7 +54,9 @@ class Detail extends Component
         $this->product_price = $product->price;
         $this->product_studio_name = $product->studio->name ." - ". $product->studio->city;
 
-        $this->payment_method_choices = PaymentMethodRepository::all()
+        $this->payment_method_choices = PaymentMethodRepository::findBy([
+            ['is_active', true]
+        ])
         ->map(function ($payment) {
             return [
                 'id' => Crypt::encrypt($payment->id),

@@ -48,6 +48,16 @@
                     </div>
                 @enderror
             </div>
+            <!-- Active Option -->
+            
+            <div class="col-md-4 mb-4 row align-items-end">
+                <div class="form-check m-2">
+                    <input class="form-check-input" type="checkbox" wire:model="is_active">
+                    <label class="form-label ms-2 mb-2">
+                        Penanda Aktif
+                    </label>
+                </div>
+            </div>
             <div class="col-md-10 mb-4">
                 <button type="submit" class="btn btn-success mt-3 w-100">
                     Simpan

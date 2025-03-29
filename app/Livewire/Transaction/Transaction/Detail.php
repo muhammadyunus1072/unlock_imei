@@ -2,18 +2,12 @@
 
 namespace App\Livewire\Transaction\Transaction;
 
-use Exception;
-use App\Helpers\Alert;
 use Livewire\Component;
-use Livewire\Attributes\On;
 use App\Helpers\FilePathHelper;
-use Livewire\Attributes\Validate;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Crypt;
 use App\Models\Transaction\Transaction;
 use App\Models\MasterData\PaymentMethod;
 use App\Repositories\Transaction\Transaction\TransactionRepository;
-use App\Repositories\MasterData\PaymentMethod\PaymentMethodRepository;
 
 class Detail extends Component
 {

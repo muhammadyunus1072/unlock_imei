@@ -138,6 +138,14 @@ class Datatable extends Component
                     return PaymentMethod::TYPE_FIXED === $item->type ? "Rp ".numberFormat($item->amount) : numberFormat($item->amount)." %";
                 }
             ],
+            [
+                'key' => 'is_active',
+                'name' => 'Aktif',
+                'render' => function($item)
+                {
+                    return $item->is_active ? "<span class='badge badge-success'>Aktif</span>" : "<span class='badge badge-danger'>Tidak Aktif</span>";
+                }
+            ],
         ];
     }
 

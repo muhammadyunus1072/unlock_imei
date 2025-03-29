@@ -29,6 +29,8 @@ class Detail extends Component
     #[Validate('required', message: 'Kode Harus Diisi', onUpdate: false)]
     public $code;
 
+    public $is_active;
+
     public $type_choices = [];
 
     public function mount()
@@ -40,6 +42,7 @@ class Detail extends Component
             $this->type = $product->type;
             $this->amount = $product->amount;
             $this->code = $product->code;
+            $this->is_active = $product->is_active ? true : false;
         }
 
         $this->type_choices = PaymentMethod::TYPE_CHOICE;
@@ -73,6 +76,7 @@ class Detail extends Component
                 'type' => $this->type,
                 'code' => $this->code,
                 'amount' => imaskToValue($this->amount),
+                'is_active' => $this->is_active,
             ];
             if ($this->objId) {
                 $objId = Crypt::decrypt($this->objId);

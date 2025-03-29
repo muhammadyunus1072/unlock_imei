@@ -16,6 +16,7 @@ class PaymentMethod extends Model
         'type',
         'amount',
         'code',
+        'is_active',
     ];
     
     protected $guarded = ['id'];
