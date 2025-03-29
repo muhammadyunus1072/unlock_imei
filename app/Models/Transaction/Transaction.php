@@ -85,7 +85,6 @@ class Transaction extends Model
     {
         self::creating(function ($model) {
             $model->number = NumberGenerator::generate(self::class, 'STUDIO');
-            $model->status = self::STATUS_PENDING;
             $model->external_id = $model->number;
 
             if($model->invoice_id)

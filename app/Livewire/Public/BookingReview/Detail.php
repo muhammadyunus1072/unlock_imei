@@ -150,6 +150,7 @@ class Detail extends Component
                 'subtotal' => $this->subtotal,
                 'admin_fee' => $this->admin_fee,
                 'discount' => $this->discount,
+                'status' => Transaction::STATUS_PENDING,
             ]);
 
             // 3️⃣ Insert booking details
