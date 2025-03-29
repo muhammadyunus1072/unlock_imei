@@ -53,7 +53,7 @@ class NumberGenerator
 
         // Roman Day
         $roman_day = RomanConverter::toRoman($day_now);
-        Log::debug("NUMBER LAST ".$lastModel->number);
+        Log::debug("NUMBER LAST ".(!empty($lastModel) ? $lastModel->number : 0));
         Log::debug("NUMBER LAST N ".$lastNumber);
         Log::debug("NUMBER C ".$c);
         Log::debug("NUMBER GENERATE ".$currentNumber);
