@@ -19,21 +19,21 @@ class NumberGenerator
         $zeroPad = 5,
         $resetType = self::RESET_TYPE_DAILY,
     ) {
-        $dateTime = Carbon::now();
+        $dateTime = now();
         $year_now = $dateTime->year;
         $month_now = $dateTime->month;
         $day_now = $dateTime->day;
 
         $lastModel = $className::withTrashed()->select('number')
             ->when($resetType == self::RESET_TYPE_YEARLY, function ($query) use ($year_now) {
-                $query->whereYear('created_at', '=', $year_now);
+                $query->whereYear('created_at', $year_now);
             })
             ->when($resetType == self::RESET_TYPE_MONTHLY, function ($query) use ($year_now, $month_now) {
-                $query->whereMonth('created_at', '=', $month_now)
-                    ->whereYear('created_at', '=', $year_now);
+                $query->whereMonth('created_at', $month_now)
+                    ->whereYear('created_at', $year_now);
             })
             ->when($resetType == self::RESET_TYPE_DAILY, function ($query) {
-                $query->whereDate('created_at', '=', now());
+                $query->whereDate('created_at', now());
             })
             ->orderBy('id', 'DESC')
             ->first();
