@@ -52,7 +52,6 @@ class WeeklySummary extends Component
                 $item->day = $this->lebels[$item->transaction_day] ?? $item->transaction_day;
                 return $item;
             });
-        // dd($weeklyData->toArray());
        
         $todayEnglish = Carbon::now()->translatedFormat('l');
         $todayIndonesian = $labels->flip()[$todayEnglish]; 
@@ -65,6 +64,7 @@ class WeeklySummary extends Component
         $indoLabels = $sortedLabels->map(function($day) use ($labels) {
             return $labels[$day];
         });
+        dd($data->values());
         return [
             'labels' => $indoLabels,
             'datasets' => [
