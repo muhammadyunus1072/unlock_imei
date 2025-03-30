@@ -64,10 +64,8 @@ class WeeklySummary extends Component
         $indoLabels = $sortedLabels->map(function($day) use ($labels) {
             return $labels[$day];
         });
-        dd($indoLabels);
-        dd($data->values());
         return [
-            'labels' => $indoLabels,
+            'labels' => $indoLabels->values(),
             'datasets' => [
                 [
                     'label' => 'Total Transaksi',
