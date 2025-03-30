@@ -42,15 +42,47 @@
 
         </div>
         <div class="subtotal-wrapper">
-            <div id="subtotal" class="cart-subtotal"><div class="cart-subtotal__order-item mb-5"><div class="order-item__label">Subtotal</div>
-            <div class="order-item__price ms-5">Rp. @currency($subtotal)</div></div><div class="cart-subtotal__order-item mb-0"><div class="order-item__label my-auto">Coupon code</div><div class="order-item__price ms-5"><input id="coupon-code" type="text" class="form-control form-control-lg form-control text-end" value=""></div></div><div class="cart-subtotal__order-item"></div></div>
-            <div class="cart-subtotal__order-item"></div>
+            <div id="subtotal" class="cart-subtotal">
+                <div class="cart-subtotal__order-item mb-5">
+                    <div class="order-item__label">Subtotal</div>
+                    <div class="order-item__price ms-5">
+                        Rp. @currency($subtotal)
+                    </div>
+                </div>
+                <div class="cart-subtotal__order-item mb-3">
+                    <div class="order-item__label my-auto">Coupon code</div>
+                    <div class="order-item__price ms-5 row col-lg-auto d-flex justify-content-start gap-1 col-sm-12">
+                        <div class="col-auto">
+                            <input type="text" class="form-control form-control-lg" wire:model="code" oninput="this.value = this.value.toUpperCase();">
+                        </div>
+                        <div class="col-auto">
+                            <button type="button" class="btn btn-success" wire:click="couponHandler">Gunakan Coupon</button>
+                        </div>
+                    </div>
+                </div>
+                @if ($voucher_id)
+                    <div class="cart-subtotal__order-item mb-2">
+                        <div class="order-item__label">
+                            Potongan Discount
+                        </div>
+                        <div class="order-item__price ms-5">
+                            Rp. @currency($discount)
+                        </div>
+                    </div>
+                @endif
+            </div>
         </div>
         <div class="total-wrapper">
-            <div id="total" class="cart-total pt-0"><div class="cart-total__order-item"><div class="order-item__label">Total</div>
-            <div class="order-item__price ms-5">Rp. @currency($grand_total)</div></div><div class="cart-total__soft-indicator">
+            <div id="total" class="cart-total pt-0">
+                <div class="cart-total__order-item">
+                    <div class="order-item__label">Total</div>
+                </div>
+            <div class="order-item__price ms-5">Rp. @currency($grand_total)
+                </div>
+            </div>
+            <div class="cart-total__soft-indicator">
                     <span id="soft-indicator">*Soft File ini disediakan dengan ketentuan dan syarat yang harus diperhatikan.</span>
-                </div></div>
+            </div>
         </div>
         <!-- <div class="form-group">
             <div class="form-check form-check-custom form-check-solid form-check-sm">
@@ -126,7 +158,7 @@
                             <div class="order-item__description-name">{{ $product_studio_name }}<br>{{ $product_name }}</div>
                             <div class="order-item__description-count"> @date($booking_date) {{ \Carbon\Carbon::parse($item['product_booking_time']['time'])->format('H:i') }}</div>
                         </div>
-                        <div class="order-item__price">Rp. @currency($product_price)
+                        <div class="order-item__price">@currency($product_price)
                             
                         </div>
                     </div>

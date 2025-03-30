@@ -41,8 +41,8 @@ return new class extends Migration
         $table->string('type')->comment('Voucher Type');
         $table->double('amount')->comment('Voucher Amount');
         $table->string('code')->comment('Voucher Code');
-        $table->dateTime('start_date')->comment('Voucher Start Date');
-        $table->dateTime('end_date')->comment('Voucher End Date');
+        $table->dateTime('start_date')->nullable()->comment('Voucher Start Date');
+        $table->dateTime('end_date')->nullable()->comment('Voucher End Date');
         $table->boolean('is_active')->comment('Voucher Active');
 
         $table->bigInteger("created_by")->unsigned()->nullable();

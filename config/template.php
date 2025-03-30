@@ -52,6 +52,11 @@ return [
                     'route' => 'payment_method.index',
                     'icon_color' => 'success',
                 ],
+                [
+                    'text' => 'Kode Voucher',
+                    'route' => 'voucher.index',
+                    'icon_color' => 'success',
+                ],
             ],
         ],
         [

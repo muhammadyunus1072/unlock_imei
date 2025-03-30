@@ -4,17 +4,19 @@ namespace App\Livewire\Public\BookingReview;
 
 use Exception;
 use App\Helpers\Alert;
-use App\Models\MasterData\PaymentMethod;
 use Livewire\Component;
-use App\Models\Transaction\Transaction;
-use App\Models\Transaction\TransactionDetail;
+use Livewire\Attributes\On;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Crypt;
-use Livewire\Attributes\On;
-use App\Repositories\MasterData\PaymentMethod\PaymentMethodRepository;
+use App\Models\Transaction\Transaction;
+use App\Models\MasterData\PaymentMethod;
+use App\Models\MasterData\Voucher;
+use App\Models\Transaction\TransactionDetail;
 use App\Repositories\MasterData\Product\ProductRepository;
-use App\Repositories\Transaction\Transaction\TransactionDetailRepository;
+use App\Repositories\MasterData\Voucher\VoucherRepository;
 use App\Repositories\Transaction\Transaction\TransactionRepository;
+use App\Repositories\MasterData\PaymentMethod\PaymentMethodRepository;
+use App\Repositories\Transaction\Transaction\TransactionDetailRepository;
 
 class Detail extends Component
 {
@@ -33,12 +35,16 @@ class Detail extends Component
     public $subtotal;
     public $grand_total;
     public $admin_fee;
+
+    public $code;
     public $discount = 0;
 
     // Input
     public $phone;
     public $payment_method;
-    public $voucher;
+    public $voucher_id;
+    public $voucher_type;
+    public $voucher_amount;
 
     public function mount()
     {
@@ -104,6 +110,27 @@ class Detail extends Component
         $this->redirectRoute('public.product-booking', $this->objId);
     }
 
+    public function couponHandler()
+    {
+        $voucher = VoucherRepository::findByCode($this->code);
+
+        if($voucher)
+        {
+            $this->voucher_id = Crypt::encrypt($voucher['id']);
+            $this->voucher_type = $voucher['type'];
+            $this->voucher_amount = $voucher['amount'];
+            $this->discount = $voucher['type'] == Voucher::TYPE_PERCENTAGE ? calculatedDiscount($this->subtotal, $voucher['amount']) : $voucher['amount'];
+            $this->grand_total = $this->subtotal + $this->admin_fee - $this->discount;
+        }else{
+            $this->voucher_id = null;
+            $this->voucher_type = null;
+            $this->voucher_amount = null;
+            $this->discount = 0;
+            $this->grand_total = $this->subtotal + $this->admin_fee - $this->discount;
+            Alert::fail($this, "Gagal", "Maaf, Coupon Tidak Tersedia");
+        }
+    }
+
     public function store()
     {
         try {
@@ -145,7 +172,7 @@ class Detail extends Component
                 'customer_label' => 'Customer',
                 'subtotal' => $this->subtotal,
                 'payment_method_id' => Crypt::decrypt($this->payment_method), // Example
-                'voucher_id' => null,
+                'voucher_id' => $this->voucher_id ? Crypt::decrypt($this->voucher_id) : null,
                 'grand_total' => $this->grand_total,
                 'subtotal' => $this->subtotal,
                 'admin_fee' => $this->admin_fee,

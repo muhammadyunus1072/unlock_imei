@@ -20,6 +20,7 @@ class XenditService
         $description = "Booking ".config('template.title')." - ".$transaction->transactionDetailSample->product_name." - ".$transaction->transactionDetailSample->studio->name;
         $items = [];
         $subtotal = 0;
+        
 
         foreach($transaction->transactionDetails as $index => $item)
         {
@@ -39,6 +40,16 @@ class XenditService
         }
         $admin_fee =  PaymentMethod::TYPE_FIXED === $transaction->payment_method_type ? $transaction->payment_method_amount : calculatedAdminFee($subtotal, $transaction->payment_method_amount);
 
+        $fees[] = [
+            "type" => "Admin Fee",
+            "value" => (float) $admin_fee
+        ];
+        if ($transaction->voucher_id !== null) {
+            array_push($fees, [
+                "type" => "Coupon Discount",
+                "value" => (float) $transaction->discount * -1
+            ]);
+        }
         $create_invoice_request = new CreateInvoiceRequest([
         'external_id' => $transaction->external_id,
         'amount' => $transaction->grand_total,
@@ -73,12 +84,7 @@ class XenditService
         'currency' => 'IDR',
         'locale' => 'id',
         "items" => $items,
-        "fees" => [
-            [
-                "type" => "Admin Fee",
-                "value" => $admin_fee
-            ]
-        ],
+        "fees" => $fees,
         'metadata' => [
             'transaction_number' => $transaction->number,
             'app_name' => config('template.title'),

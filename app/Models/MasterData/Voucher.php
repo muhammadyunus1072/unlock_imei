@@ -52,8 +52,6 @@ class Voucher extends Model
             $object[$prefix . "type"] = $this->type;
             $object[$prefix . "amount"] = $this->amount;
             $object[$prefix . "code"] = $this->code;
-            $object[$prefix . "start_date"] = $this->start_date;
-            $object[$prefix . "end_date"] = $this->end_date;
             $object[$prefix . "is_active"] = $this->is_active;
         }
 

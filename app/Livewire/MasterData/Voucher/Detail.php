@@ -1,33 +1,34 @@
 <?php
 
-namespace App\Livewire\MasterData\PaymentMethod;
+namespace App\Livewire\MasterData\Voucher;
 
 use Exception;
+use Carbon\Carbon;
 use App\Helpers\Alert;
 use Livewire\Component;
 use Livewire\Attributes\On;
-use App\Models\MasterData\PaymentMethod;
-use App\Repositories\MasterData\PaymentMethod\PaymentMethodRepository;
+use Livewire\Attributes\Validate;
+use App\Models\MasterData\Voucher;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Crypt;
-use Livewire\Attributes\Validate;
+use App\Repositories\MasterData\Voucher\VoucherRepository;
 
 class Detail extends Component
 {
     
     public $objId;
     
-    #[Validate('required', message: 'Nama Metode Pembayaran Diisi', onUpdate: false)]
-    public $name;
+    #[Validate('required', message: 'Kode Voucher Harus Diisi', onUpdate: false)]
+    public $code;
 
-    #[Validate('required', message: 'Jenis Biaya Admin Harus Diisi', onUpdate: false)]
+    #[Validate('required', message: 'Jenis Voucher Harus Diisi', onUpdate: false)]
     public $type;
 
-    #[Validate('required', message: 'Nilai Biaya Admin Harus Diisi', onUpdate: false)]
+    #[Validate('required', message: 'Nilai Voucher Harus Diisi', onUpdate: false)]
     public $amount;
 
-    #[Validate('required', message: 'Kode Harus Diisi', onUpdate: false)]
-    public $code;
+    public $start_date;
+    public $end_date;
 
     public $is_active;
 
@@ -37,33 +38,34 @@ class Detail extends Component
     {
         if($this->objId)
         {
-            $product = PaymentMethodRepository::find(Crypt::decrypt($this->objId));
-            $this->name = $product->name;
-            $this->type = $product->type;
-            $this->amount = $product->amount;
-            $this->code = $product->code;
-            $this->is_active = $product->is_active ? true : false;
+            $voucher = VoucherRepository::find(Crypt::decrypt($this->objId));
+            $this->type = $voucher->type;
+            $this->amount = $voucher->amount;
+            $this->code = $voucher->code;
+            $this->start_date = $voucher->start_date ? Carbon::parse($voucher->start_date)->format('Y-m-d') : null;
+            $this->end_date = $voucher->end_date ? Carbon::parse($voucher->end_date)->format('Y-m-d') : null;
+            $this->is_active = $voucher->is_active ? true : false;
         }else{
-            $this->type = PaymentMethod::TYPE_PERCENTAGE;
+            $this->type = Voucher::TYPE_FIXED;
         }
 
-        $this->type_choices = PaymentMethod::TYPE_CHOICE;
+        $this->type_choices = Voucher::TYPE_CHOICE;
     }
 
     #[On('on-dialog-confirm')]
     public function onDialogConfirm()
     {
         if ($this->objId) {
-            $this->redirectRoute('payment_method.edit', $this->objId);
+            $this->redirectRoute('voucher.edit', $this->objId);
         }else{
-            $this->redirectRoute('payment_method.create');
+            $this->redirectRoute('voucher.create');
         }
     }
 
     #[On('on-dialog-cancel')]
     public function onDialogCancel()
     {
-        $this->redirectRoute('payment_method.index');
+        $this->redirectRoute('voucher.index');
     }
 
     public function store()
@@ -73,17 +75,19 @@ class Detail extends Component
             DB::beginTransaction();
 
             $validatedData = [
-                'name' => $this->name,
+                'start_date' => $this->start_date ? $this->start_date : null,
+                'end_date' => $this->end_date ? $this->end_date : null,
                 'type' => $this->type,
                 'code' => $this->code,
                 'amount' => imaskToValue($this->amount),
                 'is_active' => $this->is_active,
             ];
+            
             if ($this->objId) {
                 $objId = Crypt::decrypt($this->objId);
-                PaymentMethodRepository::update($objId, $validatedData);
+                VoucherRepository::update($objId, $validatedData);
             } else {
-                $obj = PaymentMethodRepository::create($validatedData);
+                $obj = VoucherRepository::create($validatedData);
                 $objId = $obj->id;
             }
 
@@ -106,6 +110,6 @@ class Detail extends Component
 
     public function render()
     {
-        return view('livewire.master-data.payment-method.detail');
+        return view('livewire.master-data.voucher.detail');
     }
 }

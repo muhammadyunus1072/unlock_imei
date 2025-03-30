@@ -1,18 +1,19 @@
 <?php
 
-namespace App\Livewire\MasterData\PaymentMethod;
+namespace App\Livewire\MasterData\Voucher;
 
+use Carbon\Carbon;
 use App\Helpers\Alert;
-use App\Models\MasterData\PaymentMethod;
-use App\Permissions\AccessMasterData;
 use Livewire\Component;
 use Livewire\Attributes\On;
-use App\Traits\Livewire\WithDatatable;
+use App\Models\MasterData\Voucher;
+use App\Permissions\AccessMasterData;
 use App\Permissions\PermissionHelper;
 use Illuminate\Support\Facades\Crypt;
+use App\Traits\Livewire\WithDatatable;
 use Illuminate\Database\Eloquent\Builder;
 use App\Repositories\Account\UserRepository;
-use App\Repositories\MasterData\PaymentMethod\PaymentMethodRepository;
+use App\Repositories\MasterData\Voucher\VoucherRepository;
 
 class Datatable extends Component
 {
@@ -29,7 +30,7 @@ class Datatable extends Component
     public function onMount()
     {
         $authUser = UserRepository::authenticatedUser();
-        $this->isCanUpdate = $authUser->hasPermissionTo(PermissionHelper::transform(AccessMasterData::PAYMENT_METHOD, PermissionHelper::TYPE_UPDATE));
+        $this->isCanUpdate = $authUser->hasPermissionTo(PermissionHelper::transform(AccessMasterData::VOUCHER, PermissionHelper::TYPE_UPDATE));
     }
 
     #[On('on-delete-dialog-confirm')]
@@ -39,7 +40,7 @@ class Datatable extends Component
             return;
         }
         
-        PaymentMethodRepository::delete(Crypt::decrypt($this->targetDeleteId));
+        VoucherRepository::delete(Crypt::decrypt($this->targetDeleteId));
         Alert::success($this, 'Berhasil', 'Data berhasil dihapus');
     }
 
@@ -77,7 +78,7 @@ class Datatable extends Component
                     $editHtml = "";
                     $id = Crypt::encrypt($item->id);
                     if ($this->isCanUpdate) {
-                        $editUrl = route('payment_method.edit', $id);
+                        $editUrl = route('voucher.edit', $id);
                         $editHtml = "<div class='col-auto mb-2'>
                             <a class='btn btn-primary btn-sm' href='$editUrl'>
                                 <i class='ki-duotone ki-notepad-edit fs-1'>
@@ -115,27 +116,40 @@ class Datatable extends Component
                 },
             ],
             [
-                'key' => 'name',
-                'name' => 'Nama Metode Pembayaran',
-            ],
-            [
                 'key' => 'code',
-                'name' => 'Kode',
+                'name' => 'Kode Voucher',
             ],
+
             [
                 'key' => 'type',
-                'name' => 'Jenis Biaya Admin',
+                'name' => 'Jenis Voucher',
                 'render' => function($item)
                 {
-                    return PaymentMethod::TYPE_CHOICE[$item->type];
+                    return Voucher::TYPE_CHOICE[$item->type];
                 }
             ],
             [
                 'key' => 'amount',
-                'name' => 'Nilai Biaya Admin',
+                'name' => 'Nilai Voucher',
                 'render' => function($item)
                 {
-                    return PaymentMethod::TYPE_FIXED === $item->type ? "Rp ".numberFormat($item->amount) : numberFormat($item->amount)." %";
+                    return Voucher::TYPE_FIXED === $item->type ? "Rp ".numberFormat($item->amount) : numberFormat($item->amount)." %";
+                }
+            ],
+            [
+                'key' => 'start_date',
+                'name' => 'Tanggal Mulai',
+                'render' => function($item)
+                {
+                    return $item->start_date ? Carbon::parse($item->start_date)->translatedFormat('d F Y') : "-";
+                }
+            ],
+            [
+                'key' => 'end_date',
+                'name' => 'Tanggal Akhir',
+                'render' => function($item)
+                {
+                    return $item->end_date ? Carbon::parse($item->end_date)->translatedFormat('d F Y') : "-";
                 }
             ],
             [
@@ -151,11 +165,11 @@ class Datatable extends Component
 
     public function getQuery(): Builder
     {
-        return PaymentMethodRepository::datatable();
+        return VoucherRepository::datatable();
     }
 
     public function getView(): string
     {
-        return 'livewire.master-data.payment-method.datatable';
+        return 'livewire.master-data.voucher.datatable';
     }
 }
