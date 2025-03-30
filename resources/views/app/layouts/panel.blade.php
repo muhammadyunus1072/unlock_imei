@@ -78,7 +78,7 @@
                     <!--end::Sidebar mobile toggle-->
                     <!--begin::Mobile logo-->
                     <div class="d-flex align-items-center flex-grow-1 flex-lg-grow-0">
-                        <a class="d-lg-none">
+                        <a class="d-lg-none" href="{{ route('public.index') }}">
                             <img alt="Logo" src="{{ asset(config('template.logo_panel')) }}" class="h-30px" />
                         </a>
                     </div>
