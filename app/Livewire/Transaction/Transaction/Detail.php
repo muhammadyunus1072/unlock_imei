@@ -35,7 +35,7 @@ class Detail extends Component
             $this->subtotal = $transaction->transactionDetails->sum(function ($detail) {
                 return $detail->product_price + $detail->product_detail_price;
             });
-            $this->admin_fee = PaymentMethod::TYPE_PERCENTAGE ? calculatedAdminFee($this->subtotal, $transaction->payment_method_amount) : $transaction->payment_method_amount;
+            $this->admin_fee = PaymentMethod::TYPE_PERCENTAGE == $transaction->payment_method_type ? calculatedAdminFee($this->subtotal, $transaction->payment_method_amount) : $transaction->payment_method_amount;
 
             foreach($transaction->transactionDetails as $index => $item){
                 $this->transaction_details[] = [
