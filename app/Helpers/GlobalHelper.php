@@ -1,10 +1,21 @@
 <?php
 
+use Carbon\Carbon;
 use Livewire\Component;
 use App\Helpers\FilePathHelper;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Storage;
 use App\Repositories\MasterData\Studio\StudioRepository;
+
+const HOLIDAY = [
+    'Sunday',
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+];
 
 if (!function_exists('getAccessStudio')) {
     function getAccessStudio()
@@ -27,6 +38,12 @@ if (!function_exists('getAccessStudio')) {
                 'city' => $studio->city,
             ];
         });
+    }
+}
+
+if (!function_exists('isHoliday')) {
+    function isHoliday($date) {
+        return strtolower(Carbon::parse($date)->format('l')) === strtolower(HOLIDAY[config('template.setting_holiday')]);
     }
 }
 

@@ -186,7 +186,12 @@
                dateFormat: "Y-m-d",
                minDate: "today",
                inline: true,
-               defaultDate: "today"
+               defaultDate: "today",
+               disable: [
+                  function(date) {
+                        return date.getDay() == "{{config('template.setting_holiday')}}";
+                  }
+               ]
          });
       });
 

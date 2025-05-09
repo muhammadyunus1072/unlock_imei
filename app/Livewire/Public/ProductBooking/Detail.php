@@ -58,7 +58,12 @@ class Detail extends Component
 
     public function updatedBookingDate()
     {
-        $this->getBookedTimes($this->booking_date);
+        if(!isHoliday($this->booking_date))
+        {
+            $this->getBookedTimes($this->booking_date);
+        }else{
+            $this->booking_date = now()->format('Y-m-d');
+        }
         $this->product_booking_details = [];
     }
 

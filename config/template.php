@@ -10,6 +10,7 @@ return [
     'logo_panel' => 'files/images/logo_long.png',
     'logo_panel_background' => 'white',
     
+    'setting_holiday' => env('SETTING_HOLIDAY', 'sunday'),
     'admin_role' => env('ADMIN_ROLE', 'Admin'),
 
     'registration_route' => 'register',
