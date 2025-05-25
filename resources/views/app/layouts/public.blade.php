@@ -163,7 +163,7 @@
                               </div>
                               <!--end::User menu-->
                            @else
-                                 <a href="{{ route('login')}}" id="btn-login" class="btn" style="background-color: #5d2fc2;">Sign In</a>
+                                 <a href="{{ route('login')}}" id="btn-login" class="btn" style="background-color: #5d2fc2; color:#fff;">Sign In</a>
                            @endif
                        </div>
                     </div>
