@@ -87,13 +87,13 @@
                                    <a target="_blank" class="menu-link nav-link py-3 px-4 px-xxl-6" href="https://kuystudio.id/about">About Us</a>
                                    </div> -->
                                 <div class="menu-item">
-                                   <a class="menu-link nav-link py-3 px-4 px-xxl-6" style="background-color: #5d2fc2;" href="{{ route('public.index') }}">Booking</a>
+                                   <a class="menu-link nav-link py-3 px-4 px-xxl-6" style="color: #5d2fc2;" href="{{ route('public.index') }}">Booking</a>
                                 </div>
                                 {{-- <div class="menu-item">
-                                   <a class="menu-link nav-link py-3 px-4 px-xxl-6" style="background-color: #5d2fc2;" href="">Pricelist</a>
+                                   <a class="menu-link nav-link py-3 px-4 px-xxl-6" style="color: #5d2fc2;" href="">Pricelist</a>
                                 </div> --}}
                                 <div class="menu-item">
-                                   <a class="menu-link nav-link py-3 px-4 px-xxl-6" style="background-color: #5d2fc2;" href="{{ route('public.contact')}}">Contact</a>
+                                   <a class="menu-link nav-link py-3 px-4 px-xxl-6" style="color: #5d2fc2;" href="{{ route('public.contact')}}">Contact</a>
                                 </div>
                              </div>
                           </div>
