@@ -27,7 +27,10 @@
 
     @stack('css')
     <style>
-        .menu-item{
+        .menu-item .menu-icon{
+            color: #01cecb;
+        }
+        .menu-item .menu-title{
             color: #01cecb;
         }
     </style>
