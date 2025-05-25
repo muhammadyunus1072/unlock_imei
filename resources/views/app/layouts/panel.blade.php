@@ -27,7 +27,7 @@
 
     @stack('css')
     <style>
-        .app-sidebar .menu>.menu-item .menu-link.active {
+        [data-kt-app-layout=dark-sidebar] .app-sidebar .menu>.menu-item .menu-link.active {
             background-color: #5d2fc2;
         }
 
