@@ -103,7 +103,7 @@
                               <!--begin::User menu-->
                               <div class="app-navbar-item ms-1 ms-md-4" id="kt_header_user_menu_toggle">
                                  <!--begin::Menu wrapper-->
-                                 <div class="cursor-pointer symbol symbol-35px btn btn-success"
+                                 <div class="cursor-pointer symbol symbol-35px btn" style="background-color: #5d2fc2; color:#fff;"
                                     data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-attach="parent"
                                     data-kt-menu-placement="bottom-end">
                                     My Account
