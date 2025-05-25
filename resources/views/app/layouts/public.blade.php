@@ -405,7 +405,7 @@
              <div class="d-flex flex-column flex-md-row flex-stack py-7 py-lg-10">
                 <div class="d-flex align-items-center order-2 order-md-1">
                    <a href="{{ route('public.index')}}">
-                   <img alt="Logo" src="{{ asset(config('template.logo_panel')) }}" class="h-25px h-md-35px bg-white">
+                   <img alt="Logo" src="{{ asset(config('template.logo_panel')) }}" class="h-25px h-md-35px">
                    </a>
                    <span class="mx-5 fs-6 fw-semibold text-white pt-1" href="https://dev.kuystudio.id">© 2025 {{ config('template.title')}}.</span>
                 </div>

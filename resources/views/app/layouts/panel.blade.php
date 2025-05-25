@@ -187,9 +187,9 @@
                         <!--begin::Logo image-->
                         <a href="{{ route('public.index') }}">
                             <img alt="Logo" src="{{ asset(config('template.logo_panel')) }}"
-                                class="h-50px app-sidebar-logo-default p-1 rounded bg-{{ config('template.logo_panel_background') }}">
+                                class="h-50px app-sidebar-logo-default p-1 rounded">
                             <img alt="Logo" src="{{ asset(config('template.logo_auth')) }}"
-                                class="h-35px app-sidebar-logo-minimize p-1 rounded bg-{{ config('template.logo_panel_background') }}">
+                                class="h-35px app-sidebar-logo-minimize p-1 rounded">
                         </a>
                         <!--end::Logo image-->
 
