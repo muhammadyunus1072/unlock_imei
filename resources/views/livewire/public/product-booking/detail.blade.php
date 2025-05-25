@@ -2,6 +2,7 @@
     <style>
       .select-time.times-checkbox-checked{
          background-color: #5d2fc2;
+         border-color: #5d2fc2 !important;
          color:#fff;
       }
       .addon-checkbox.addon-checkbox-checked {
