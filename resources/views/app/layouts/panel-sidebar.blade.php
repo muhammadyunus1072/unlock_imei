@@ -1,7 +1,12 @@
 @push('css')
     <style>
-        .menu-link.active {
+        .app-sidebar .menu>.menu-item .menu-link.active {
             background-color: #5d2fc2;
+        }
+        .app-sidebar .menu>.menu-item .menu-link.active .menu-icon {
+            color: #fecb6e;
+        }
+        .app-sidebar .menu>.menu-item .menu-link.active .menu-icon {
             color: #fecb6e;
         }
 
