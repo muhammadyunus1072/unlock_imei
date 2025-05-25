@@ -96,10 +96,10 @@
                {!! $product_note !!}
             </div>
             <div class="container mt-5">
-               <button type="submit" class="btn btn-bg-dark text-white w-100">
-               <span wire:loading.class="d-none" class="indicator-label">Booking</span>
-               <span wire:loading class="indicator-progress">Please wait...
-               <span wire:loading class="spinner-border spinner-border-sm align-middle ms-2"></span>
+               <button type="submit" class="btn text-white w-100" style="background-color: #5d2fc2; ">
+               <span wire:loading.class="d-none" class="text-white indicator-label">Booking</span>
+               <span wire:loading class="text-white indicator-progress">Please wait...
+               <span wire:loading class="text-white spinner-border spinner-border-sm align-middle ms-2"></span>
                </span>
                </button>
             </div>
