@@ -4,7 +4,7 @@
          background-color: #5d2fc2;
          color:#fff;
       }
-      .addon-checkbox.addon-checkbox-checked{
+      .addon-checkbox-checked{
          border-color: #5d2fc2;
       }
     </style>
