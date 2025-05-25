@@ -40,6 +40,15 @@
             background-color: #5d2fc2;
             color: #fff;
         }
+        [data-kt-app-layout=dark-sidebar] .app-sidebar .menu>.menu-item.here>.menu-link.active .menu-title {
+            color: #fff;
+        }
+        [data-kt-app-layout=dark-sidebar] .app-sidebar .menu>.menu-item.here>.menu-link.active .menu-icon{
+            color: #fff;
+        }
+        [data-kt-app-layout=dark-sidebar] .app-sidebar .menu>.menu-item.here>.menu-link.active .menu-arrow{
+            color: #fff;
+        }
 
     </style>
 </head>
