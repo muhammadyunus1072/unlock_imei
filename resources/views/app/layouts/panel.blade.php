@@ -29,6 +29,7 @@
     <style>
         [data-kt-app-layout=dark-sidebar] .app-sidebar .menu>.menu-item .menu-link.active {
             background-color: #5d2fc2;
+            color:#fff;
         }
 
     </style>
