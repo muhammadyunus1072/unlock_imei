@@ -1,3 +1,12 @@
+@push('css')
+    <style>
+        .menu-link.active {
+            background-color: #5d2fc2;
+            color: #fecb6e;
+        }
+
+    </style>
+@endpush
 <!--begin::sidebar menu-->
 <div class="app-sidebar-menu overflow-hidden flex-column-fluid">
     <!--begin::Menu wrapper-->
