@@ -1,3 +1,11 @@
+@push('css')
+    <style>
+      .select-time.times-checkbox-checked{
+         background-color: #5d2fc2;
+         color:#fff;
+      }
+    </style>
+@endpush
 <div class="card-body pb-lg-0 position-relative">
    <form wire:submit="store">
       <a href="#" class="text-dark text-hover-primary fs-2 fw-bold">{{ $product_name }}</a>
