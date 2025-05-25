@@ -13,7 +13,7 @@
                     @if (isset($menu['header']))
                         <div class="menu-item pt-5">
                             <div class="menu-content">
-                                <span class="menu-heading fw-bold text-uppercase fs-7">{{ $menu['header'] }}</span>
+                                <span class="menu-heading fw-bold text-uppercase fs-7" style="color: #01cecb">{{ $menu['header'] }}</span>
                             </div>
                         </div>
                     @elseif (isset($menu['submenu']))
@@ -25,7 +25,7 @@
                                 {{ isset($menu['id']) ? "id={$menu['id']}" : '' }}>
                                 @if (isset($menu['icon']))
                                     <span class="menu-icon">
-                                        <i class="{{ $menu['icon'] }} fs-2">
+                                        <i class="{{ $menu['icon'] }} fs-2" style="color: #01cecb">
                                             <span class="path1"></span>
                                             <span class="path2"></span>
                                             <span class="path3"></span>
@@ -38,7 +38,7 @@
                                 @endif
                                 <span class="menu-title">
                                     {{ $menu['text'] }}
-                                    <label class='badge-notification badge bg-danger text-white ms-3'></label>
+                                    <label class='badge-notification badge bg-danger ms-3' style="color: #01cecb"></label>
                                 </span>
                                 <span class="menu-arrow"></span>
                             </span>
@@ -57,7 +57,7 @@
                                             <span class="menu-title">
                                                 {{ $submenu['text'] }}
                                                 <label
-                                                    class='badge-notification badge bg-danger text-white ms-3'></label>
+                                                    class='badge-notification badge bg-danger ms-3' style="color: #01cecb"></label>
                                             </span>
                                         </a>
                                         <!--end:Menu link-->
@@ -76,7 +76,7 @@
                                 href="{{ route($menu['route']) }}" {{ isset($menu['id']) ? "id={$menu['id']}" : '' }}>
                                 @if (isset($menu['icon']))
                                     <span class="menu-icon">
-                                        <i class="{{ $menu['icon'] }} fs-2">
+                                        <i class="{{ $menu['icon'] }} fs-2" style="color: #01cecb">
                                             <span class="path1"></span>
                                             <span class="path2"></span>
                                             <span class="path3"></span>
@@ -89,7 +89,7 @@
                                 @endif
                                 <span class="menu-title">
                                     {{ $menu['text'] }}
-                                    <label class='badge-notification badge bg-danger text-white ms-3'></label>
+                                    <label class='badge-notification badge bg-danger ms-3' style="color: #01cecb"></label>
                                 </span>
                             </a>
                             <!--end:Menu link-->
