@@ -36,13 +36,13 @@
         [data-kt-app-layout=dark-sidebar] .app-sidebar .menu>.menu-item.here>.menu-link .menu-arrow{
             color: #5d2fc2;
         }
-        [data-kt-app-layout=dark-sidebar] .app-sidebar .menu>.menu-item.here>..menu-sub .menu-title {
+        [data-kt-app-layout=dark-sidebar] .app-sidebar .menu>.menu-item.here>.menu-sub .menu-title {
             color: #5d2fc2;
         }
-        [data-kt-app-layout=dark-sidebar] .app-sidebar .menu>.menu-item.here>..menu-sub .menu-icon{
+        [data-kt-app-layout=dark-sidebar] .app-sidebar .menu>.menu-item.here>.menu-sub .menu-icon{
             color: #5d2fc2;
         }
-        [data-kt-app-layout=dark-sidebar] .app-sidebar .menu>.menu-item.here>..menu-sub .menu-arrow{
+        [data-kt-app-layout=dark-sidebar] .app-sidebar .menu>.menu-item.here>.menu-sub .menu-arrow{
             color: #5d2fc2;
         }
         [data-kt-app-layout=dark-sidebar] .app-sidebar .menu>.menu-item .menu-link.active {
