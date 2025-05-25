@@ -16,7 +16,7 @@
               <div class="card-footer">
                   <div class="media">
                       <small>Start From</small>
-                      <h2 class="card-title mt-0 text-white">
+                      <h2 class="card-title mt-0" style="color: #01cecb">
                           Rp. @currency($item->price) / Sesi 
                       </h2>
                   </div>
