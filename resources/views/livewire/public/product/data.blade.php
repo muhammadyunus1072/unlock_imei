@@ -7,7 +7,7 @@
 			#8662e8 100%)">
               <div class="card-body">
                 <a target="_blank" href="https://www.google.com/maps?q={{ $item->studio->latitude.','.$item->studio->longitude }}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="{{$item->studio->address}}" data-kt-initialized="1">
-                    <p class="card-meta mb-1"><i class="fa-solid fa-location-dot" style="color:#fecb6e;"></i> {{$item->studio->name}} - {{$item->studio->city}}</p>
+                    <p class="card-meta mb-1" style="color:#fecb6e;"><i class="fa-solid fa-location-dot" style="color:#fecb6e;"></i> {{$item->studio->name}} - {{$item->studio->city}}</p>
                 </a>
                 <h2 class="card-title mt-0">
                     <a class="text-white" href="#">{{$item->name}}</a>
