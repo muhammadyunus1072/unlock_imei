@@ -4,6 +4,9 @@
          background-color: #5d2fc2;
          color:#fff;
       }
+      .addon-checkbox.addon-checkbox-checked{
+         border-color: #5d2fc2;
+      }
     </style>
 @endpush
 <div class="card-body pb-lg-0 position-relative">
