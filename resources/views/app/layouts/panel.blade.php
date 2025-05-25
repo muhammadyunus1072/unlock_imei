@@ -36,6 +36,15 @@
         [data-kt-app-layout=dark-sidebar] .app-sidebar .menu>.menu-item.here>.menu-link .menu-arrow{
             color: #5d2fc2;
         }
+        [data-kt-app-layout=dark-sidebar] .app-sidebar .menu>.menu-item.here>.menu-link .menu-sub .menu-title {
+            color: #5d2fc2;
+        }
+        [data-kt-app-layout=dark-sidebar] .app-sidebar .menu>.menu-item.here>.menu-link .menu-sub .menu-icon{
+            color: #5d2fc2;
+        }
+        [data-kt-app-layout=dark-sidebar] .app-sidebar .menu>.menu-item.here>.menu-link .menu-sub .menu-arrow{
+            color: #5d2fc2;
+        }
         [data-kt-app-layout=dark-sidebar] .app-sidebar .menu>.menu-item .menu-link.active {
             background-color: #5d2fc2;
             color: #fff;
