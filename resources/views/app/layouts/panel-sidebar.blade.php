@@ -36,7 +36,7 @@
                                         </i>
                                     </span>
                                 @endif
-                                <span class="menu-title">
+                                <span class="menu-title" style="color: #01cecb">
                                     {{ $menu['text'] }}
                                     <label class='badge-notification badge bg-danger ms-3' style="color: #01cecb"></label>
                                 </span>
