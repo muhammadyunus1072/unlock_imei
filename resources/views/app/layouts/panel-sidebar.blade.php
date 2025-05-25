@@ -54,7 +54,7 @@
                                             <span class="menu-bullet">
                                                 <span class="bullet bullet-dot"></span>
                                             </span>
-                                            <span class="menu-title">
+                                            <span class="menu-title" style="color: #5d2fc2">
                                                 {{ $submenu['text'] }}
                                                 <label
                                                     class='badge-notification badge bg-danger ms-3' style="color: #5d2fc2"></label>
