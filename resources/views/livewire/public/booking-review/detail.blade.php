@@ -56,7 +56,7 @@
                             <input type="text" class="form-control form-control-lg" wire:model="code" oninput="this.value = this.value.toUpperCase();">
                         </div>
                         <div class="col-auto">
-                            <button type="button" class="btn btn-success" wire:click="couponHandler">Gunakan Coupon</button>
+                            <button type="button" class="btn text-white" style="background-color: #5d2fc2; " wire:click="couponHandler">Gunakan Coupon</button>
                         </div>
                     </div>
                 </div>
@@ -91,7 +91,7 @@
             </div>
         </div> -->
         <form id="form-configure" class="form-configure w-100 pe-10 mb-5 mt-10 btn-confirm-order-wrapper" autocomplete="off" wire:submit="store">
-            <button type="submit" id="btn-confirm-order" class="btn btn-bg-success text-white w-100">
+            <button type="submit" id="btn-confirm-order" class="btn text-white w-100" style="background-color: #5d2fc2; ">
                 <span class="indicator-label">Confirm Order</span>
                 <span class="indicator-progress">Please wait...
                     <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
@@ -111,7 +111,7 @@
                     Customer Agreement
                 </h2>
             </div>
-            <div id="freeFile" class="card-body p-2 rounded d-flex align-items-center justify-content-center" style="min-height: 120px; background-color:#4CC9FE;">
+            <div id="freeFile" class="card-body p-2 rounded d-flex align-items-center justify-content-center" style="min-height: 120px; background-color:#5d2fc2;">
                 <blockquote class="blockquote mb-0 text-center">
                     <h4 class="text-white">
                         Dengan ini anda menyatakan kesediaan untuk melaksanakan ketentuan untuk mendapatkan soft file secara
