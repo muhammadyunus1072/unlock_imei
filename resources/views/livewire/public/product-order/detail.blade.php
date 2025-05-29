@@ -420,8 +420,8 @@
             var lat;
             var lng;
 
-            const initLat = @json($latitude ?? null);
-            const initLng = @json($longitude ?? null);
+            const initLat = @json($lat ?? null);
+            const initLng = @json($lng ?? null);
 
             const map = L.map('map');
 
