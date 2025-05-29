@@ -448,6 +448,8 @@
             );
 
             function initMap(){
+                console.log(initLat);
+                console.log(initLng);
                 if(initLat && initLng) {
                     map.setView([ initLat, initLng], 18);
                 }else{
