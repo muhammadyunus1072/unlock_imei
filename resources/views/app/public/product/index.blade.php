@@ -25,6 +25,6 @@
         <h3 class="fs-2hx text-dark">{{ config('template.title') }}</h3>
     </div>
     <!--end::Heading-->
-    <livewire:public.product.filter>     
+    {{-- <livewire:public.product.filter>      --}}
     <livewire:public.product.data>     
 @stop

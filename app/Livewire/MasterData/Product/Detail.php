@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Storage;
 use App\Repositories\MasterData\Product\ProductRepository;
+use App\Repositories\MasterData\Product\ProductWarrantyRepository;
 
 class Detail extends Component
 {
@@ -20,39 +21,32 @@ class Detail extends Component
     
     public $objId;
 
-    #[Validate('required', message: 'Studio Harus Diisi', onUpdate: false)]
-    public $studio_id;
-    public $studio_text;
-    public $studios = [];
-
     #[Validate('required', message: 'Nama Produk Harus Diisi', onUpdate: false)]
     public $name;
-
-    #[Validate('required', message: 'Harga Harus Diisi', onUpdate: false)]
-    public $price;
 
     public $image_url;
     public $image;
     public $description;
-    public $note;
+    public $product_warranty_id;
+    public $product_warranty_choices = [];
 
     public function mount()
-    {
-        $this->studios = getAccessStudio();
-        
+    {   
         if ($this->objId) {
             $id = Crypt::decrypt($this->objId);
             $product = ProductRepository::find($id);
-            $this->studio_id = Crypt::encrypt($product->studio_id);
-            $this->studio_text = $product->studio->name ."-". $product->studio->city;
             $this->name = $product->name;
-            $this->price = valueToImask($product->price);
             $this->description = $product->description;
-            $this->note = $product->note;
+            $this->product_warranty_id = simple_encrypt($product->product_warranty_id);
             $this->image_url = $product->image_url();
-        }else{
-            $this->studio_id = $this->studios[0]['id'];
         }
+
+        $this->product_warranty_choices = ProductWarrantyRepository::all()->map(function ($product_warranty) {
+                return [
+                    'id' => simple_encrypt($product_warranty->id),
+                    'name' => $product_warranty->name,
+                ];
+            });
     }
 
     #[On('on-dialog-confirm')]
@@ -119,11 +113,9 @@ class Detail extends Component
         $this->validate();
         try {
             $validatedData = [
-                'studio_id' => Crypt::decrypt($this->studio_id),
                 'name' => $this->name,
                 'description' => $this->description,
-                'price' => imaskToValue($this->price),
-                'note' => $this->note,
+                'product_warranty_id' => $this->product_warranty_id ? simple_decrypt($this->product_warranty_id) : null,
             ];
             $filePath = session('uploaded_image', null);
             if ($filePath) {

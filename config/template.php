@@ -39,13 +39,13 @@ return [
             'icon' => 'ki-duotone ki-shield-tick',
             'submenu' => [
                 [
-                    'text' => 'Studio',
-                    'route' => 'studio.index',
+                    'text' => 'Produk',
+                    'route' => 'product.index',
                     'icon_color' => 'success',
                 ],
                 [
-                    'text' => 'Produk',
-                    'route' => 'product.index',
+                    'text' => 'Garansi Produk',
+                    'route' => 'product_warranty.index',
                     'icon_color' => 'success',
                 ],
                 [
@@ -80,18 +80,6 @@ return [
                 [
                     'text' => 'Laporan - Transaksi',
                     'route' => 'transaction_report.index',
-                    'icon_color' => 'success',
-                ],
-            ],
-        ],
-        [
-            // 'id' => 'menu_admin'
-            'text' => 'Layanan',
-            'icon' => 'ki-duotone ki-shield-tick',
-            'submenu' => [
-                [
-                    'text' => 'Scanner QR',
-                    'route' => 'scanner.index',
                     'icon_color' => 'success',
                 ],
             ],

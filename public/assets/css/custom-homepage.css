@@ -916,7 +916,7 @@
 	/* Configuration */
 	.configure {
 		width: 100%;
-		order: 1;
+		order: 0;
 	}
 
 	.cart-summary__title {
@@ -951,8 +951,8 @@
 		line-height: 54px;
 		font-size: 44px;
 		font-weight: 700;
-		text-transform: none;
-		display: none;
+		/* text-transform: none;
+		display: none; */
 	}
 	
 	.panel-configure__title-mobile {
@@ -990,8 +990,8 @@
 		line-height: 54px;
 		font-size: 44px;
 		font-weight: 700;
-		text-transform: none;
-		display: none;
+		/* text-transform: none;
+		display: none; */
 	}
 	
 	.panel-configure__title-mobile {
@@ -999,8 +999,8 @@
 		line-height: 54px;
 		font-size: 30px;
 		font-weight: 700;
-		text-transform: none;
-		display: inline;
+		/* text-transform: none;
+		display: inline; */
 	}
 
 	/* .panel-configure__title {

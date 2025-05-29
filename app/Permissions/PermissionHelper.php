@@ -30,7 +30,6 @@ class PermissionHelper
         'AccessAccount' => AccessAccount::class,
         'AccessMasterData' => AccessMasterData::class,
         'AccessTransaction' => AccessTransaction::class,
-        'AccessService' => AccessService::class,
         'AccessReport' => AccessReport::class,
     ];
 
@@ -38,7 +37,6 @@ class PermissionHelper
         'Utama' => AccessAccount::ALL,
         'MasterData' => AccessMasterData::ALL,
         'Transaction' => AccessTransaction::ALL,
-        'Service' => AccessService::ALL,
         'Service' => AccessReport::ALL,
     ];
 
@@ -46,7 +44,6 @@ class PermissionHelper
         ...AccessAccount::ALL,
         ...AccessMasterData::ALL,
         ...AccessTransaction::ALL,
-        ...AccessService::ALL,
         ...AccessReport::ALL,
     ];
 
@@ -54,7 +51,6 @@ class PermissionHelper
         ...AccessAccount::TYPE_ALL,
         ...AccessMasterData::TYPE_ALL,
         ...AccessTransaction::TYPE_ALL,
-        ...AccessService::TYPE_ALL,
         ...AccessReport::TYPE_ALL,
     ];
 
@@ -62,7 +58,6 @@ class PermissionHelper
         ...AccessAccount::TRANSLATE,
         ...AccessMasterData::TRANSLATE,
         ...AccessTransaction::TRANSLATE,
-        ...AccessService::TRANSLATE,
         ...AccessReport::TRANSLATE,
     ];
 

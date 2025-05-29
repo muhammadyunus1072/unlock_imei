@@ -6,7 +6,7 @@ use App\Http\Controllers\Public\PublicController;
 
 Route::group(["controller" => PublicController::class, "prefix" => "", "as" => "public."], function () {
     Route::get('/', 'index')->name('index');
-    Route::get('{id}/product-booking', 'product_booking')->name('product-booking'); 
+    Route::get('{id}/product-order', 'product_order')->name('product-order'); 
     Route::get('contact', 'contact')->name('contact'); 
 });
 

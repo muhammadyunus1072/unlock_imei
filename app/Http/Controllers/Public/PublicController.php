@@ -52,9 +52,9 @@ class PublicController extends Controller
         }
     }
     
-    public function product_booking(Request $request)
+    public function product_order(Request $request)
     {
-        return view('app.public.product-booking.detail', ["objId" => $request->id]);
+        return view('app.public.product-order.detail', ["objId" => $request->id]);
     }
     
     public function booking_review(Request $request)

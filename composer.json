@@ -20,6 +20,7 @@
         "simplesoftwareio/simple-qrcode": "^4.2",
         "sis/track-history": "^1.0",
         "spatie/laravel-permission": "^6.3",
+        "stevebauman/location": "^7.5",
         "xendit/xendit-php": "^6.3"
     },
     "require-dev": {

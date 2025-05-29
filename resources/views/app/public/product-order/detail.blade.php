@@ -19,5 +19,5 @@
 @stop
 
 @section('content')
-    <livewire:public.booking-review.detail>     
+    <livewire:public.product-order.detail :objId="$objId">     
 @stop

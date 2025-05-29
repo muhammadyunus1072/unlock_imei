@@ -17,6 +17,16 @@ const HOLIDAY = [
     'Saturday',
 ];
 
+if (!function_exists('saveInfoHelper')) {
+    function saveInfoHelper($object, $model, $data, $prefix)
+    {
+        foreach($data as $item)
+        {
+            $object[$prefix . "".$item] = $model->$item;
+        }
+        return $object;
+    }
+}
 if (!function_exists('getAccessStudio')) {
     function getAccessStudio()
     {

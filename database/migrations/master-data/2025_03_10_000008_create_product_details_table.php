@@ -34,14 +34,10 @@ return new class extends Migration
             $table->bigInteger('obj_id')->unsigned();
         } else {
             $table->index('product_id', 'product_details_product_id_idx');
-            $table->index('name', 'product_details_name_idx');
         }
-
         $table->unsignedBigInteger('product_id')->comment('ID Product');
-        $table->string('name')->comment('Product Detail Name');
         $table->text('description')->nullable()->comment('Product Detail Description');
-        $table->double('price')->comment('Product Detail Price');
-        $table->string('image')->comment('Product Detail Image');
+        $table->double('price')->comment('Product Price');
 
         $table->bigInteger("created_by")->unsigned()->nullable();
         $table->bigInteger("updated_by")->unsigned()->nullable();

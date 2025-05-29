@@ -15,10 +15,8 @@ class ProductDetail extends Model
 
     protected $fillable = [
         'product_id',
-        'name',
         'description',
         'price',
-        'image',
     ];
     
     protected $guarded = ['id'];
@@ -34,20 +32,12 @@ class ProductDetail extends Model
     }
     public function saveInfo($object, $data = null, $prefix = "product_detail_")
     {
-        if($data)
-        {
-            foreach($data as $item)
-            {
-                $object[$prefix . "".$item] = $this->$item;
-            }
-        }else{
-            $object[$prefix . "name"] = $this->name;
-            $object[$prefix . "description"] = $this->description;
-            $object[$prefix . "price"] = $this->price;
-            $object[$prefix . "image"] = $this->image;
-        }
+        $default = [
+            "description",
+            "price",
+        ];
 
-        return $object;
+        return saveInfoHelper($object, $this, $data ?? $default, $prefix);
     }
 
     public function image_url()

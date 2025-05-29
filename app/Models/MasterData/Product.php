@@ -16,12 +16,10 @@ class Product extends Model
     use HasFactory, SoftDeletes, HasTrackHistory;
 
     protected $fillable = [
-        'studio_id',
+        'product_warranty_id',
         'name',
         'description',
-        'price',
         'image',
-        'note',
     ];
     
     protected $guarded = ['id'];
@@ -36,24 +34,15 @@ class Product extends Model
         return true;
     }
 
-    public function saveInfo($object, $data = null, $prefix = "product_")
+    public function saveInfo($object, $prefix = "product_", $data = null)
     {
-        if($data)
-        {
-            foreach($data as $item)
-            {
-                $object[$prefix . "".$item] = $this->$item;
-            }
-        }else{
-            $object[$prefix . "studio_id"] = $this->studio_id;
-            $object[$prefix . "name"] = $this->name;
-            $object[$prefix . "description"] = $this->description;
-            $object[$prefix . "price"] = $this->price;
-            $object[$prefix . "image"] = $this->image;
-            $object[$prefix . "note"] = $this->note;
-        }
+        $default = [
+            "name",
+            "description",
+            "image",
+        ];
 
-        return $object;
+        return saveInfoHelper($object, $this, $data ?? $default, $prefix);
     }
 
     public function image_url()
@@ -61,18 +50,13 @@ class Product extends Model
         return $this->image ? Storage::url(FilePathHelper::FILE_PRODUCT_IMAGE . $this->image) : null;
     }
 
-    public function studio()
-    {
-        return $this->belongsTo(Studio::class, 'studio_id', 'id');
-    }
-
     public function productDetails()
     {
         return $this->hasMany(ProductDetail::class, 'product_id', 'id');
     }
 
-    public function productBookingTimes()
+    public function productWarranty()
     {
-        return $this->hasMany(ProductBookingTime::class, 'product_id', 'id');
+        return $this->belongsTo(ProductWarranty::class, 'product_warranty_id', 'id');
     }
 }

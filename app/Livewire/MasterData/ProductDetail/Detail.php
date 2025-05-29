@@ -39,7 +39,7 @@ class Detail extends Component
                     'price' => ValueToImask($value->price),
                     'description' => $value->description,
                     'image' => $value->image,
-                    'image_url' => $value->image ? Storage::url(FilePathHelper::FILE_PRODUCT_DETAIL_IMAGE . $value->image) : asset("media/404.png"),
+                    'image_url' => $value->image ? Storage::url(FilePathHelper::FILE_PRODUCT_DETAIL_IMEI . $value->image) : asset("media/404.png"),
                 ];
             }
         }else{

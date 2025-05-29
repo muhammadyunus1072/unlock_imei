@@ -11,19 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('studios', function (Blueprint $table) {
+        Schema::create('product_warranties', function (Blueprint $table) {
             $this->scheme($table, false);
         });
 
-        Schema::create('_history_studios', function (Blueprint $table) {
+        Schema::create('_history_product_warranties', function (Blueprint $table) {
             $this->scheme($table, true);
         });
     }
 
     public function down()
     {
-        Schema::dropIfExists('studios');
-        Schema::dropIfExists('_history_studios');
+        Schema::dropIfExists('product_warranties');
+        Schema::dropIfExists('_history_product_warranties');
     }
 
     private function scheme(Blueprint $table, $is_history = false)
@@ -33,17 +33,11 @@ return new class extends Migration
         if ($is_history) {
             $table->bigInteger('obj_id')->unsigned();
         } else {
-            $table->index('name', 'studios_name_idx');
-            $table->index('city', 'studios_city_idx');
+            $table->index('name', 'product_warranties_name_idx');
         }
 
-        $table->string('name')->comment('Studio Name');
-        $table->text('description')->nullable()->comment('Studio Description');
-        $table->string('latitude')->nullable()->comment('Studio Latitude');
-        $table->string('longitude')->nullable()->comment('Studio Longitude');
-        $table->string('map_zoom')->nullable()->comment('Studio Map Zoom');
-        $table->string('city')->nullable()->comment('Studio City Name');
-        $table->text('address')->nullable()->comment('Studio Address');
+        $table->string('name')->comment('Product Warranty Name');
+        $table->double('days')->default(0)->comment('Product Warranty Days');
 
         $table->bigInteger("created_by")->unsigned()->nullable();
         $table->bigInteger("updated_by")->unsigned()->nullable();

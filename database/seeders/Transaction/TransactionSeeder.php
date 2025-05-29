@@ -9,6 +9,7 @@ use Illuminate\Database\Seeder;
 use App\Models\MasterData\Product;
 use App\Models\Transaction\Transaction;
 use App\Models\Transaction\TransactionDetail;
+use App\Repositories\MasterData\PaymentMethod\PaymentMethodRepository;
 
 class TransactionSeeder extends Seeder
 {
@@ -17,66 +18,57 @@ class TransactionSeeder extends Seeder
         $faker = \Faker\Factory::create('id_ID');
 
         // Ambil semua produk dan booking time
-        $paymentMethods = PaymentMethod::all();
+        $paymentMethods = PaymentMethodRepository::getBy([
+            ['is_active', true],
+        ]);
         $products = Product::all();
         $users = User::all();
 
-        for($day = 0; $day < 300; $day++) {
+        for($day = 0; $day < 100; $day++) {
+            $imei = $faker->uuid();
             $bookingDate = Carbon::now()->subDays($day);
 
             $randTransactionCount = rand(5, 10);
             for ($i=0; $i < $randTransactionCount; $i++) { 
                 $user = $faker->randomElement($users);
-
-                $bookingCount = rand(1, 3);
-                $bookings = [];
-                $booking = 0;
-                while ($booking < $bookingCount) {
-                     // Pilih produk acak
-                    $product = $faker->randomElement($products); // Get full product model
-
-                    // Pilih product_detail_id yang sesuai dengan product_id
-                    if ($product->productDetails->isEmpty()) {
-                        continue; // Skip if no product details available
-                    }
-                    $productDetail = $faker->randomElement($product->productDetails);
-
-                    // Pilih product_booking_time_id yang sesuai dengan product_detail_id
-                    if ($product->productBookingTimes->isEmpty()) {
-                        continue; // Skip if no booking times available
-                    }
-                    $productBookingTime = $faker->randomElement($product->productBookingTimes);
-
-                    // Cek ketersediaan sebelum booking
-                    $isNotAvailable = TransactionDetail::isNotAvailable(
-                        $bookingDate, 
-                        $product->id, 
-                        $productBookingTime->id
-                    );
-
-                    if ($isNotAvailable) {
-                        continue; // Skip if already booked
-                    }
-
-                    $bookings[] = [
-                        'product_id' => $product->id,
-                        'product_detail_id' => $productDetail->id,
-                        'product_booking_time_id' => $productBookingTime->id,
-                        'price' => $product->price + $productDetail->price,
-                    ];
-
-                    $booking++; // Increase booking count
+                
+                // Pilih produk acak
+                $product = $faker->randomElement($products); // Get full product model
+                
+                // Pilih product_detail_id yang sesuai dengan product_id
+                if ($product->productDetails->isEmpty()) {
+                    continue; // Skip if no product details available
                 }
+
+                // Cek ketersediaan sebelum booking
+                $isNotAvailable = TransactionDetail::isNotAvailable(
+                    $imei,
+                );
+
+                if ($isNotAvailable) {
+                    continue; // Skip if already booked
+                }
+
+                $product_details = [];
+                foreach ($product->productDetails as $key => $product_detail) {
+                    
+                    $product_details[] = [           
+                        'product_id' => $product_detail->product_id,             
+                        'product_detail_id' => $product_detail->id,             
+                        'price' => $product_detail->price,             
+                    ];
+                }
+
                 $paymentMethod = $faker->randomElement($paymentMethods); // Contoh metode pembayaran
-                $subtotal = collect($bookings)->sum('price');
+                $subtotal = collect($product_details)->sum('price');
                 $admin_fee = 0;
                 $grandTotal = 0;
-                if($paymentMethod->type === PaymentMethod::TYPE_PERCENTAGE)
+                if($paymentMethod->fee_type === PaymentMethod::TYPE_PERCENTAGE)
                 {
-                    $admin_fee = calculatedAdminFee($subtotal, $paymentMethod->amount);
+                    $admin_fee = calculatedAdminFee($subtotal, $paymentMethod->fee_amount);
                     $grandTotal = $subtotal + $admin_fee;
                 }else{
-                    $admin_fee = $paymentMethod->amount;
+                    $admin_fee = $paymentMethod->fee_amount;
                     $grandTotal = $subtotal + $admin_fee;
                 }
                 $transaction = Transaction::create([
@@ -84,14 +76,17 @@ class TransactionSeeder extends Seeder
                     'customer_name' => $user->name,
                     'customer_email' => $user->email,
                     'customer_phone' => $faker->phoneNumber(),
-                    'customer_label' => 'Customer',
+                    'customer_lat' => $faker->latitude(),
+                    'customer_long' => $faker->longitude(),
+                    'customer_ktp' => $faker->word(),
+                    'customer_social_media' => json_encode([]),
                     'payment_method_id' => $paymentMethod->id,
                     'voucher_id' => null,
                     'created_at' => $bookingDate,
                     'status' => $faker->randomElement([
-                        Transaction::STATUS_PENDING,
-                        Transaction::STATUS_PAID,
-                        Transaction::STATUS_EXPIRED,
+                        Transaction::PAYMENT_STATUS_PENDING,
+                        Transaction::PAYMENT_STATUS_PAID,
+                        Transaction::PAYMENT_STATUS_EXPIRED,
                     ]),
                     'grand_total' => $grandTotal,
                     'subtotal' => $subtotal,
@@ -99,13 +94,12 @@ class TransactionSeeder extends Seeder
                     'discount' => 0,
                 ]);
 
-                foreach ($bookings as $book) {
-                    TransactionDetail::create([
+                foreach ($product_details as $book) {
+                    $transactionDetail = TransactionDetail::create([
                         'transaction_id' => $transaction->id,
-                        'booking_date' => $bookingDate,
                         'product_id' => $book['product_id'],
                         'product_detail_id' => $book['product_detail_id'],
-                        'product_booking_time_id' => $book['product_booking_time_id'],
+                        'imei' => $imei,
                     ]);
                 } 
             }

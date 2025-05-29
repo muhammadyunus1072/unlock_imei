@@ -33,30 +33,33 @@ return new class extends Migration
         if ($is_history) {
             $table->bigInteger('obj_id')->unsigned();
         } else {
+
+            $table->index('transaction_id', 'transaction_details_transaction_id_idx');
+            $table->index('product_id', 'transaction_details_product_id_idx');
+            $table->index('product_detail_price', 'transaction_details_product_detail_price_idx');
         }
 
         $table->unsignedBigInteger('transaction_id')->comment('ID Transaction');
-        $table->dateTime('booking_date')->comment('Transaction Booking Date');
+        
+        $table->string('imei')->comment('Transaction Detail IMEI');
 
         // Product Information
         $table->unsignedBigInteger('product_id')->comment('ID Product');
-        $table->unsignedBigInteger('product_studio_id')->comment('Product ID Studio');
         $table->string('product_name')->comment('Product Name');
         $table->text('product_description')->nullable()->comment('Product Description');
-        $table->double('product_price')->comment('Product Price');
         $table->string('product_image')->comment('Product Image');
-        $table->string('product_note')->nullable()->comment('Product Note');
+        
+        $table->dateTime('active_at')->nullable()->default(null)->comment('Product IMEI Active At');
 
-        // Product Detail Information
-        $table->unsignedBigInteger('product_detail_id')->comment('ID Product Detail');  
-        $table->string('product_detail_name')->comment('Product Detail Name');
+        $table->unsignedBigInteger('product_warranty_id')->comment('ID Product Warranty');
+        $table->string('product_warranty_name')->comment('Product Warranty Name');
+        $table->double('product_warranty_days')->default(0)->comment('Product Warranty Days');
+        $table->dateTime('warranty_expired_at')->nullable()->default(null)->comment('Product Warranty Expired At');
+
+        // Product Detail
+        $table->unsignedBigInteger('product_detail_id')->comment('ID Product Detail');
         $table->text('product_detail_description')->nullable()->comment('Product Detail Description');
         $table->double('product_detail_price')->comment('Product Detail Price');
-        $table->string('product_detail_image')->comment('Product Detail Image');
-
-        // Product Booking Time Information
-        $table->unsignedBigInteger('product_booking_time_id')->comment('ID Product Booking Time');
-        $table->time('product_booking_time_time')->comment('Product Booking Time');
 
         $table->bigInteger("created_by")->unsigned()->nullable();
         $table->bigInteger("updated_by")->unsigned()->nullable();

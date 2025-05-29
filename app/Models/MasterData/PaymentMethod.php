@@ -13,10 +13,11 @@ class PaymentMethod extends Model
 
     protected $fillable = [
         'name',
-        'type',
-        'amount',
+        'fee_type',
+        'fee_amount',
         'code',
         'is_active',
+        'is_xendit',
     ];
     
     protected $guarded = ['id'];
@@ -39,21 +40,16 @@ class PaymentMethod extends Model
         self::TYPE_FIXED => 'Nominal Tetap',
     ];
 
-    public function saveInfo($object, $data = null, $prefix = "payment_method_")
+    public function saveInfo($object, $prefix = "payment_method_", $data = null)
     {
-        if($data)
-        {
-            foreach($data as $item)
-            {
-                $object[$prefix . "".$item] = $this->$item;
-            }
-        }else{
-            $object[$prefix . "name"] = $this->name;
-            $object[$prefix . "type"] = $this->type;
-            $object[$prefix . "amount"] = $this->amount;
-            $object[$prefix . "code"] = $this->code;
-        }
+        $default = [
+            'name',
+            'fee_type',
+            'fee_amount',
+            'code',
+            'is_xendit',
+        ];
 
-        return $object;
+        return saveInfoHelper($object, $this, $data ?? $default, $prefix);
     }
 }

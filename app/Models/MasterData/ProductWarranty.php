@@ -7,13 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class ProductBookingTime extends Model
+class ProductWarranty extends Model
 {
     use HasFactory, SoftDeletes, HasTrackHistory;
 
     protected $fillable = [
-        'product_id',
-        'time',
+        'name',
+        'days',
     ];
     
     protected $guarded = ['id'];
@@ -27,18 +27,13 @@ class ProductBookingTime extends Model
     {
         return true;
     }
-    public function saveInfo($object, $data = null, $prefix = "product_booking_time_")
+    public function saveInfo($object, $data = null, $prefix = "product_warranty_")
     {
-        if($data)
-        {
-            foreach($data as $item)
-            {
-                $object[$prefix . "".$item] = $this->$item;
-            }
-        }else{
-            $object[$prefix . "time"] = $this->time;
-        }
+        $default = [
+            "name",
+            "days",
+        ];
 
-        return $object;
+        return saveInfoHelper($object, $this, $data ?? $default, $prefix);
     }
 }

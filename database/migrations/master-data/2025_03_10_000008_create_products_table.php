@@ -33,16 +33,14 @@ return new class extends Migration
         if ($is_history) {
             $table->bigInteger('obj_id')->unsigned();
         } else {
-            $table->index('studio_id', 'products_studio_id_idx');
             $table->index('name', 'products_name_idx');
         }
 
-        $table->unsignedBigInteger('studio_id')->comment('ID Studio');
+        $table->unsignedBigInteger('product_warranty_id')->nullable()->comment('Product Warranty ID');
+        
         $table->string('name')->comment('Product Name');
         $table->text('description')->nullable()->comment('Product Description');
-        $table->double('price')->comment('Product Price');
         $table->string('image')->comment('Product Image');
-        $table->string('note')->nullable()->comment('Product Note');
 
         $table->bigInteger("created_by")->unsigned()->nullable();
         $table->bigInteger("updated_by")->unsigned()->nullable();

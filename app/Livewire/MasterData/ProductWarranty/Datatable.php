@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Livewire\MasterData\PaymentMethod;
+namespace App\Livewire\MasterData\ProductWarranty;
 
 use App\Helpers\Alert;
-use App\Models\MasterData\PaymentMethod;
 use App\Permissions\AccessMasterData;
 use Livewire\Component;
 use Livewire\Attributes\On;
@@ -12,7 +11,7 @@ use App\Permissions\PermissionHelper;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Database\Eloquent\Builder;
 use App\Repositories\Account\UserRepository;
-use App\Repositories\MasterData\PaymentMethod\PaymentMethodRepository;
+use App\Repositories\MasterData\Product\ProductWarrantyRepository;
 
 class Datatable extends Component
 {
@@ -29,7 +28,7 @@ class Datatable extends Component
     public function onMount()
     {
         $authUser = UserRepository::authenticatedUser();
-        $this->isCanUpdate = $authUser->hasPermissionTo(PermissionHelper::transform(AccessMasterData::PAYMENT_METHOD, PermissionHelper::TYPE_UPDATE));
+        $this->isCanUpdate = $authUser->hasPermissionTo(PermissionHelper::transform(AccessMasterData::PRODUCT_WARRANTY, PermissionHelper::TYPE_UPDATE));
     }
 
     #[On('on-delete-dialog-confirm')]
@@ -39,7 +38,7 @@ class Datatable extends Component
             return;
         }
         
-        PaymentMethodRepository::delete(Crypt::decrypt($this->targetDeleteId));
+        ProductWarrantyRepository::delete(Crypt::decrypt($this->targetDeleteId));
         Alert::success($this, 'Berhasil', 'Data berhasil dihapus');
     }
 
@@ -77,7 +76,7 @@ class Datatable extends Component
                     $editHtml = "";
                     $id = Crypt::encrypt($item->id);
                     if ($this->isCanUpdate) {
-                        $editUrl = route('payment_method.edit', $id);
+                        $editUrl = route('product_warranty.edit', $id);
                         $editHtml = "<div class='col-auto mb-2'>
                             <a class='btn btn-primary btn-sm' href='$editUrl'>
                                 <i class='ki-duotone ki-notepad-edit fs-1'>
@@ -116,46 +115,25 @@ class Datatable extends Component
             ],
             [
                 'key' => 'name',
-                'name' => 'Nama Metode Pembayaran',
+                'name' => 'Nama Garansi',
             ],
             [
-                'key' => 'code',
-                'name' => 'Kode',
-            ],
-            [
-                'key' => 'fee_type',
-                'name' => 'Jenis Biaya Admin',
-                'render' => function($item)
-                {
-                    return PaymentMethod::TYPE_CHOICE[$item->fee_type];
-                }
-            ],
-            [
-                'key' => 'amount',
-                'name' => 'Nilai Biaya Admin',
-                'render' => function($item)
-                {
-                    return PaymentMethod::TYPE_FIXED === $item->fee_type ? "Rp ".numberFormat($item->fee_amount) : numberFormat($item->fee_amount)." %";
-                }
-            ],
-            [
-                'key' => 'is_active',
-                'name' => 'Aktif',
-                'render' => function($item)
-                {
-                    return $item->is_active ? "<span class='badge badge-success'>Aktif</span>" : "<span class='badge badge-danger'>Tidak Aktif</span>";
-                }
+                'key' => 'days',
+                'name' => 'Lama Garansi (Hari)',
+                'render' => function ($item) {
+                    return $item->days ? number_format($item->days, 0, ',', '.') : 'Selamanya';
+                },
             ],
         ];
     }
 
     public function getQuery(): Builder
     {
-        return PaymentMethodRepository::datatable();
+        return ProductWarrantyRepository::datatable();
     }
 
     public function getView(): string
     {
-        return 'livewire.master-data.payment-method.datatable';
+        return 'livewire.master-data.product-warranty.datatable';
     }
 }

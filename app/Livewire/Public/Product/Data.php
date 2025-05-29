@@ -6,7 +6,9 @@ use Livewire\Component;
 use Livewire\Attributes\On;
 use Livewire\WithPagination;
 use App\Models\MasterData\Product;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Crypt;
+use App\Models\MasterData\ProductDetail;
 
 class Data extends Component
 {
@@ -19,12 +21,20 @@ class Data extends Component
     public $sortDirection = 'asc';
     public $loading = false;
 
-    public $studio_id = 'all';
-
     private function getProducts()
     {
-        return Product::when($this->studio_id !== 'all', function ($query) {
-            return $query->where('studio_id', Crypt::decrypt($this->studio_id));
+        $query = ProductDetail::select(
+            'product_id',
+            DB::raw('SUM(price) as price'),
+        )
+        ->groupBy('product_id');
+        
+        return Product::select(
+            'products.*',
+            'product_details.price',
+        )
+        ->joinSub($query, 'product_details', function ($join) {
+            $join->on('products.id', '=', 'product_details.product_id');
         })
         ->orderBy($this->sortBy, $this->sortDirection);
     }

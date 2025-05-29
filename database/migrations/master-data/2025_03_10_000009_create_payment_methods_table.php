@@ -33,12 +33,17 @@ return new class extends Migration
         if ($is_history) {
             $table->bigInteger('obj_id')->unsigned();
         } else {
-            $table->index('type', 'payment_methods_type_idx');
+            $table->index('name', 'payment_methods_name_idx');
+            $table->index('code', 'payment_methods_code_idx');
+            $table->index('fee_type', 'payment_methods_fee_type_idx');
         }
 
         $table->string('name')->comment('Payment Method Name');
-        $table->string('type')->comment('Payment Method Type');
-        $table->double('amount')->comment('Payment Method amount');
+        $table->string('fee_type')->comment('Payment Method Fee Type'); // Percentage / Fixed
+        $table->double('fee_amount')->comment('Payment Method Fee Amount');
+        $table->string('code')->comment('Payment Method Code');
+        $table->boolean('is_xendit')->comment('Is Xendit')->default(false);
+        $table->boolean('is_active')->comment('Is Active')->default(false);
 
         $table->bigInteger("created_by")->unsigned()->nullable();
         $table->bigInteger("updated_by")->unsigned()->nullable();

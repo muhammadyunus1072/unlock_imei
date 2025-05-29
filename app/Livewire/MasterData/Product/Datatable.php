@@ -29,8 +29,6 @@ class Datatable extends Component
     {
         $authUser = UserRepository::authenticatedUser();
         $this->isCanUpdate = $authUser->hasPermissionTo(PermissionHelper::transform(AccessMasterData::PRODUCT, PermissionHelper::TYPE_UPDATE));
-        $this->isCanUpdateBookingTime = $authUser->hasPermissionTo(PermissionHelper::transform(AccessMasterData::PRODUCT_BOOKING_TIME, PermissionHelper::TYPE_UPDATE));
-        $this->isCanUpdateDetail = $authUser->hasPermissionTo(PermissionHelper::transform(AccessMasterData::PRODUCT_DETAIL, PermissionHelper::TYPE_UPDATE));
     }
 
     #[On('on-delete-dialog-confirm')]
@@ -106,42 +104,10 @@ class Datatable extends Component
                             </button>
                         </div>";
                     }
-                    $bookingTimeHtml = "";
-                    if ($this->isCanUpdateBookingTime) {
-                        $bookingTimeUrl = route('product_booking_time.edit', $id);
-                        $bookingTimeHtml = "<div class='col-auto mb-2'>
-                            <a class='btn btn-warning btn-sm w-100' href='$bookingTimeUrl'>
-                            <i class='ki-duotone ki-time fs-1'>
-                                <span class='path1'></span>
-                                <span class='path2'></span>
-                                <span class='path3'></span>
-                            </i>
-                            Waktu Booking
-                        </a>
-                        </div>";
-                    }
-                    $detailHtml = "";
-                    if ($this->isCanUpdateDetail) {
-                        $detailUrl = route('product_detail.edit', $id);
-                        $detailHtml = "<div class='col-auto mb-2'>
-                            <a class='btn btn-success btn-sm w-100' href='$detailUrl'>
-                            <i class='ki-duotone ki-element-11 fs-1'>
-                                <span class='path1'></span>
-                                <span class='path2'></span>
-                                <span class='path3'></span>
-                                <span class='path4'></span>
-                                <span class='path5'></span>
-                                <span class='path6'></span>
-                                <span class='path7'></span>
-                            </i>
-                            Detail Produk
-                        </a>
-                        </div>";
-                    }
                     
 
                     $html = "<div class='row'>
-                        $editHtml $bookingTimeHtml $detailHtml $destroyHtml 
+                        $editHtml $destroyHtml 
                     </div>";
 
                     return $html;
@@ -152,10 +118,14 @@ class Datatable extends Component
                 'name' => 'Nama Produk',
             ],
             [
-                'key' => 'price',
-                'name' => 'Harga',
+                'key' => 'product_warranty_name',
+                'name' => 'Garansi Produk',
+            ],
+            [
+                'key' => 'total_price',
+                'name' => 'Harga Total',
                 'render' => function ($item) {
-                    return number_format($item->price, 0, ',', '.');
+                    return number_format($item->total_price, 0, ',', '.');
                 },
             ],
         ];
