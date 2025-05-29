@@ -73,8 +73,8 @@ class Detail extends Component
     public function mount()
     {   
         $position = Location::get(request()->ip());
-        $this->lat = $position->latitude;
-        $this->lng = $position->longitude;
+        // $this->lat = $position->latitude;
+        // $this->lng = $position->longitude;
         $product = ProductRepository::find(Crypt::decrypt($this->objId));
         $this->product = [
             'name' => $product->name,
