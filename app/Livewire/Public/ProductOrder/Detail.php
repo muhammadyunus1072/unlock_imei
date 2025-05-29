@@ -67,10 +67,14 @@ class Detail extends Component
     public $modal_image_url = '';
     public $editedIndex;
 
+    public $lat;
+    public $lng;
+
     public function mount()
     {   
         $position = Location::get(request()->ip());
-        dd($position);
+        $this->lat = $position->latitude;
+        $this->lng = $position->longitude;
         $product = ProductRepository::find(Crypt::decrypt($this->objId));
         $this->product = [
             'name' => $product->name,

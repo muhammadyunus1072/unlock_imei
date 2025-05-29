@@ -420,6 +420,9 @@
             var lat;
             var lng;
 
+            const initLat = @json($latitude ?? null);
+            const initLng = @json($longitude ?? null);
+
             const map = L.map('map');
 
             L.tileLayer('//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
@@ -445,7 +448,11 @@
             );
 
             function initMap(){
-                map.setView([ lat, lng], 18);
+                if(initLat && initLng) {
+                    map.setView([ initLat, initLng], 18);
+                }else{
+                    map.setView([ lat, lng], 18);
+                }
                 const search = new GeoSearch.GeoSearchControl({
                     provider: new GeoSearch.OpenStreetMapProvider(),
                     showMarker: false, 
@@ -468,7 +475,11 @@
                 });
     
                 map.addControl(search);
-                updateMarker(lat, lng, 18);
+                if(initLat && initLng) {
+                    updateMarker(initLat, initLng, 18);
+                }else{
+                    updateMarker(lat, lng, 18);
+                }
                 map.on('click', function (event) {
                     const { lat, lng } = event.latlng; 
                     const zoom = map.getZoom(); 
