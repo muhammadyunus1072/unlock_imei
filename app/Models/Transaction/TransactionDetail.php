@@ -2,6 +2,7 @@
 
 namespace App\Models\Transaction;
 
+use Carbon\Carbon;
 use App\Models\MasterData\Studio;
 use App\Models\MasterData\Product;
 use Illuminate\Support\Facades\DB;
@@ -19,8 +20,8 @@ class TransactionDetail extends Model
     protected $fillable = [
         'transaction_id',
         'product_id',
-        'product_detail_id',
         'imei',
+        'active_at',
     ];
     
     protected $guarded = ['id'];
@@ -39,7 +40,7 @@ class TransactionDetail extends Model
     {
         self::creating(function ($model) {
             $model = $model->product->saveInfo($model);
-            $model = $model->productDetail->saveInfo($model);
+            $model->warranty_expired_at = $model->warranty_days >= 0 ? Carbon::now()->addDays($model->product->warranty_days) : null;
         });
     }
 
@@ -47,7 +48,7 @@ class TransactionDetail extends Model
     {
         return self::join('transactions', 'transactions.id', '=', 'transaction_details.transaction_id')
             ->where('transaction_details.imei', $imei)
-            ->whereIn('transactions.status', [Transaction::STATUS_PENDING])
+            ->whereIn('transactions.payment_status', [Transaction::PAYMENT_STATUS_PENDING])
             ->where('transaction_details.deleted_at', null)
             ->lockForUpdate() // ✅ Lock slot before creating transaction
             ->exists();
@@ -60,9 +61,5 @@ class TransactionDetail extends Model
     public function product()
     {
         return $this->belongsTo(Product::class, 'product_id', 'id');
-    }
-    public function productDetail()
-    {
-        return $this->belongsTo(ProductDetail::class, 'product_detail_id', 'id');
     }
 }

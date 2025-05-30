@@ -87,84 +87,10 @@
                                    <a target="_blank" class="menu-link nav-link py-3 px-4 px-xxl-6" href="https://kuystudio.id/about">About Us</a>
                                    </div> -->
                                 <div class="menu-item">
-                                   <a class="menu-link nav-link py-3 px-4 px-xxl-6" style="color: #5d2fc2;" href="{{ route('public.index') }}">Booking</a>
-                                </div>
-                                {{-- <div class="menu-item">
-                                   <a class="menu-link nav-link py-3 px-4 px-xxl-6" style="color: #5d2fc2;" href="">Pricelist</a>
-                                </div> --}}
-                                <div class="menu-item">
-                                   <a class="menu-link nav-link py-3 px-4 px-xxl-6" style="color: #5d2fc2;" href="{{ route('public.contact')}}">Contact</a>
+                                   <button type="button" class="nav-link py-3 px-4 px-xxl-6 btn btn-light-primary w-100" href="{{ route('public.index') }}">PILIH GARANSI</button>
                                 </div>
                              </div>
                           </div>
-                       </div>
-                       <div class="flex-equal text-end ms-1">
-                           @if(auth()->check())
-                              <!--begin::User menu-->
-                              <div class="app-navbar-item ms-1 ms-md-4" id="kt_header_user_menu_toggle">
-                                 <!--begin::Menu wrapper-->
-                                 <div class="cursor-pointer symbol symbol-35px btn" style="background-color: #5d2fc2; color:#fff;"
-                                    data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-attach="parent"
-                                    data-kt-menu-placement="bottom-end">
-                                    My Account
-                                 </div>
-                                 <!--begin::User account menu-->
-                                 <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg menu-state-color fw-semibold py-4 fs-6 w-275px"
-                                    data-kt-menu="true">
-                                    <!--begin::Menu item-->
-                                    <div class="menu-item px-3" style="overflow:scroll;">
-                                       <div class="menu-content d-flex align-items-center px-3">
-                                             <!--begin::Username-->
-                                             <div class="d-flex flex-column">
-                                                <div class="fw-bold d-flex align-items-center fs-5">
-                                                   {{ Auth::user()->name }}
-                                                </div>
-                                                <a href="#"
-                                                   class="fw-semibold text-muted text-hover-primary fs-7">{{ Auth::user()->email }}</a>
-                                             </div>
-                                             <!--end::Username-->
-                                       </div>
-                                    </div>
-                                    <!--end::Menu item-->
-
-                                    <!--begin::Menu item-->
-                                    <div class="menu-item px-5 d-none unhide-123">
-                                    </div>
-                                    <!--end::Menu item-->
-
-                                    <!--begin::Menu item-->
-                                    @if (auth()->user()->hasRole(config('template.admin_role')))
-                                       <div class="menu-item px-5">
-                                             <a href="{{ route('dashboard.index') }}"
-                                                class="menu-link px-5">Dashboard</a>
-                                       </div>
-                                    @endif
-                                    @if (config('template.profile_route'))
-                                       <div class="menu-item px-5">
-                                             <a href="{{ route(config('template.profile_route')) }}"
-                                                class="menu-link px-5">Profil</a>
-                                       </div>
-                                    @endif
-
-                                    <div class="menu-item px-5">
-                                          <a href="{{ route('public.transaction', ['id' => Crypt::encrypt(rand(0, 100))]) }}"
-                                             class="menu-link px-5">Data Transaksi</a>
-                                    </div>
-                                    <!--end::Menu item-->
-
-                                    <!--begin::Menu item-->
-                                    <div class="menu-item px-5">
-                                       <a href="{{ route('logout') }}" class="menu-link px-5">Sign Out</a>
-                                    </div>
-                                    <!--end::Menu item-->
-                                 </div>
-                                 <!--end::User account menu-->
-                                 <!--end::Menu wrapper-->
-                              </div>
-                              <!--end::User menu-->
-                           @else
-                                 <a href="{{ route('login')}}" id="btn-login" class="btn" style="background-color: #5d2fc2; color:#fff;">Sign In</a>
-                           @endif
                        </div>
                     </div>
                  </div>

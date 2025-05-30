@@ -2,6 +2,8 @@
 
 namespace App\Models\Transaction;
 
+use App\Models\User;
+use App\Helpers\FilePathHelper;
 use App\Helpers\RomanConverter;
 use App\Services\XenditService;
 use App\Helpers\NumberGenerator;
@@ -10,8 +12,9 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Crypt;
 use Sis\TrackHistory\HasTrackHistory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use App\Models\MasterData\PaymentMethod;
-use App\Models\User;
+use App\Models\Transaction\TransactionDetail;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -20,7 +23,10 @@ class Transaction extends Model
     use HasFactory, SoftDeletes, HasTrackHistory;
 
     protected $fillable = [
-        'user_id',
+        'subtotal',
+        'admin_fee',
+        'discount',
+        'grand_total',
 
         'customer_name',
         'customer_email',
@@ -131,7 +137,53 @@ class Transaction extends Model
         }
     }
 
-    public function getStatusBadge(): string
+    public function getTransactionStatusBadge(): string
+    {
+        $badges = [
+            'warning' => [self::TRANSACTION_STATUS_PENDING],
+            'info' => [self::TRANSACTION_STATUS_PROCESSING],
+            'success' => [self::TRANSACTION_STATUS_COMPLETED],
+            'danger' => [self::TRANSACTION_STATUS_FAILED],
+            'secondary' => [self::TRANSACTION_STATUS_CANCELED],
+        ];
+
+        $status = $this->transaction_status;
+        
+        // Find the corresponding badge class
+        $badgeColor = array_keys(array_filter($badges, fn($statuses) => in_array($status, $statuses, true)))[0] ?? 'secondary';
+
+        return $badgeColor;
+        return "<span class='badge badge-{$badgeColor}'>" . strtoupper($status) . "</span>";
+    }
+
+    public function getTransactionAction(): string
+    {
+        $html = '';
+        switch ($this->transaction_status) {
+            case self::TRANSACTION_STATUS_PENDING:
+                $html = "<div class='col-auto mb-2'>
+                            <a class='btn btn-success btn-sm w-100' href='{$this->checkout_link}'>
+                                Bayar Sekarang
+                            </a>
+                        </div>";
+                break;
+
+            case self::TRANSACTION_STATUS_COMPLETED:
+                $route = route('service.generate', ['id' => Crypt::encrypt($this->id)]);
+                $html = "<div class='col-auto mb-2'>
+                            <a class='btn btn-primary btn-sm w-100' href='{$route}' target='_BLANK'>
+                                Generate QR-Code
+                            </a>
+                        </div>";
+                break;
+            
+            default:
+                $html = '<p class="text-center fw-bold fs-3"> - </p>';
+                break;
+        }
+        return $html;
+    }
+    public function getPaymentStatusBadge(): string
     {
         $badges = [
             'warning' => [self::PAYMENT_STATUS_PENDING],
@@ -142,7 +194,7 @@ class Transaction extends Model
             'info' => [self::PAYMENT_STATUS_CANCELED],
         ];
 
-        $status = $this->status;
+        $status = $this->payment_status;
         
         // Find the corresponding badge class
         $badgeColor = array_keys(array_filter($badges, fn($statuses) => in_array($status, $statuses, true)))[0] ?? 'secondary';
@@ -151,10 +203,10 @@ class Transaction extends Model
         return "<span class='badge badge-{$badgeColor}'>" . strtoupper($status) . "</span>";
     }
 
-    public function getAction(): string
+    public function getPaymentAction(): string
     {
         $html = '';
-        switch ($this->status) {
+        switch ($this->payment_status) {
             case self::PAYMENT_STATUS_PENDING:
                 $html = "<div class='col-auto mb-2'>
                             <a class='btn btn-success btn-sm w-100' href='{$this->checkout_link}'>
@@ -186,7 +238,7 @@ class Transaction extends Model
 
     public function transactionDetailSample()
     {
-        return $this->belongsTo(TransactionDetail::class, 'id', 'transaction_id')->orderBy('product_booking_time_time', 'ASC');
+        return $this->belongsTo(TransactionDetail::class, 'id', 'transaction_id')->orderBy('product_id', 'ASC');
     }
 
     public function voucher()
@@ -202,6 +254,11 @@ class Transaction extends Model
     public function creator()
     {
         return $this->belongsTo(User::class, 'created_by', 'id');
+    }
+
+    public function customer_ktp_url()
+    {
+        return $this->customer_ktp ? Storage::url(FilePathHelper::FILE_CUSTOMER_KTP . $this->customer_ktp) : null;
     }
 
     public function paymentMethod()

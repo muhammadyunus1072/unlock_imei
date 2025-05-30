@@ -23,7 +23,7 @@ class Filter extends Component
 
     public function mount()
     {
-        $this->statuses = Transaction::STATUS_CHOICE;
+        $this->statuses = Transaction::PAYMENT_STATUS_CHOICE;
         $this->isCanDelete = UserRepository::authenticatedUser()->hasPermissionTo(PermissionHelper::transform(AccessTransaction::TRANSACTION, PermissionHelper::TYPE_DELETE));
 
         $this->dateStart = Carbon::now()->startOfMonth()->format('Y-m-d');
@@ -47,7 +47,7 @@ class Filter extends Component
         }
 
         TransactionRepository::forceDeleteBy([
-            ['status', Transaction::STATUS_EXPIRED]
+            ['status', Transaction::PAYMENT_STATUS_EXPIRED]
         ]);
 
         Alert::success($this, 'Berhasil', 'Data Expired berhasil dihapus');

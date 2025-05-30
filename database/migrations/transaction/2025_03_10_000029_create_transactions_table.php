@@ -33,12 +33,10 @@ return new class extends Migration
         if ($is_history) {
             $table->bigInteger('obj_id')->unsigned();
         } else {
-            $table->index('id', 'transactions_id_idx');
             $table->index('customer_name', 'transactions_customer_name_idx');
             $table->index('customer_email', 'transactions_customer_email_idx');
             $table->index('customer_phone', 'transactions_customer_phone_idx');
             $table->index('number', 'transactions_number_idx');
-            $table->index('user_id', 'transactions_user_id_idx');
             $table->index('transaction_status', 'transactions_transaction_status_idx');
             $table->index('payment_status', 'transactions_payment_status_idx');
             $table->index('verified_at', 'transactions_verified_at_idx');
@@ -51,7 +49,7 @@ return new class extends Migration
         $table->double('grand_total')->comment('Transaction Grand Total');
 
         $table->string('number')->comment('Transaction Number');
-        $table->unsignedBigInteger('user_id')->comment('ID User');
+        // $table->unsignedBigInteger('cached_ip_location_id')->comment('ID Cached IP Location');
 
         $table->string('customer_name')->comment('Customer Name');
         $table->string('customer_email')->comment('Customer Email');

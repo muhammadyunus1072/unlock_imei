@@ -14,7 +14,7 @@
                   <div class="media">
                       <small>Start From</small>
                       <h2 class="card-title mt-0" style="color: #01cecb">
-                          Rp. @currency($item->price) / Sesi 
+                          Rp. @currency($item->price) / IMEI 
                       </h2>
                   </div>
               </div>

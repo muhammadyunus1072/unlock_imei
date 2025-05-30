@@ -18,8 +18,15 @@ class Detail extends Component
     public $transaction = [];
     public $transaction_details = [];
 
-    public $status_badge;
-    public $status_name;
+    public $transaction_status_badge;
+    public $transaction_status_name;
+    public $payment_status_badge;
+    public $payment_status_name;
+    public $customer_ig;
+    public $customer_fb;
+    public $customer_ktp_url;
+    public $customer_lat;
+    public $customer_lng;
     public $subtotal = 0;
     public $admin_fee = 0;
 
@@ -29,9 +36,15 @@ class Detail extends Component
         if($this->objId)
         {
             $transaction = TransactionRepository::find(Crypt::decrypt($this->objId));
-
+            $social_media = json_decode($transaction->customer_social_media);
+            $this->customer_ig = $social_media->instagram;
+            $this->customer_fb = $social_media->facebook;
             $this->transaction = $transaction->toArray();
-            $this->status_badge = $transaction->getStatusBadge();
+            $this->customer_lat = $transaction->customer_lat;
+            $this->customer_lng = $transaction->customer_long;
+            $this->transaction_status_badge = $transaction->getTransactionStatusBadge();
+            $this->payment_status_badge = $transaction->getPaymentStatusBadge();
+            $this->customer_ktp_url = $transaction->customer_ktp_url();
             $this->subtotal = $transaction->transactionDetails->sum(function ($detail) {
                 return $detail->product_price + $detail->product_detail_price;
             });
@@ -40,8 +53,7 @@ class Detail extends Component
             foreach($transaction->transactionDetails as $index => $item){
                 $this->transaction_details[] = [
                     'booking_date' => $item['booking_date'],
-                    'product_detail_image_url' => generateUrl($item['product_detail_image'], FilePathHelper::FILE_PRODUCT_DETAIL_IMAGE),
-                    'studio_name' => $item->studio->name,
+                    'imei_url' => generateUrl($item['imei'], FilePathHelper::FILE_CUSTOMER_IMEI),
                     'product_name' => $item['product_name'],
                     'product_price' => $item['product_price'],
                     'product_detail_name' => $item['product_detail_name'],
@@ -54,7 +66,7 @@ class Detail extends Component
 
     public function deleteExpired() {
         TransactionRepository::forceDeleteBy([
-            ['status', Transaction::STATUS_PENDING]
+            ['payment_status', Transaction::PAYMENT_STATUS_PENDING]
         ]);
     }
 

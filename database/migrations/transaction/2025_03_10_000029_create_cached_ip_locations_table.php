@@ -11,19 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('product_details', function (Blueprint $table) {
+        Schema::create('cached_ip_locations', function (Blueprint $table) {
             $this->scheme($table, false);
         });
 
-        Schema::create('_history_product_details', function (Blueprint $table) {
+        Schema::create('_history_cached_ip_locations', function (Blueprint $table) {
             $this->scheme($table, true);
         });
     }
 
     public function down()
     {
-        Schema::dropIfExists('product_details');
-        Schema::dropIfExists('_history_product_details');
+        Schema::dropIfExists('cached_ip_locations');
+        Schema::dropIfExists('_history_cached_ip_locations');
     }
 
     private function scheme(Blueprint $table, $is_history = false)
@@ -33,11 +33,16 @@ return new class extends Migration
         if ($is_history) {
             $table->bigInteger('obj_id')->unsigned();
         } else {
-            $table->index('product_id', 'product_details_product_id_idx');
+
+            $table->index('ip', 'cached_ip_locations_ip_idx');
         }
-        $table->unsignedBigInteger('product_id')->comment('ID Product');
-        $table->text('description')->nullable()->comment('Product Detail Description');
-        $table->double('price')->comment('Product Price');
+        
+        $table->string('ip')->comment('IP Address');
+        $table->string('latitude')->comment('Latitude');
+        $table->string('longitude')->comment('Longitude');
+        $table->string('city')->comment('City');
+        $table->string('country')->comment('Country');
+        $table->json('raw')->comment('Raw');
 
         $table->bigInteger("created_by")->unsigned()->nullable();
         $table->bigInteger("updated_by")->unsigned()->nullable();

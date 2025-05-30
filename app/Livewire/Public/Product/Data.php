@@ -22,20 +22,10 @@ class Data extends Component
     public $loading = false;
 
     private function getProducts()
-    {
-        $query = ProductDetail::select(
-            'product_id',
-            DB::raw('SUM(price) as price'),
-        )
-        ->groupBy('product_id');
-        
+    {   
         return Product::select(
             'products.*',
-            'product_details.price',
         )
-        ->joinSub($query, 'product_details', function ($join) {
-            $join->on('products.id', '=', 'product_details.product_id');
-        })
         ->orderBy($this->sortBy, $this->sortDirection);
     }
 

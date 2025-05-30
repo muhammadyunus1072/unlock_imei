@@ -20,6 +20,8 @@ class Product extends Model
         'name',
         'description',
         'image',
+        'price',
+        'warranty_days',
     ];
     
     protected $guarded = ['id'];
@@ -40,6 +42,8 @@ class Product extends Model
             "name",
             "description",
             "image",
+            "price",
+            "warranty_days",
         ];
 
         return saveInfoHelper($object, $this, $data ?? $default, $prefix);
@@ -48,15 +52,5 @@ class Product extends Model
     public function image_url()
     {
         return $this->image ? Storage::url(FilePathHelper::FILE_PRODUCT_IMAGE . $this->image) : null;
-    }
-
-    public function productDetails()
-    {
-        return $this->hasMany(ProductDetail::class, 'product_id', 'id');
-    }
-
-    public function productWarranty()
-    {
-        return $this->belongsTo(ProductWarranty::class, 'product_warranty_id', 'id');
     }
 }

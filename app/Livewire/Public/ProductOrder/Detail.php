@@ -29,6 +29,8 @@ class Detail extends Component
 
     public $objId;
 
+    public $isLocationEnabled = false;
+
     // Customer Information
     #[Validate('required', message: 'Nama Harus Diisi', onUpdate: false)]
     public $customer_name;
@@ -37,7 +39,7 @@ class Detail extends Component
     #[Validate('required', message: 'Telp / WA Harus Diisi', onUpdate: false)]
     public $customer_phone;
     #[Validate('required', message: 'KTP Harus Diisi', onUpdate: false)]
-    public array $customer_ktp = [];
+    public $customer_ktp;
     public $customer_lat;
     public $customer_lang;
     public $customer_fb;
@@ -72,25 +74,20 @@ class Detail extends Component
 
     public function mount()
     {   
-        $position = Location::get(request()->ip());
+        // $position = Location::get(request()->ip());
         // $this->lat = $position->latitude;
         // $this->lng = $position->longitude;
         $product = ProductRepository::find(Crypt::decrypt($this->objId));
         $this->product = [
             'name' => $product->name,
             'description' => $product->description,
-            'warranty_text' => $product->product_warranty_id ? $product->productWarranty->name : 'Tidak Ada Garansi',
+            'price' => $product->price,
         ];
 
-        foreach ($product->productDetails as $key => $value) {
-            $this->product_details[] = [
-                'id' => Crypt::encrypt($value->id),
-                'description' => $value->description,
-                'price' => $value->price,
-                'imei' => '',
-                'imei_url' => $value->imei ? Storage::url(FilePathHelper::FILE_PRODUCT_DETAIL_IMEI . $value->imei) : asset("media/404.png")
-            ];
-        }
+        $this->product_details[] = [
+            'imei' => '',
+            // 'imei_url' => $product->imei ? Storage::url(FilePathHelper::FILE_PRODUCT_DETAIL_IMEI . $product->imei) : asset("media/404.png")
+        ];
 
         $this->payment_method_choices = PaymentMethodRepository::getBy([
             ['is_active', true]
@@ -105,57 +102,29 @@ class Detail extends Component
         })->toArray();
 
         $this->calculatedTotal();
-        $this->grand_total = $this->subtotal;
+        $this->setGrandTotal();
     }
 
-    public function getFile()
+    #[On('on-dialog-confirm')]
+    public function onDialogConfirm()
     {
-        consoleLog($this, $this->customer_ktp);
-    }
-
-
-    public function editImage($index)
-    {
-        $this->modal_image_url = $this->product_details[$index]['image_url'];
-        $this->editedIndex = $index;
-        $this->dispatch('openModal');
-    }
-
-    public function saveImage()
-    {
-        try {
-            DB::beginTransaction(); 
-            // Validate the uploaded image file
-            $this->validate([
-                'image' => 'required|image',
-            ],[
-                'image.required' => 'Pilih gambar terlebih dahulu',
-                'image.image' => 'File yang diupload harus berupa gambar',
-            ]);
-            
-            $file = $this->image;      
-            $filePath = $file->store(FilePathHelper::FILE_PRODUCT_DETAIL_IMEI, 'public');
-            $product_detail = $this->product_details[$this->editedIndex];
-            if ($product_detail['id']) {
-                $validatedData = [
-                    'image' => basename($filePath),
-                ];
-                $objId = Crypt::decrypt($product_detail['id']);
-                ProductRepository::update($objId, $validatedData);
-            }else{
-                $image_url = Storage::url(FilePathHelper::FILE_PRODUCT_DETAIL_IMEI . basename($filePath));
-                $this->product_details[$this->editedIndex]['image_url'] = $image_url;
-                $this->product_details[$this->editedIndex]['image'] = basename($filePath);
-            }
-            // Commit the database transaction
-            $this->modal_image_url = asset("media/404.png");
-            $this->dispatch('closeModal');
-            DB::commit();
-            
-        } catch (Exception $e) {
-            DB::rollBack();
-            Alert::fail($this, "Gagal", $e->getMessage());
+        if ($this->objId) {
+            $this->redirectRoute('public.index');
+        } else {
+            $this->redirectRoute('public.index');
         }
+    }
+
+    #[On('on-dialog-cancel')]
+    public function onDialogCancel()
+    {
+        $this->redirectRoute('public.index');
+    }
+
+    public function setLocation($lat, $lng)
+    {
+        $this->customer_lat = $lat;
+        $this->customer_lang = $lng;
     }
 
     public function updatedPaymentMethod($value)
@@ -166,29 +135,39 @@ class Detail extends Component
         if($selectedPayment['fee_type'] === PaymentMethod::TYPE_PERCENTAGE)
         {
             $this->admin_fee = calculatedAdminFee($this->subtotal, $selectedPayment['fee_amount']);
-            $this->grand_total = $this->subtotal + $this->admin_fee - $this->discount;
+            $this->setGrandTotal();
         }else{
             $this->admin_fee = $selectedPayment['fee_amount'];
-            $this->grand_total = $this->subtotal + $this->admin_fee - $this->discount;
+            $this->setGrandTotal();
         }
+    }
+
+    private function setGrandTotal()
+    {
+        $this->grand_total = $this->subtotal + $this->admin_fee - $this->discount;
+    }
+
+    public function addProduct()
+    {
+        $this->product_details[] = [
+            'imei' => '',
+            // 'imei_url' => asset("media/404.png")
+        ];
+        $this->calculatedTotal();
+        $this->setGrandTotal();
+    }
+
+    public function removeProduct($index)
+    {
+        unset($this->product_details[$index]);
+        $this->product_details = array_values($this->product_details); // Re-index the array
+        $this->calculatedTotal();
+        $this->setGrandTotal();
     }
 
     private function calculatedTotal()
     {
-        $subtotal = 0;
-
-        foreach($this->product_details as $product_detail)
-        {
-            $subtotal += $product_detail['price'];
-        }
-
-        $this->subtotal = $subtotal;
-    }
-
-    #[On('on-dialog-confirm')]
-    public function onDialogConfirm()
-    {
-        $this->redirectRoute('public.product-booking', $this->objId);
+        $this->subtotal = count($this->product_details) * $this->product['price'];
     }
 
     public function couponHandler()
@@ -201,47 +180,74 @@ class Detail extends Component
             $this->voucher_type = $voucher['type'];
             $this->voucher_amount = $voucher['amount'];
             $this->discount = $voucher['type'] == Voucher::TYPE_PERCENTAGE ? calculatedDiscount($this->subtotal, $voucher['amount']) : $voucher['amount'];
-            $this->grand_total = $this->subtotal + $this->admin_fee - $this->discount;
+            $this->setGrandTotal();
         }else{
             $this->voucher_id = null;
             $this->voucher_type = null;
             $this->voucher_amount = null;
             $this->discount = 0;
-            $this->grand_total = $this->subtotal + $this->admin_fee - $this->discount;
+            $this->setGrandTotal();
             Alert::fail($this, "Gagal", "Maaf, Coupon Tidak Tersedia");
         }
     }
 
     public function store()
     {
-        $this->validate([
-            'product_details.*.imei.*' => 'image|max:2048',
-        ]);
 
-        foreach ($this->product_details as $index => $product_detail) {
-            foreach ($product_detail['imei'] ?? [] as $file) {
-                // Save or inspect each file
-                consoleLog($this, [
-                    'index' => $index,
-                    'file_name' => $file->getClientOriginalName(),
-                    'real_path' => $file->getRealPath(),
-                ]);
+        // foreach ($this->product_details as $index => $product_detail) {
+            // if($product_detail['imei'])
+            // {
 
-                // Example: store it
-                // $path = $file->store('uploads/imei', 'public');
-            }
-        }
+            // }
+            // foreach ($product_detail['imei'] as $file) {
+            //     // Save or inspect each file
+            //     consoleLog($this, [
+            //         'index' => $index,
+            //         'file_name' => $file->getClientOriginalName(),
+            //         'real_path' => $file->getRealPath(),
+            //     ]);
 
-        return;
+            //     // Example: store it
+            //     // $path = $file->store('uploads/imei', 'public');
+            // }
+        // }
+        consoleLog($this, $this->customer_ig);
+        consoleLog($this, $this->customer_fb);
+        consoleLog($this, $this->customer_ktp);
+        consoleLog($this, $this->product_details);
+        // return;
         try {
-            $phone = preg_replace('/[^\d]/', '', $this->phone);
+
+        // $this->validate([
+        //     'customer_ktp' => 'required|image|max:2048',
+        //     'product_details.*.imei.*' => 'required|image|max:2048',
+        //     'customer_email' => 'required|email',
+        //     'customer_ig' => 'required',
+        //     'customer_fb' => 'required',
+        // ],[
+        //     'product_details.*.imei.*.image' => 'File yang diupload harus berupa gambar',
+        //     'product_details.*.imei.*.max' => 'Ukuran file maksimal 2MB',
+        //     'customer_ig.required' => 'Akun Instagram harus diisi',
+        //     'customer_fb.required' => 'Akun Facebook harus diisi',
+        // ]);
+            $phone = preg_replace('/[^\d]/', '', $this->customer_phone);
             if (!preg_match("/^8[0-9]{9,11}$/", $phone) || (strlen($phone) < 9 || strlen($phone) > 11)) {
                 throw new \Exception("Format No Telp tidak sesuai,<br>Contoh: +62 8XX-XXXX-XXXX");
             }
 
-            if(!$this->customer_ig && !$this->customer_fb)
+            if(collect($this->product_details)->where('imei', '')->count() > 0)
+            {
+                throw new \Exception("IMEI harus diisi");
+            }
+
+            if(!$this->customer_ig || !$this->customer_fb)
             {
                 throw new \Exception("Masukkan data Media Sosial terlebih dahulu");
+            }
+
+            if(!$this->customer_lat || !$this->customer_lang)
+            {
+                return redirect()->route('public.index');
             }
 
             if(!$this->payment_method)
@@ -251,54 +257,56 @@ class Detail extends Component
 
             DB::beginTransaction();
 
-            // 1️⃣ Check if any booking slot is already taken and lock them
-            foreach ($this->booking_details as $booking) {
-
-                if ($booking['product_booking_time']['booking_detail_id']) {
-                    throw new \Exception("Maaf, jam yang kamu pilih sudah tidak tersedia. Silahkan memilih jam booking yang lain.");
-                }
-                $isNotAvailable = TransactionDetail::isNotAvailable(
-                    $this->booking_date, 
-                    Crypt::decrypt($this->objId), 
-                    Crypt::decrypt($booking['product_booking_time']['id'])
-                );
-
-                if ($isNotAvailable) {
-                    throw new \Exception("Maaf, jam yang kamu pilih sudah tidak tersedia. Silahkan memilih jam booking yang lain.");
-                }
-            }
-
+            $ktp = $this->customer_ktp->store(FilePathHelper::FILE_CUSTOMER_KTP, 'public');
             // 2️⃣ Create the transaction after ensuring no conflicts
-            $transaction = TransactionRepository::create([
-                'user_id' => auth()->id(),
-                'customer_name' => auth()->user()->name,
-                'customer_email' => auth()->user()->email,
+            $validatedData = [
+                'customer_name' => $this->customer_name,
+                'customer_email' => $this->customer_email,
                 'customer_phone' => $phone,
-                'customer_label' => 'Customer',
-                'subtotal' => $this->subtotal,
+                'customer_lat' => $this->customer_lat,
+                'customer_long' => $this->customer_lang,
+                'customer_ip_lat' => $this->customer_lat,
+                'customer_ip_long' => $this->customer_lang,
+                'customer_ktp' => basename($ktp),
+                'customer_social_media' => json_encode([
+                    'facebook' => preg_replace('/\s+/', '.', $this->customer_fb),
+                    'instagram' => preg_replace('/\s+/', '', $this->customer_ig),
+                ]),
                 'payment_method_id' => Crypt::decrypt($this->payment_method), // Example
                 'voucher_id' => $this->voucher_id ? Crypt::decrypt($this->voucher_id) : null,
-                'grand_total' => $this->grand_total,
+                'payment_status' => Transaction::PAYMENT_STATUS_PENDING,
+                'transaction_status' => Transaction::TRANSACTION_STATUS_PENDING,
                 'subtotal' => $this->subtotal,
                 'admin_fee' => $this->admin_fee,
-                'discount' => $this->discount,
-                'status' => Transaction::PAYMENT_STATUS_PENDING,
-            ]);
+                'grand_total' => $this->grand_total,
+            ];
+            consoleLog($this, $validatedData);
+            $transaction = TransactionRepository::create($validatedData);
 
             // 3️⃣ Insert booking details
-            foreach ($this->booking_details as $booking) {
-                TransactionDetailRepository::create([
-                    'transaction_id' => $transaction->id,
-                    'booking_date' => $this->booking_date,
-                    'product_id' => Crypt::decrypt($this->objId),
-                    'product_detail_id' => Crypt::decrypt($booking['product_detail']['id']),
-                    'product_booking_time_id' => Crypt::decrypt($booking['product_booking_time']['id']),
-                ]);
-            }
-            $transaction->createInvoice();
+            foreach ($this->product_details as $detail) {
 
+                $imei = $detail['imei']->store(FilePathHelper::FILE_CUSTOMER_IMEI, 'public');
+                $validatedData = [
+                    'transaction_id' => $transaction->id,
+                    'product_id' => Crypt::decrypt($this->objId),
+                    'imei' => basename($imei),
+                ];
+            consoleLog($this, $validatedData);
+                TransactionDetailRepository::create($validatedData);
+            }
             DB::commit();
-            return redirect()->away($transaction->checkout_link);
+
+            Alert::confirmation(
+                $this,
+                Alert::ICON_SUCCESS,
+                "Berhasil",
+                "Order Berhasil Dibuat",
+                "on-dialog-confirm",
+                "on-dialog-cancel",
+                "Oke",
+                "Tutup",
+            );
         } catch (Exception $e) {
             DB::rollBack();
             // Alert::fail($this, "Gagal", $e->getMessage(), "on-dialog-confirm");

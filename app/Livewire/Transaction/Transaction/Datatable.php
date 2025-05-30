@@ -136,37 +136,23 @@ class Datatable extends Component
                 'name' => 'Informasi Pengguna',
                 'render' => function($item)
                 {
+                    $social_media = json_decode($item->customer_social_media);
                     return "
                     <p class='mb-0 text-dark fw-normal fs-5 m-0 p-0 lh-1'>Nama &nbsp: {$item->customer_name}</p>
                     <p class='mb-0 text-dark fw-normal fs-5 m-0 p-0 lh-1'>Email &nbsp&nbsp: {$item->customer_email}</p>
                     <p class='mb-0 text-dark fw-normal fs-5 m-0 p-0 lh-1'>Phone : {$item->customer_phone}</p>
+                    <p class='mb-0 text-dark fw-normal fs-5 m-0 p-0 lh-1'>Instagram : {$social_media->instagram}</p>
+                    <p class='mb-0 text-dark fw-normal fs-5 m-0 p-0 lh-1'>Facebook : {$social_media->facebook}</p>
                     ";
                 }
             ],
             [
                 'sortable' => false,
                 'searchable' => false,
-                'name' => 'Informasi Booking',
+                'name' => 'Informasi Produk',
                 'render' => function($item)
                 {
-                    return "
-                    <p class='mb-0 text-dark fw-bold fs-4 m-0 p-0 lh-1'>{$item->transactionDetailSample['product_name']}</p>
-                    <small>".Carbon::parse($item->transactionDetailSample['booking_date'])->translatedFormat('l, d F Y')." ".Carbon::parse($item->transactionDetailSample['product_booking_time_time'])->translatedFormat('H:i')."</small><br>
-                    <span class='badge badge-info'>{$item->transactionDetailSample->studio->name} - {$item->transactionDetailSample->studio->city}</span>
-                    ";
-                }
-            ],
-            [
-                'sortable' => false,
-                'searchable' => false,
-                'name' => 'Data Product',
-                'render' => function($item)
-                {
-                    $html = '';
-                    foreach ($item->transactionDetails as $index => $detail) {
-                        $html .= "<span class='badge badge-secondary ms-1'>{$detail->product_detail_name}</span>";
-                    }
-                    return $html;
+                    return $item->transactionDetails->count()." IMEI";
                 }
             ],
             [
@@ -183,18 +169,16 @@ class Datatable extends Component
                 'render' => function($item)
                 {
                     $html = "<p class='mb-0'>{$item->payment_method_name}</p>";
-                    $html .= "<span class='badge badge-{$item->getStatusBadge()}'>" . $item->status . "</span>";
+                    $html .= "<span class='badge badge-{$item->getPaymentStatusBadge()}'>" . $item->payment_status . "</span>";
 
                     return $html;
                 }
             ],
             [
-                'key' => 'scanned_at',
-                'name' => 'Check In',
+                'key' => 'verified_at',
+                'name' => 'Verifikasi',
                 'render' => function ($item) {
-                    $html = $item->scanned_at ? Carbon::parse($item->scanned_at)->translatedFormat('d/m/Y H:i') : "<span class='badge badge-warning ms-1'>Belum Check In</span>";
-                    
-
+                    $html = $item->verified_at ? Carbon::parse($item->verified_at)->translatedFormat('d/m/Y H:i') : "<span class='badge badge-warning ms-1'>Belum Check In</span>";
                     return $html;
                 },
             ],
