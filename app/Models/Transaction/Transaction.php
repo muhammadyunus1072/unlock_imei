@@ -122,7 +122,8 @@ class Transaction extends Model
         });
         self::created(function ($model) {
             logger('WA SENDING');
-            ServiceHelper::kirimWhatsapp();
+            $result = ServiceHelper::kirimWhatsapp();
+            logger($result);
             logger('WA SENDED');
         });
         
