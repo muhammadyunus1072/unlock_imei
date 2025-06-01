@@ -296,17 +296,9 @@ class Detail extends Component
                 TransactionDetailRepository::create($validatedData);
             }
             DB::commit();
-
-            Alert::confirmation(
-                $this,
-                Alert::ICON_SUCCESS,
-                "Berhasil",
-                "Order Berhasil Dibuat",
-                "on-dialog-confirm",
-                "on-dialog-cancel",
-                "Oke",
-                "Tutup",
-            );
+            return redirect()->route('public.product-order.invoice', [
+                'id' => Crypt::encrypt($transaction->id),
+            ]);
         } catch (Exception $e) {
             DB::rollBack();
             // Alert::fail($this, "Gagal", $e->getMessage(), "on-dialog-confirm");
