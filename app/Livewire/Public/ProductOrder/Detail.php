@@ -296,7 +296,7 @@ class Detail extends Component
                 TransactionDetailRepository::create($validatedData);
             }
             DB::commit();
-            return redirect()->route('public.product-order.invoice', [
+            return redirect()->route('public.product-order.order-invoice', [
                 'id' => Crypt::encrypt($transaction->id),
             ]);
         } catch (Exception $e) {
