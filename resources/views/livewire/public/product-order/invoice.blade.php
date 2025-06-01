@@ -69,7 +69,7 @@
                                                 <!--end::Title-->
                                             </div>
                                         </td>
-                                        <td class="text-end">Rp @currency($transaction->transactionDetails->count())</td>
+                                        <td class="text-end">@currency($transaction->transactionDetails->count())</td>
                                         <td class="text-end">Rp @currency($transaction->transactionDetails[0]->product_price)</td>
                                     </tr>
                                     <tr>
