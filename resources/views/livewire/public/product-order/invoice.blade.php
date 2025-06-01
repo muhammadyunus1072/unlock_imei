@@ -22,7 +22,7 @@
                 <!--begin::Wrapper-->
                 <div class="d-flex flex-column gap-7 gap-md-10">
                     <!--begin::Message-->
-                    <div class="fw-bold fs-2">Dear {{$transaction->customer_name}}
+                    <div class="fw-bold fs-2">Yth {{$transaction->customer_name}}
                     <span class="fs-6">({{$transaction->customer_email}})</span>,
                     <br>
                     <span class="text-muted fs-5">Berikut adalah detail pesanan Anda. Terima kasih atas pembelian Anda.</span></div>
@@ -54,26 +54,24 @@
                                 <thead>
                                     <tr class="border-bottom fs-6 fw-bold text-muted">
                                         <th class="min-w-175px pb-2">Produk</th>
-                                        <th class="min-w-80px text-end pb-2">QTY</th>
+                                        <th class="min-w-100px text-end pb-2">QTY</th>
                                         <th class="min-w-100px text-end pb-2">Total</th>
                                     </tr>
                                 </thead>
                                 <tbody class="fw-semibold text-gray-600">
-                                    @foreach ($transaction->transactionDetails as $transactionDetail)
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <!--begin::Title-->
-                                                    <div class="ms-5">
-                                                        <div class="fw-bold">{{ $transactionDetail->product_name }}</div>
-                                                    </div>
-                                                    <!--end::Title-->
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <!--begin::Title-->
+                                                <div class="ms-5">
+                                                    <div class="fw-bold">{{ $transaction->transactionDetails[0]->product_name }}</div>
                                                 </div>
-                                            </td>
-                                            <td class="text-end">1</td>
-                                            <td class="text-end">Rp @currency($transactionDetail->price)</td>
-                                        </tr>
-                                    @endforeach
+                                                <!--end::Title-->
+                                            </div>
+                                        </td>
+                                        <td class="text-end">Rp @currency($transaction->transactionDetails->count())</td>
+                                        <td class="text-end">Rp @currency($transaction->transactionDetails[0]->product_price)</td>
+                                    </tr>
                                     <tr>
                                         <td colspan="3" class="text-end">Subtotal</td>
                                         <td class="text-end"> @currency($subtotal)</td>
