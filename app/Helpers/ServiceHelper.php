@@ -55,10 +55,13 @@ class ServiceHelper
         // ]);
         logger($result);
 
+        $response = curl_exec($curl);
+        $errors = curl_error($curl);
+        $code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
         return [
-            'code' => $result['status'],
-            'response' => $result,
-            'errors' => $result['status'] ? null : $result['statusText'],
+            'code' => $code,
+            'response' => $response,
+            'errors' => $errors,
         ];
     }
 }
