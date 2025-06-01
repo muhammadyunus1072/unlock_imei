@@ -42,7 +42,7 @@
                         </div>
                         <div class="flex-root d-flex flex-column">
                             <span class="text-muted">Status Transaksi</span>
-                            <span class="fs-5 badge badge-{{$transaction->getTransactionStatusBadge()}}"> {{$item->transaction_status}} </span>
+                            <span class="fs-5 badge badge-{{$transaction->getTransactionStatusBadge()}}"> {{$transaction->transaction_status}} </span>
                         </div>
                     </div>
                     <!--end::Order details-->
