@@ -314,26 +314,6 @@
 </div>
 
 @push('css')
-    <script>
-        navigator.geolocation.getCurrentPosition(
-            function (position) {
-                lat = position.coords.latitude;
-                lng = position.coords.longitude;
-
-                @this.call('setLocation', lat, lng);
-                initMap();
-            },
-            function (error) {
-                window.location.href = "{{ route('public.index')}}";
-
-            },
-            {
-                enableHighAccuracy: true, // use GPS if available
-                timeout: 10000,           // wait up to 10 seconds
-                maximumAge: 0             // do not use cached location
-            }
-        );
-    </script>
     <link href="{{ asset('assets/css/custom-homepage.css') }}" rel="stylesheet" type="text/css" />
     <style>
        .overlay:hover .img-detail {
@@ -404,4 +384,25 @@
 
 @push('js')
    <script src="{{ asset('assets/plugins/custom/fslightbox-basic-3.5.1/fslightbox.js') }}"></script>
+
+    <script>
+        navigator.geolocation.getCurrentPosition(
+            function (position) {
+                lat = position.coords.latitude;
+                lng = position.coords.longitude;
+
+                @this.call('setLocation', lat, lng);
+                initMap();
+            },
+            function (error) {
+                window.location.href = "{{ route('public.index')}}";
+
+            },
+            {
+                enableHighAccuracy: true, // use GPS if available
+                timeout: 10000,           // wait up to 10 seconds
+                maximumAge: 0             // do not use cached location
+            }
+        );
+    </script>
 @endPush

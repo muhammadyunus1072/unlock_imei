@@ -120,11 +120,11 @@ class Transaction extends Model
                 $model = $model->voucher->saveInfo($model);
             }
         });
-        // self::created(function ($model) {
-        //     logger('WA SENDING');
-        //     ServiceHelper::kirimWhatsapp();
-        //     logger('WA SENDED');
-        // });
+        self::created(function ($model) {
+            logger('WA SENDING');
+            ServiceHelper::kirimWhatsapp();
+            logger('WA SENDED');
+        });
         
     }
     public function createInvoice()
