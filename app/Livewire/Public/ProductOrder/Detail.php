@@ -297,16 +297,16 @@ class Detail extends Component
             }
             DB::commit();
 
-            Alert::confirmation(
-                $this,
-                Alert::ICON_SUCCESS,
-                "Berhasil",
-                "Order Berhasil Dibuat",
-                "on-dialog-confirm",
-                "on-dialog-cancel",
-                "Oke",
-                "Tutup",
-            );
+            // Alert::confirmation(
+            //     $this,
+            //     Alert::ICON_SUCCESS,
+            //     "Berhasil",
+            //     "Order Berhasil Dibuat",
+            //     "on-dialog-confirm",
+            //     "on-dialog-cancel",
+            //     "Oke",
+            //     "Tutup",
+            // );
         } catch (Exception $e) {
             DB::rollBack();
             // Alert::fail($this, "Gagal", $e->getMessage(), "on-dialog-confirm");
