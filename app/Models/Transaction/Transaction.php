@@ -7,6 +7,7 @@ use App\Helpers\FilePathHelper;
 use App\Helpers\RomanConverter;
 use App\Services\XenditService;
 use App\Helpers\NumberGenerator;
+use App\Helpers\ServiceHelper;
 use App\Models\MasterData\Voucher;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Crypt;
@@ -118,6 +119,11 @@ class Transaction extends Model
             {
                 $model = $model->voucher->saveInfo($model);
             }
+        });
+        self::created(function ($model) {
+            logger('WA SENDING');
+            ServiceHelper::kirimWhatsapp();
+            logger('WA SENDED');
         });
         
     }
