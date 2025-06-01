@@ -87,7 +87,10 @@
                                    <a target="_blank" class="menu-link nav-link py-3 px-4 px-xxl-6" href="https://kuystudio.id/about">About Us</a>
                                    </div> -->
                                 <div class="menu-item">
-                                   <button type="button" class="nav-link py-3 px-4 px-xxl-6 btn btn-light-primary w-100" href="{{ route('public.index') }}">PILIH GARANSI</button>
+                                   <a class="nav-link py-3 px-4 px-xxl-6 btn btn-light-primary w-100" href="{{ route('public.index') }}">PILIH GARANSI</a>
+                                </div>
+                                <div class="menu-item">
+                                   <a class="nav-link py-3 px-4 px-xxl-6 btn btn-light-primary w-100" href="{{ route('public.order-check') }}">CARI ORDER</a>
                                 </div>
                              </div>
                           </div>

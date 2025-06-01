@@ -69,12 +69,11 @@
                     <div id="map" style="height: 400px;"></div>
                 </div>
                 <button
-                class="btn btn-primary"
-                {{-- onclick="window.open(`https://www.google.com/maps?q={{ $customer_lat }},{{ $customer_lng }}`, '_blank')"> --}}
-                onclick="window.open(`https://www.google.com/maps?q=-7.7012339,112.7904209`, '_blank')">
-                Buka Di Google Maps
-            </button>
-
+                    class="btn btn-primary"
+                    {{-- onclick="window.open(`https://www.google.com/maps?q={{ $customer_lat }},{{ $customer_lng }}`, '_blank')"> --}}
+                    onclick="window.open(`https://www.google.com/maps?q=-7.7012339,112.7904209`, '_blank')">
+                    Buka Di Google Maps
+                </button>
             </div>
             
 
@@ -143,34 +142,33 @@
                 @endforeach
              </div>
         </div>
-        <div class="subtotal-wrapper">
-            <div id="subtotal" class="cart-subtotal">
-               <div class="cart-subtotal__order-item mb-5">
-                  <div class="order-item__label">Subtotal</div>
-                  <div class="order-item__price ms-5">Rp. @currency($subtotal)</div>
-               </div>
-
-        <div class="form-group">
-            <label for="email" class="form-label">Metode Pembayaran</label>
-            <p class="form-control" id="email">{{ $transaction['payment_method_name'] }} - Admin Fee @currency($admin_fee)</p>
+        <!--begin::Table-->
+        <div class="table-responsive border-bottom mb-9">
+            <table class="table align-middle table-row-dashed fs-6 gy-5 mb-0">
+                <tbody class="fw-semibold text-gray-600">
+                    <tr>
+                        <td colspan="3" class="text-end">Subtotal</td>
+                        <td class="text-end"> @currency($subtotal)</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" class="text-end">Admin</td>
+                        <td class="text-end"> @currency($admin_fee)</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" class="text-end">Diskon</td>
+                        <td class="text-end">- @currency($discount)</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" class="fs-3 text-dark fw-bold text-end">Grand Total</td>
+                        <td class="text-dark fs-3 fw-bolder text-end">Rp @currency($grand_total)</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-               <div class="cart-subtotal__order-item mb-0">
-                  <div class="order-item__label my-auto">Kode Voucher</div>
-                  <div class="order-item__price ms-5">
-                     <p class="form-control" id="voucher">{{ $transaction['voucher_id'] ? $transaction['voucher_code']." Nilai ". (\App\Models\MasterData\Voucher::TYPE_PERCENTAGE ? numberFormat(calculatedAdminFee($subtotal, $transaction['voucher_amount'])) : $transaction['voucher_amount'] ) : "TANPA VOUCHER" }}</p>
-                  </div>
-               </div>
-            </div>
-        </div>
-        <div class="total-wrapper">
-        <div id="total" class="cart-total pt-0">
-            <div class="cart-total__order-item">
-                <div class="order-item__label">Total</div>
-                <div class="order-item__price ms-5">
-                    Rp. @currency($transaction['grand_total'])
-                </div>
-            </div>
-        </div>
+        <!--end::Table-->
+        <div class="row">
+            <button type="button" class="btn btn-primary mb-3">Verifikasi Data</button>
+            <button type="button" class="btn btn-danger">Batalkan</button>
         </div>
     </div>
 </div>

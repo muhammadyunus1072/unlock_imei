@@ -7,6 +7,7 @@ use App\Helpers\FilePathHelper;
 use Illuminate\Support\Facades\Crypt;
 use App\Models\Transaction\Transaction;
 use App\Models\MasterData\PaymentMethod;
+use App\Models\MasterData\Voucher;
 use App\Repositories\Transaction\Transaction\TransactionRepository;
 
 class Detail extends Component
@@ -29,6 +30,8 @@ class Detail extends Component
     public $customer_lng;
     public $subtotal = 0;
     public $admin_fee = 0;
+    public $discount = 0;
+    public $grand_total = 0;
 
 
     public function mount()
@@ -45,11 +48,10 @@ class Detail extends Component
             $this->transaction_status_badge = $transaction->getTransactionStatusBadge();
             $this->payment_status_badge = $transaction->getPaymentStatusBadge();
             $this->customer_ktp_url = $transaction->customer_ktp_url();
-            $this->subtotal = $transaction->transactionDetails->sum(function ($detail) {
-                return $detail->product_price + $detail->product_detail_price;
-            });
-            $this->admin_fee = PaymentMethod::TYPE_PERCENTAGE == $transaction->payment_method_type ? calculatedAdminFee($this->subtotal, $transaction->payment_method_amount) : $transaction->payment_method_amount;
-
+            $this->subtotal = $transaction->subtotal;
+            $this->admin_fee = PaymentMethod::TYPE_PERCENTAGE == $transaction->payment_method_fee_type ? calculatedAdminFee($this->subtotal, $transaction->payment_method_fee_amount) : $transaction->payment_method_fee_amount;
+            $this->discount = Voucher::TYPE_PERCENTAGE == $transaction->voucher_type ? calculatedAdminFee($this->subtotal, $transaction->voucher_amount) : $transaction->voucher_amount;
+            $this->grand_total = $transaction->grand_total;
             foreach($transaction->transactionDetails as $index => $item){
                 $this->transaction_details[] = [
                     'booking_date' => $item['booking_date'],

@@ -8,6 +8,7 @@ Route::group(["controller" => PublicController::class, "prefix" => "", "as" => "
     Route::get('/', 'index')->name('index');
     Route::get('{id}/product-order', 'product_order')->name('product-order'); 
     Route::get('{id}/order-invoice', 'order_invoice')->name('order-invoice'); 
+    Route::get('order-check', 'order_check')->name('order-check'); 
     Route::get('contact', 'contact')->name('contact'); 
 });
 
