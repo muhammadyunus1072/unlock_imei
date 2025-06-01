@@ -47,7 +47,6 @@ class Voucher extends Model
             "type",
             "amount",
             "code",
-            "is_active",
         ];
 
         return saveInfoHelper($object, $this, $data ?? $default, $prefix);

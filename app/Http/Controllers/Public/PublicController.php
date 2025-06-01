@@ -40,7 +40,7 @@ class PublicController extends Controller
                 ['id', Crypt::decrypt($request->id)]
             ]);
             
-            if(!$transaction || $transaction->status !== Transaction::STATUS_PAID || !$transaction->booking_code)
+            if(!$transaction || $transaction->payment_status !== Transaction::PAYMENT_STATUS_PAID || !$transaction->booking_code)
             {
                 return redirect()->route('public.index');
             }
@@ -55,6 +55,11 @@ class PublicController extends Controller
     public function product_order(Request $request)
     {
         return view('app.public.product-order.detail', ["objId" => $request->id]);
+    }
+
+    public function order_invoice(Request $request)
+    {
+        return view('app.public.product-order.invoice', ["objId" => $request->id]);
     }
     
     public function booking_review(Request $request)
@@ -89,14 +94,14 @@ class PublicController extends Controller
                 throw new \Exception("Transaction not found for Invoice: $invoiceExternalId", 404);
             }
 
-            if (in_array($transaction->status, ['paid'])) {
+            if (in_array($transaction->payment_status, ['paid'])) {
                 throw new \Exception("Duplicate callback ignored for Invoice: $invoiceExternalId", 401);
             }
 
             switch ($request->status) {
                 case 'EXPIRED':
-                    if ($transaction->status !== Transaction::STATUS_PAID) {
-                        $transaction->status = Transaction::STATUS_EXPIRED;
+                    if ($transaction->payment_status !== Transaction::PAYMENT_STATUS_PAID) {
+                        $transaction->payment_status = Transaction::PAYMENT_STATUS_EXPIRED;
                         $transaction->save();
                         Log::info("Transaction expired: $invoiceExternalId", ['transaction_id' => $transaction->id]);
                     }
@@ -104,11 +109,11 @@ class PublicController extends Controller
         
                 case 'PAID':
                     // If the payment is late (after expiry), update it to paid
-                    if ($transaction->status === Transaction::STATUS_EXPIRED) {
+                    if ($transaction->payment_status === Transaction::PAYMENT_STATUS_EXPIRED) {
                         Log::info("Late payment received for expired invoice: $invoiceExternalId", ['transaction_id' => $transaction->id]);
                     }
         
-                    $transaction->status = Transaction::STATUS_PAID;
+                    $transaction->payment_status = Transaction::PAYMENT_STATUS_PAID;
                     $transaction->booking_code = substr(strtoupper(md5(uniqid() . 1)), 0, 3) . str_pad($transaction->id, 4, '0', STR_PAD_LEFT);;
                     $transaction->scanned_at = null;
                     $transaction->save();
