@@ -57,7 +57,7 @@ class ServiceHelper
         $response = curl_exec($curl);
         $errors = curl_error($curl);
         $code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-        logger(json_decode($response)['status']);
+        logger(json_decode($response)->status);
         return [
             'code' => $code,
             'response' => $response,
