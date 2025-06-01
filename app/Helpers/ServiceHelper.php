@@ -6,6 +6,7 @@ class ServiceHelper
 {
     public static function kirimWhatsapp()
     {
+        logger('KORIM');
         $url = env('ADSMEDIA_URL');
 
         $apikey = env('ADSMEDIA_API_KEY');
