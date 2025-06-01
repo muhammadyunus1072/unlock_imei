@@ -215,7 +215,7 @@ class Detail extends Component
         consoleLog($this, $this->customer_fb);
         consoleLog($this, $this->customer_ktp);
         consoleLog($this, $this->product_details);
-        // return;
+        return;
         try {
 
         // $this->validate([
