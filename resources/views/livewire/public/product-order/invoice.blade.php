@@ -42,7 +42,7 @@
                         </div>
                         <div class="flex-root d-flex flex-column">
                             <span class="text-muted">Status Transaksi</span>
-                            <span class="fs-5">{{ $transaction->getTransactionStatusBadge }}</span>
+                            <span class="fs-5">{!! $transaction->getTransactionStatusBadge() !!}</span>
                         </div>
                     </div>
                     <!--end::Order details-->
@@ -76,19 +76,19 @@
                                     @endforeach
                                     <tr>
                                         <td colspan="3" class="text-end">Subtotal</td>
-                                        <td class="text-end">$264.00</td>
+                                        <td class="text-end"> @currency($subtotal)</td>
                                     </tr>
                                     <tr>
-                                        <td colspan="3" class="text-end">VAT (0%)</td>
-                                        <td class="text-end">$0.00</td>
+                                        <td colspan="3" class="text-end">Admin</td>
+                                        <td class="text-end"> @currency($admin_fee)</td>
                                     </tr>
                                     <tr>
-                                        <td colspan="3" class="text-end">Shipping Rate</td>
-                                        <td class="text-end">$5.00</td>
+                                        <td colspan="3" class="text-end">Diskon</td>
+                                        <td class="text-end"> @currency($discount)</td>
                                     </tr>
                                     <tr>
                                         <td colspan="3" class="fs-3 text-dark fw-bold text-end">Grand Total</td>
-                                        <td class="text-dark fs-3 fw-bolder text-end">$269.00</td>
+                                        <td class="text-dark fs-3 fw-bolder text-end">Rp @currency($grand_total)</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -112,9 +112,6 @@
                     <!-- end::Download-->
                 </div>
                 <!-- end::Actions-->
-                <!-- begin::Action-->
-                <a href="../../demo1/dist/apps/invoices/create.html" class="btn btn-primary my-1">Create Invoice</a>
-                <!-- end::Action-->
             </div>
             <!-- end::Footer-->
         </div>
