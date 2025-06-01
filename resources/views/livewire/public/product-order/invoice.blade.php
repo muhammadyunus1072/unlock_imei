@@ -11,15 +11,9 @@
                 <div class="text-sm-end">
                     <!--begin::Logo-->
                     <a href="#" class="d-block mw-150px ms-sm-auto">
-                        <img alt="Logo" src="assets/media/svg/brand-logos/lloyds-of-london-logo.svg" class="w-100">
+                        <img alt="Logo" src="{{ asset(config('template.logo_auth'))}}" class="w-100">
                     </a>
                     <!--end::Logo-->
-                    <!--begin::Text-->
-                    <div class="text-sm-end fw-semibold fs-4 text-muted mt-7">
-                        <div>Cecilia Chapman, 711-2880 Nulla St, Mankato</div>
-                        <div>Mississippi 96522</div>
-                    </div>
-                    <!--end::Text-->
                 </div>
             </div>
             <!--end::Header-->
@@ -28,10 +22,10 @@
                 <!--begin::Wrapper-->
                 <div class="d-flex flex-column gap-7 gap-md-10">
                     <!--begin::Message-->
-                    <div class="fw-bold fs-2">Dear Melody Macy
-                    <span class="fs-6">(melody@altbox.com)</span>,
+                    <div class="fw-bold fs-2">Dear {{$transaction->customer_name}}
+                    <span class="fs-6">({{$transaction->customer_email}})</span>,
                     <br>
-                    <span class="text-muted fs-5">Here are your order details. We thank you for your purchase.</span></div>
+                    <span class="text-muted fs-5">Berikut adalah detail pesanan Anda. Terima kasih atas pembelian Anda.</span></div>
                     <!--begin::Message-->
                     <!--begin::Separator-->
                     <div class="separator"></div>
@@ -39,41 +33,19 @@
                     <!--begin::Order details-->
                     <div class="d-flex flex-column flex-sm-row gap-7 gap-md-10 fw-bold">
                         <div class="flex-root d-flex flex-column">
-                            <span class="text-muted">Order ID</span>
-                            <span class="fs-5">#14534</span>
+                            <span class="text-muted">Tanggal</span>
+                            <span class="fs-5">@date($transaction->created_at)</span>
                         </div>
                         <div class="flex-root d-flex flex-column">
-                            <span class="text-muted">Date</span>
-                            <span class="fs-5">19 July, 2023</span>
+                            <span class="text-muted">Invoice</span>
+                            <span class="fs-5">{{ $transaction->number }}</span>
                         </div>
                         <div class="flex-root d-flex flex-column">
-                            <span class="text-muted">Invoice ID</span>
-                            <span class="fs-5">#INV-000414</span>
-                        </div>
-                        <div class="flex-root d-flex flex-column">
-                            <span class="text-muted">Shipment ID</span>
-                            <span class="fs-5">#SHP-0025410</span>
+                            <span class="text-muted">Status Transaksi</span>
+                            <span class="fs-5">{{ $transaction->getTransactionStatusBadge }}</span>
                         </div>
                     </div>
                     <!--end::Order details-->
-                    <!--begin::Billing & shipping-->
-                    <div class="d-flex flex-column flex-sm-row gap-7 gap-md-10 fw-bold">
-                        <div class="flex-root d-flex flex-column">
-                            <span class="text-muted">Billing Address</span>
-                            <span class="fs-6">Unit 1/23 Hastings Road,
-                            <br>Melbourne 3000,
-                            <br>Victoria,
-                            <br>Australia.</span>
-                        </div>
-                        <div class="flex-root d-flex flex-column">
-                            <span class="text-muted">Shipping Address</span>
-                            <span class="fs-6">Unit 1/23 Hastings Road,
-                            <br>Melbourne 3000,
-                            <br>Victoria,
-                            <br>Australia.</span>
-                        </div>
-                    </div>
-                    <!--end::Billing & shipping-->
                     <!--begin:Order summary-->
                     <div class="d-flex justify-content-between flex-column">
                         <!--begin::Table-->
@@ -81,53 +53,27 @@
                             <table class="table align-middle table-row-dashed fs-6 gy-5 mb-0">
                                 <thead>
                                     <tr class="border-bottom fs-6 fw-bold text-muted">
-                                        <th class="min-w-175px pb-2">Products</th>
-                                        <th class="min-w-70px text-end pb-2">SKU</th>
+                                        <th class="min-w-175px pb-2">Produk</th>
                                         <th class="min-w-80px text-end pb-2">QTY</th>
                                         <th class="min-w-100px text-end pb-2">Total</th>
                                     </tr>
                                 </thead>
                                 <tbody class="fw-semibold text-gray-600">
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <!--begin::Thumbnail-->
-                                                <a href="../../demo1/dist/apps/ecommerce/catalog/edit-product.html" class="symbol symbol-50px">
-                                                    <span class="symbol-label" style="background-image:url(assets/media//stock/ecommerce/1.png);"></span>
-                                                </a>
-                                                <!--end::Thumbnail-->
-                                                <!--begin::Title-->
-                                                <div class="ms-5">
-                                                    <div class="fw-bold">Product 1</div>
-                                                    <div class="fs-7 text-muted">Delivery Date: 19/07/2023</div>
+                                    @foreach ($transaction->transactionDetails as $transactionDetail)
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <!--begin::Title-->
+                                                    <div class="ms-5">
+                                                        <div class="fw-bold">{{ $transactionDetail->product_name }}</div>
+                                                    </div>
+                                                    <!--end::Title-->
                                                 </div>
-                                                <!--end::Title-->
-                                            </div>
-                                        </td>
-                                        <td class="text-end">01626002</td>
-                                        <td class="text-end">2</td>
-                                        <td class="text-end">$240.00</td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <!--begin::Thumbnail-->
-                                                <a href="../../demo1/dist/apps/ecommerce/catalog/edit-product.html" class="symbol symbol-50px">
-                                                    <span class="symbol-label" style="background-image:url(assets/media//stock/ecommerce/100.png);"></span>
-                                                </a>
-                                                <!--end::Thumbnail-->
-                                                <!--begin::Title-->
-                                                <div class="ms-5">
-                                                    <div class="fw-bold">Footwear</div>
-                                                    <div class="fs-7 text-muted">Delivery Date: 19/07/2023</div>
-                                                </div>
-                                                <!--end::Title-->
-                                            </div>
-                                        </td>
-                                        <td class="text-end">04844001</td>
-                                        <td class="text-end">1</td>
-                                        <td class="text-end">$24.00</td>
-                                    </tr>
+                                            </td>
+                                            <td class="text-end">1</td>
+                                            <td class="text-end">Rp @currency($transactionDetail->price)</td>
+                                        </tr>
+                                    @endforeach
                                     <tr>
                                         <td colspan="3" class="text-end">Subtotal</td>
                                         <td class="text-end">$264.00</td>
