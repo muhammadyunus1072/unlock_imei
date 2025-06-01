@@ -53,7 +53,7 @@ class ServiceHelper
         //     'errors' => $errors,
         //     'code' => $code,
         // ]);
-        // logger($result);
+        logger($result);
 
         $response = curl_exec($curl);
         $errors = curl_error($curl);
