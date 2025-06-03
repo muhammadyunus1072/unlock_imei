@@ -16,12 +16,11 @@ class Product extends Model
     use HasFactory, SoftDeletes, HasTrackHistory;
 
     protected $fillable = [
-        'product_warranty_id',
         'name',
+        'warranty_days',
         'description',
         'image',
         'price',
-        'warranty_days',
     ];
     
     protected $guarded = ['id'];
@@ -40,10 +39,10 @@ class Product extends Model
     {
         $default = [
             "name",
+            "warranty_days",
             "description",
             "image",
             "price",
-            "warranty_days",
         ];
 
         return saveInfoHelper($object, $this, $data ?? $default, $prefix);

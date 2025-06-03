@@ -65,14 +65,6 @@ return new class extends Migration
         $table->dateTime('verified_at')->nullable()->default(null)->comment('Transaction Verified At');
         $table->string('transaction_status')->comment('Transaction Status');
         $table->string('payment_status')->comment('Transaction Payment Status');
-
-        // Payment Method Information
-        $table->unsignedBigInteger('payment_method_id')->comment('ID Payment Method');
-        $table->string('payment_method_name')->comment('Payment Method Name');
-        $table->string('payment_method_fee_type')->comment('Payment Method Fee Type');
-        $table->double('payment_method_fee_amount')->comment('Payment Method Fee Amount');
-        $table->string('payment_method_code')->comment('Payment Method Code');
-        $table->string('payment_method_is_xendit')->comment('Payment Method Is Xendit');
         
         // Voucher Information
         $table->unsignedBigInteger('voucher_id')->nullable()->default(null)->comment('ID Voucher');

@@ -50,7 +50,7 @@ class Detail extends Component
     public $product_warranty_text;
     public $product_details = [];
 
-    public $payment_method_choices = [];
+    // public $payment_method_choices = [];
 
     public $subtotal;
     public $grand_total;
@@ -61,7 +61,7 @@ class Detail extends Component
 
     // Input
     public $phone;
-    public $payment_method;
+    // public $payment_method;
     public $voucher_id;
     public $voucher_type;
     public $voucher_amount;
@@ -89,17 +89,17 @@ class Detail extends Component
             // 'imei_url' => $product->imei ? Storage::url(FilePathHelper::FILE_PRODUCT_DETAIL_IMEI . $product->imei) : asset("media/404.png")
         ];
 
-        $this->payment_method_choices = PaymentMethodRepository::getBy([
-            ['is_active', true]
-        ])
-        ->map(function ($payment) {
-            return [
-                'id' => Crypt::encrypt($payment->id),
-                'name' => $payment->name,
-                'fee_type' => $payment->fee_type,
-                'fee_amount' => $payment->fee_amount,
-            ];
-        })->toArray();
+        // $this->payment_method_choices = PaymentMethodRepository::getBy([
+        //     ['is_active', true]
+        // ])
+        // ->map(function ($payment) {
+        //     return [
+        //         'id' => Crypt::encrypt($payment->id),
+        //         'name' => $payment->name,
+        //         'fee_type' => $payment->fee_type,
+        //         'fee_amount' => $payment->fee_amount,
+        //     ];
+        // })->toArray();
 
         $this->calculatedTotal();
         $this->setGrandTotal();
@@ -250,10 +250,10 @@ class Detail extends Component
                 return redirect()->route('public.index');
             }
 
-            if(!$this->payment_method)
-            {
-                throw new \Exception("Pilih Metode Pembayaran terlebih dahulu");
-            }
+            // if(!$this->payment_method)
+            // {
+            //     throw new \Exception("Pilih Metode Pembayaran terlebih dahulu");
+            // }
 
             DB::beginTransaction();
 
@@ -272,7 +272,7 @@ class Detail extends Component
                     'facebook' => preg_replace('/\s+/', '.', $this->customer_fb),
                     'instagram' => preg_replace('/\s+/', '', $this->customer_ig),
                 ]),
-                'payment_method_id' => Crypt::decrypt($this->payment_method), // Example
+                'payment_method_id' => 0, // Example
                 'voucher_id' => $this->voucher_id ? Crypt::decrypt($this->voucher_id) : null,
                 'payment_status' => Transaction::PAYMENT_STATUS_PENDING,
                 'transaction_status' => Transaction::TRANSACTION_STATUS_PENDING,
@@ -280,7 +280,6 @@ class Detail extends Component
                 'admin_fee' => $this->admin_fee,
                 'grand_total' => $this->grand_total,
             ];
-            consoleLog($this, $validatedData);
             $transaction = TransactionRepository::create($validatedData);
 
             // 3️⃣ Insert booking details
@@ -292,7 +291,6 @@ class Detail extends Component
                     'product_id' => Crypt::decrypt($this->objId),
                     'imei' => basename($imei),
                 ];
-            consoleLog($this, $validatedData);
                 TransactionDetailRepository::create($validatedData);
             }
             DB::commit();

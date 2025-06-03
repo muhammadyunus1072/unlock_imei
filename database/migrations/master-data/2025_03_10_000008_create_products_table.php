@@ -35,14 +35,12 @@ return new class extends Migration
         } else {
             $table->index('name', 'products_name_idx');
         }
-
-        $table->unsignedBigInteger('product_warranty_id')->nullable()->comment('Product Warranty ID');
         
         $table->string('name')->comment('Product Name');
         $table->text('description')->nullable()->comment('Product Description');
         $table->string('image')->nullable()->comment('Product Image');
         $table->double('price')->comment('Product Price');
-        $table->integer('warranty_days')->default(0)->comment('Product Warranty Days');
+        $table->double('warranty_days')->nullable()->default(0)->comment('Product Warranty Days');
 
         $table->bigInteger("created_by")->unsigned()->nullable();
         $table->bigInteger("updated_by")->unsigned()->nullable();

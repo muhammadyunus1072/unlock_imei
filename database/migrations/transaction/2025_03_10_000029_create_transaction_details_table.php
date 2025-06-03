@@ -47,7 +47,7 @@ return new class extends Migration
         $table->string('product_name')->comment('Product Name');
         $table->text('product_description')->nullable()->comment('Product Description');
         $table->string('product_image')->comment('Product Image');
-        $table->integer('product_warranty_days')->comment('Product Warranty Days');
+        $table->double('product_warranty_days')->nullable()->comment('Product Warranty Days');
         $table->double('product_price')->comment('Product Price');
         $table->dateTime('warranty_expired_at')->nullable()->default(now())->comment('Product Warranty Expired At');
         

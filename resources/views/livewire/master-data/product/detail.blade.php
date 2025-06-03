@@ -13,19 +13,29 @@
                     @enderror
                 </div>
             </div>
-            <div class="row">
-                {{-- SELECT PRODUCT WARRANTY --}}
-                <div class="col-md-10 mb-3">
-                    <label>Garansi Produk</label>
-                    <select class="form-select w-100" wire:model='product_warranty_id'>
-                        <option value="">Tidak Ada Garansi</option>
-                        @php $isFound = false; @endphp
-    
-                        @foreach ($product_warranty_choices as $product_warranty)
-                            @php $isFound = $isFound || $product_warranty['id'] == $product_warranty_id; @endphp
-                            <option value="{{ $product_warranty['id'] }}">{{ $product_warranty['name'] }}</option>
-                        @endforeach
-                    </select>
+            <div class="row p-0 m-0">
+                <div class="col-md-10 mb-4">
+                    <label>Lama Garansi (Hari)</label>
+                    <input placeholder="Lama Garansi (Hari)" type="text" class="form-control currency @error('warranty_days') is-invalid @enderror" wire:model="warranty_days" />
+        
+                    <div class="form-text" id="basic-addon4">0 = Tanpa Garansi, Kosong = Garansi Selamanya</div>
+                    @error('warranty_days')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                    @enderror
+                </div>
+            </div>
+            <div class="row p-0 m-0">
+                <div class="col-md-10 mb-4">
+                    <label>Harga</label>
+                    <input placeholder="Harga" type="text" class="form-control currency @error('price') is-invalid @enderror" wire:model="price" />
+        
+                    @error('price')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                    @enderror
                 </div>
             </div>
 

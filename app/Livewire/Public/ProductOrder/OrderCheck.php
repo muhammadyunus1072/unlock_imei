@@ -26,7 +26,7 @@ class OrderCheck extends Component
                 }
         }
         $this->dispatch('on-search', [
-            'invoice' => $this->invoice,
+            'invoice' => preg_replace('/\s+/', '', $this->invoice),
             'customer_phone' => $phone
         ]);
     }

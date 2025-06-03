@@ -40,7 +40,25 @@ class TransactionDetail extends Model
     {
         self::creating(function ($model) {
             $model = $model->product->saveInfo($model);
-            $model->warranty_expired_at = $model->warranty_days >= 0 ? Carbon::now()->addDays($model->product->warranty_days) : null;
+        });
+        self::updating(function ($model) {
+            if($model->active_at)
+            {
+                $model->warranty_expired_at = $model->warranty_days >= 0 ? Carbon::now()->addDays($model->product->warranty_days) : null;
+            }
+        });
+        self::updated(function ($model) {
+            if($model->active_at)
+            {
+                $transaction = $model->transaction; // assuming `belongsTo(Transaction::class)`
+
+                // Check if all transaction details are activated (active_at is not null)
+                $allActive = $transaction->transactionDetails()->whereNull('active_at')->doesntExist();
+
+                if ($allActive) {
+                    $transaction->update(['transaction_status' => Transaction::TRANSACTION_STATUS_COMPLETED]);
+                }
+            }
         });
     }
 

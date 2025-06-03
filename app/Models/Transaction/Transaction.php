@@ -72,16 +72,14 @@ class Transaction extends Model
 
     // Transaction lifecycle statuses
     const TRANSACTION_STATUS_PENDING = 'PENDING'; // Transaction created but not yet processed
-    const TRANSACTION_STATUS_PROCESSING = 'PROCESSING'; // Actively being processed
-    const TRANSACTION_STATUS_COMPLETED = 'COMPLETED'; // Order fulfilled or service delivered
-    const TRANSACTION_STATUS_FAILED = 'FAILED'; // Failed due to system or manual issue
-    const TRANSACTION_STATUS_CANCELED = 'CANCELED'; // Canceled by user or system
+    const TRANSACTION_STATUS_VERIFIED = 'VERIFIED'; // Verified being processed
+    const TRANSACTION_STATUS_COMPLETED = 'COMPLETED'; // Order fulfilled
+    const TRANSACTION_STATUS_CANCELED = 'CANCELED'; // Canceled by admin
 
     const TRANSACTION_STATUS_CHOICE = [
         self::TRANSACTION_STATUS_PENDING => self::TRANSACTION_STATUS_PENDING,
-        self::TRANSACTION_STATUS_PROCESSING => self::TRANSACTION_STATUS_PROCESSING,
+        self::TRANSACTION_STATUS_VERIFIED => self::TRANSACTION_STATUS_VERIFIED,
         self::TRANSACTION_STATUS_COMPLETED => self::TRANSACTION_STATUS_COMPLETED,
-        self::TRANSACTION_STATUS_FAILED => self::TRANSACTION_STATUS_FAILED,
         self::TRANSACTION_STATUS_CANCELED => self::TRANSACTION_STATUS_CANCELED,
     ];
 
@@ -122,7 +120,7 @@ class Transaction extends Model
         });
         self::created(function ($model) {
             logger('WA SENDING');
-            $result = ServiceHelper::kirimWhatsapp();
+            $result = ServiceHelper::kirimWhatsapp('', '');
             logger($result);
             logger('WA SENDED');
         });
@@ -148,10 +146,9 @@ class Transaction extends Model
     {
         $badges = [
             'warning' => [self::TRANSACTION_STATUS_PENDING],
-            'info' => [self::TRANSACTION_STATUS_PROCESSING],
+            'primary' => [self::TRANSACTION_STATUS_VERIFIED],
             'success' => [self::TRANSACTION_STATUS_COMPLETED],
-            'danger' => [self::TRANSACTION_STATUS_FAILED],
-            'secondary' => [self::TRANSACTION_STATUS_CANCELED],
+            'danger' => [self::TRANSACTION_STATUS_CANCELED],
         ];
 
         $status = $this->transaction_status;

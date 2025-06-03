@@ -120,8 +120,8 @@
             <div id="order-items" class="order-items cart-overflow">
                 {{-- Main Product --}}
                 @foreach ($transaction_details as $item)
-                    <div class="cart-summary__order-item">
-                        <a class="d-inline overlay" data-fslightbox="{{ rand() }}" href="{{ $item['imei_url'] }}" style="height: 80px !important; width: 80px !important; z-index: 99;">
+                    <div class="cart-summary__order-item d-flex justify-content-start gap-5">
+                        <a class="d-inline overlay col-auto" data-fslightbox="{{ rand() }}" href="{{ $item['imei_url'] }}" style="height: 80px !important; width: 80px !important; z-index: 99;">
                             <!--begin::Image-->
                             <img class="img-responsive img-detail rounded-3" width="80" height="80" src="{{ $item['imei_url'] }}">
                             <!--end::Image-->
@@ -131,44 +131,69 @@
                             </div>
                             <!--end::Action-->
                         </a>
-                        <div class="order-item__description">
+                        <div class="order-item__description col-auto">
                             <div class="order-item__description-name">{{ $item['product_name'] }}</div>
                             <div class="order-item__description-count"> </div>
                         </div>
-                        <div class="order-item__price">Rp. @currency($item['product_price'])
+                        <div class=" col-auto">Rp. @currency($item['product_price'])
                             
                         </div>
+                        @if ($verified_at)
+                            @if ($item['active_at'])
+                                <div class="">
+                                    <div class="btn btn-success">
+                                        <p class="my-0 py-0 text-center fs-sm fw-normal">Aktif </p>
+                                        <p class="my-0 py-0 text-center fs-sm fw-normal">@dateFull($item['active_at'])</p>
+                                    </div>
+                                </div>
+                            @else
+                                <div class="">
+                                    <button type="button" class="btn btn-sm btn-primary mb-3" wire:click="showActiveDialog('{{$item['id']}}')">Aktifkan</button>
+                                </div>
+                            @endif
+                        @endif
                     </div>
                 @endforeach
              </div>
         </div>
-        <!--begin::Table-->
-        <div class="table-responsive border-bottom mb-9">
-            <table class="table align-middle table-row-dashed fs-6 gy-5 mb-0">
-                <tbody class="fw-semibold text-gray-600">
-                    <tr>
-                        <td colspan="3" class="text-end">Subtotal</td>
-                        <td class="text-end"> @currency($subtotal)</td>
-                    </tr>
-                    <tr>
-                        <td colspan="3" class="text-end">Admin</td>
-                        <td class="text-end"> @currency($admin_fee)</td>
-                    </tr>
-                    <tr>
-                        <td colspan="3" class="text-end">Diskon</td>
-                        <td class="text-end">- @currency($discount)</td>
-                    </tr>
-                    <tr>
-                        <td colspan="3" class="fs-3 text-dark fw-bold text-end">Grand Total</td>
-                        <td class="text-dark fs-3 fw-bolder text-end">Rp @currency($grand_total)</td>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="row d-flex justify-content-end">
+            <div class="col-md-6">
+                <!--begin::Table-->
+                <div class="table-responsive border-bottom mb-9">
+                    <table class="table align-middle table-row-dashed fs-6 gy-5 mb-0">
+                        <tbody class="fw-semibold text-gray-600">
+                            <tr>
+                                <td colspan="3" class="py-0 my-0 text-end">Subtotal</td>
+                                <td class="py-0 my-0 text-end"> @currency($subtotal)</td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" class="py-0 my-0 text-end">Admin</td>
+                                <td class="py-0 my-0 text-end"> @currency($admin_fee)</td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" class="py-0 my-0 text-end">Diskon</td>
+                                <td class="py-0 my-0 text-end">- @currency($discount)</td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" class="fs-3 py-0 my-0 text-dark fw-bold text-end">Total</td>
+                                <td class="text-dark fs-3 fw-bolder text-end">Rp @currency($grand_total)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!--end::Table-->
+            </div>
         </div>
-        <!--end::Table-->
-        <div class="row">
-            <button type="button" class="btn btn-primary mb-3">Verifikasi Data</button>
-            <button type="button" class="btn btn-danger">Batalkan</button>
+        <div class="row p-3">
+            <label>Catatan Pembatalan</label>
+            <textarea class="form-control mb-2" placeholder="Catatan Pembatalan" cols="30" rows="4" wire:model="cancellation_reason"></textarea>
+        
+            @if ($verified_at)
+                <p class="btn btn-success mb-3">Diverifikasi pada @dateFull($verified_at)</p>
+            @else
+                <button type="button" class="btn btn-primary mb-3" wire:click="showVerifyDialog">Verifikasi Data</button>
+            @endif
+            <button type="button" class="btn btn-danger" wire:click="showCanncelDialog">Batalkan</button>
         </div>
     </div>
 </div>

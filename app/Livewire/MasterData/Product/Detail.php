@@ -23,10 +23,13 @@ class Detail extends Component
 
     #[Validate('required', message: 'Nama Produk Harus Diisi', onUpdate: false)]
     public $name;
+    
+    public $warranty_days;
+    public $description;
+    public $price;
 
     public $image_url;
     public $image;
-    public $description;
     public $product_warranty_id;
     public $product_warranty_choices = [];
 
@@ -36,17 +39,11 @@ class Detail extends Component
             $id = Crypt::decrypt($this->objId);
             $product = ProductRepository::find($id);
             $this->name = $product->name;
+            $this->warranty_days = $product->warranty_days;
             $this->description = $product->description;
-            $this->product_warranty_id = simple_encrypt($product->product_warranty_id);
+            $this->price = valueToImask($product->price);
             $this->image_url = $product->image_url();
         }
-
-        $this->product_warranty_choices = ProductWarrantyRepository::all()->map(function ($product_warranty) {
-                return [
-                    'id' => simple_encrypt($product_warranty->id),
-                    'name' => $product_warranty->name,
-                ];
-            });
     }
 
     #[On('on-dialog-confirm')]
@@ -114,8 +111,9 @@ class Detail extends Component
         try {
             $validatedData = [
                 'name' => $this->name,
+                'warranty_days' => $this->warranty_days,
+                'price' => imaskToValue($this->price),
                 'description' => $this->description,
-                'product_warranty_id' => $this->product_warranty_id ? simple_decrypt($this->product_warranty_id) : null,
             ];
             $filePath = session('uploaded_image', null);
             if ($filePath) {

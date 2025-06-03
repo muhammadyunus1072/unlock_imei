@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row" id="searchDiv">
     <form wire:submit="store">
         <div class='row'>
             <div class="col-md-6 mb-4">

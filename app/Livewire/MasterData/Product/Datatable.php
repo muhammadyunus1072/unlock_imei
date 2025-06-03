@@ -118,14 +118,30 @@ class Datatable extends Component
                 'name' => 'Nama Produk',
             ],
             [
-                'key' => 'product_warranty_name',
-                'name' => 'Garansi Produk',
+                'key' => 'warranty_days',
+                'name' => 'Lama Garansi (Hari)',
+                'render' => function ($item) {
+                    
+                    if($item->warranty_days === 0)
+                    {
+                        return "Tidak Ada Garansi";
+                    }else if(is_null($item->warranty_days))
+                    {
+                        return "Garansi Seumur Hidup";
+                    }else{
+                        return number_format($item->warranty_days, 0, ',', '.')." (Hari)";
+                    }
+                },
             ],
             [
-                'key' => 'total_price',
-                'name' => 'Harga Total',
+                'key' => 'description',
+                'name' => 'Deskripsi Produk',
+            ],
+            [
+                'key' => 'price',
+                'name' => 'Harga',
                 'render' => function ($item) {
-                    return number_format($item->total_price, 0, ',', '.');
+                    return number_format($item->price, 0, ',', '.');
                 },
             ],
         ];

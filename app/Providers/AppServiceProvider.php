@@ -36,6 +36,9 @@ class AppServiceProvider extends ServiceProvider
             return "<?php echo App\Helpers\NumberFormatter::format($expression); ?>";
         });
 
+        Blade::directive('dateFull', function ($expression) {
+            return "<?php echo $expression ? Carbon\Carbon::parse($expression)->translatedFormat('d F Y, H:i:s') : $expression; ?>";
+        });
         Blade::directive('date', function ($expression) {
             return "<?php echo $expression ? Carbon\Carbon::parse($expression)->translatedFormat('d F Y') : $expression; ?>";
         });

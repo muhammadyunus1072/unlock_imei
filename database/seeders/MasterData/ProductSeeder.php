@@ -15,6 +15,7 @@ class ProductSeeder extends Seeder
         $faker = \Faker\Factory::create('id_ID');
         $description = "";
         $warranties = [
+            null,
             0,
             7,
             30,
@@ -25,8 +26,7 @@ class ProductSeeder extends Seeder
         for ($i=0; $i < count($warranties); $i++) { 
             
             ProductRepository::create([
-                'product_warranty_id' => $i+1,
-                'name' => "IMEI GARANSI ".$warranties[$i]." HARI",
+                'name' => "IMEI All Operator",
                 'description' => $description,
                 'image' => $faker->randomElement([
                     'bg-3.jpg',
