@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('cached_ip_locations', function (Blueprint $table) {
-            $this->scheme($table, false);
-        });
+        // Schema::create('cached_ip_locations', function (Blueprint $table) {
+        //     $this->scheme($table, false);
+        // });
 
-        Schema::create('_history_cached_ip_locations', function (Blueprint $table) {
-            $this->scheme($table, true);
-        });
+        // Schema::create('_history_cached_ip_locations', function (Blueprint $table) {
+        //     $this->scheme($table, true);
+        // });
     }
 
     public function down()

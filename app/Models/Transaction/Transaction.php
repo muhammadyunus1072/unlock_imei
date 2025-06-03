@@ -25,9 +25,9 @@ class Transaction extends Model
 
     protected $fillable = [
         'subtotal',
-        'admin_fee',
         'discount',
-        'grand_total',
+        'total_amount',
+        'amount_due',
 
         'customer_name',
         'customer_email',
@@ -39,23 +39,8 @@ class Transaction extends Model
         'customer_ktp',
         'customer_social_media',
         
-        'verified_at',
-        'transaction_status',
-        'payment_status',
-        'cancellation_reason',
-
-        // Payment Method Information
-        'payment_method_id',
-        
         // Voucher Information
         'voucher_id',
-
-        'external_id',
-        'checkout_link',
-        'payment_callback',
-
-        // Seeder
-        'created_at',
     ];
     
     protected $guarded = ['id'];
@@ -70,61 +55,33 @@ class Transaction extends Model
         return true;
     }
 
-    // Transaction lifecycle statuses
-    const TRANSACTION_STATUS_PENDING = 'PENDING'; // Transaction created but not yet processed
-    const TRANSACTION_STATUS_VERIFIED = 'VERIFIED'; // Verified being processed
-    const TRANSACTION_STATUS_COMPLETED = 'COMPLETED'; // Order fulfilled
-    const TRANSACTION_STATUS_CANCELED = 'CANCELED'; // Canceled by admin
-
-    const TRANSACTION_STATUS_CHOICE = [
-        self::TRANSACTION_STATUS_PENDING => self::TRANSACTION_STATUS_PENDING,
-        self::TRANSACTION_STATUS_VERIFIED => self::TRANSACTION_STATUS_VERIFIED,
-        self::TRANSACTION_STATUS_COMPLETED => self::TRANSACTION_STATUS_COMPLETED,
-        self::TRANSACTION_STATUS_CANCELED => self::TRANSACTION_STATUS_CANCELED,
-    ];
-
-    // Initial status
-    const PAYMENT_STATUS_PENDING = 'PENDING'; // Waiting for payment
-
-    // Xendit-specific statuses
-    const PAYMENT_STATUS_PAID = 'PAID'; // Payment successful
-    const PAYMENT_STATUS_EXPIRED = 'EXPIRED'; // Payment expired (e.g., virtual account expired)
-    const PAYMENT_STATUS_FAILED = 'FAILED'; // Payment failed (e.g., insufficient funds, declined)
-    const PAYMENT_STATUS_CANCELED = 'CANCELED'; // User or system canceled transaction
-
-    // Refund-related statuses
-    const PAYMENT_STATUS_REFUND_REQUESTED = 'REFUND_REQUESTED'; // User requested a refund
-    const PAYMENT_STATUS_REFUNDED = 'REFUNDED'; // Payment refunded successfully
-    const PAYMENT_STATUS_PARTIALLY_REFUNDED = 'PARTIALLY_REFUNDED'; // Partial refund issued
-
-    // Settlement & Completion
-    const PAYMENT_STATUS_SETTLED = 'SETTLED'; // Payment settled (confirmed by the bank)
-    const PAYMENT_STATUS_COMPLETED = 'COMPLETED'; // Order/service fulfilled after payment
-
-    const PAYMENT_STATUS_CHOICE = [
-        self::PAYMENT_STATUS_PENDING => self::PAYMENT_STATUS_PENDING,
-        self::PAYMENT_STATUS_PAID => self::PAYMENT_STATUS_PAID,
-        self::PAYMENT_STATUS_EXPIRED => self::PAYMENT_STATUS_EXPIRED,
-    ];
-
     protected static function onBoot()
     {
         self::creating(function ($model) {
             $model->number = NumberGenerator::generate(self::class, 'INV');
-            $model->external_id = $model->number;
-            $model = $model->paymentMethod->saveInfo($model);
             if($model->voucher_id)
             {
                 $model = $model->voucher->saveInfo($model);
             }
         });
         self::created(function ($model) {
-            logger('WA SENDING');
-            $result = ServiceHelper::kirimWhatsapp('', '');
-            logger($result);
-            logger('WA SENDED');
+            $status = new TransactionStatus();
+            $status->transaction_id = $model->id;
+            $status->name = TransactionStatus::STATUS_NOT_VERIFIED;
+            $status->description = null;
+            $status->remarks_id = $model->id;
+            $status->remarks_type = self::class;
+            $status->save();
         });
         
+    }
+
+    public function onCreated()
+    {
+        logger('WA SENDING');
+        $result = ServiceHelper::kirimWhatsapp('', '');
+        logger($result);
+        logger('WA SENDED');
     }
     public function createInvoice()
     {
@@ -142,102 +99,24 @@ class Transaction extends Model
         }
     }
 
-    public function getTransactionStatusBadge(): string
-    {
-        $badges = [
-            'warning' => [self::TRANSACTION_STATUS_PENDING],
-            'primary' => [self::TRANSACTION_STATUS_VERIFIED],
-            'success' => [self::TRANSACTION_STATUS_COMPLETED],
-            'danger' => [self::TRANSACTION_STATUS_CANCELED],
-        ];
-
-        $status = $this->transaction_status;
-        
-        // Find the corresponding badge class
-        $badgeColor = array_keys(array_filter($badges, fn($statuses) => in_array($status, $statuses, true)))[0] ?? 'secondary';
-
-        return $badgeColor;
-        return "<span class='badge badge-{$badgeColor}'>" . strtoupper($status) . "</span>";
-    }
-
-    public function getTransactionAction(): string
-    {
-        $html = '';
-        switch ($this->transaction_status) {
-            case self::TRANSACTION_STATUS_PENDING:
-                $html = "<div class='col-auto mb-2'>
-                            <a class='btn btn-success btn-sm w-100' href='{$this->checkout_link}'>
-                                Bayar Sekarang
-                            </a>
-                        </div>";
-                break;
-
-            case self::TRANSACTION_STATUS_COMPLETED:
-                $route = route('service.generate', ['id' => Crypt::encrypt($this->id)]);
-                $html = "<div class='col-auto mb-2'>
-                            <a class='btn btn-primary btn-sm w-100' href='{$route}' target='_BLANK'>
-                                Generate QR-Code
-                            </a>
-                        </div>";
-                break;
-            
-            default:
-                $html = '<p class="text-center fw-bold fs-3"> - </p>';
-                break;
-        }
-        return $html;
-    }
-    public function getPaymentStatusBadge(): string
-    {
-        $badges = [
-            'warning' => [self::PAYMENT_STATUS_PENDING],
-            'success' => [self::PAYMENT_STATUS_PAID],
-            'danger' => [self::PAYMENT_STATUS_EXPIRED],
-            'dark' => [self::PAYMENT_STATUS_EXPIRED],
-            'secondary' => [self::PAYMENT_STATUS_CANCELED],
-            'info' => [self::PAYMENT_STATUS_CANCELED],
-        ];
-
-        $status = $this->payment_status;
-        
-        // Find the corresponding badge class
-        $badgeColor = array_keys(array_filter($badges, fn($statuses) => in_array($status, $statuses, true)))[0] ?? 'secondary';
-
-        return $badgeColor;
-        return "<span class='badge badge-{$badgeColor}'>" . strtoupper($status) . "</span>";
-    }
-
-    public function getPaymentAction(): string
-    {
-        $html = '';
-        switch ($this->payment_status) {
-            case self::PAYMENT_STATUS_PENDING:
-                $html = "<div class='col-auto mb-2'>
-                            <a class='btn btn-success btn-sm w-100' href='{$this->checkout_link}'>
-                                Bayar Sekarang
-                            </a>
-                        </div>";
-                break;
-
-            case self::PAYMENT_STATUS_PAID:
-                $route = route('service.generate', ['id' => Crypt::encrypt($this->id)]);
-                $html = "<div class='col-auto mb-2'>
-                            <a class='btn btn-primary btn-sm w-100' href='{$route}' target='_BLANK'>
-                                Generate QR-Code
-                            </a>
-                        </div>";
-                break;
-            
-            default:
-                $html = '<p class="text-center fw-bold fs-3"> - </p>';
-                break;
-        }
-        return $html;
-    }
-
     public function transactionDetails()
     {
         return $this->hasMany(TransactionDetail::class, 'transaction_id', 'id');
+    }
+
+    public function lastStatus()
+    {
+        return $this->hasOne(TransactionStatus::class, 'id', 'last_status_id');
+    }
+
+    public function transactionStatuses()
+    {
+        return $this->hasMany(TransactionStatus::class, 'transaction_id', 'id')->orderBy('id', "DESC");
+    }
+
+    public function TransactionPayments()
+    {
+        return $this->hasMany(TransactionPayment::class, 'transaction_id', 'id')->orderBy('id', "DESC");
     }
 
     public function transactionDetailSample()

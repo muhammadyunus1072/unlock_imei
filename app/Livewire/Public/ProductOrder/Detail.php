@@ -127,21 +127,6 @@ class Detail extends Component
         $this->customer_lang = $lng;
     }
 
-    public function updatedPaymentMethod($value)
-    {
-        $selectedPayment = collect($this->payment_method_choices)
-            ->firstWhere('id', $value);
-
-        if($selectedPayment['fee_type'] === PaymentMethod::TYPE_PERCENTAGE)
-        {
-            $this->admin_fee = calculatedAdminFee($this->subtotal, $selectedPayment['fee_amount']);
-            $this->setGrandTotal();
-        }else{
-            $this->admin_fee = $selectedPayment['fee_amount'];
-            $this->setGrandTotal();
-        }
-    }
-
     private function setGrandTotal()
     {
         $this->grand_total = $this->subtotal + $this->admin_fee - $this->discount;
@@ -179,7 +164,7 @@ class Detail extends Component
             $this->voucher_id = Crypt::encrypt($voucher['id']);
             $this->voucher_type = $voucher['type'];
             $this->voucher_amount = $voucher['amount'];
-            $this->discount = $voucher['type'] == Voucher::TYPE_PERCENTAGE ? calculatedDiscount($this->subtotal, $voucher['amount']) : $voucher['amount'];
+            $this->discount = $voucher['type'] == Voucher::TYPE_PERCENTAGE ? calculatePercentage($this->subtotal, $voucher['amount']) : $voucher['amount'];
             $this->setGrandTotal();
         }else{
             $this->voucher_id = null;
@@ -274,11 +259,11 @@ class Detail extends Component
                 ]),
                 'payment_method_id' => 0, // Example
                 'voucher_id' => $this->voucher_id ? Crypt::decrypt($this->voucher_id) : null,
-                'payment_status' => Transaction::PAYMENT_STATUS_PENDING,
-                'transaction_status' => Transaction::TRANSACTION_STATUS_PENDING,
+                
                 'subtotal' => $this->subtotal,
-                'admin_fee' => $this->admin_fee,
-                'grand_total' => $this->grand_total,
+                'discount' => $this->discount,
+                'total_amount' => $this->grand_total,
+                'amount_due' => $this->grand_total,
             ];
             $transaction = TransactionRepository::create($validatedData);
 
@@ -294,7 +279,7 @@ class Detail extends Component
                 TransactionDetailRepository::create($validatedData);
             }
             DB::commit();
-            return redirect()->route('public.order-invoice', [
+            return redirect()->route('public.order_invoice', [
                 'id' => Crypt::encrypt($transaction->id),
             ]);
         } catch (Exception $e) {

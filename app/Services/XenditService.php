@@ -38,7 +38,7 @@ class XenditService
             $subtotal += $item->product_price;
             $subtotal += $item->product_detail_price;
         }
-        $admin_fee =  PaymentMethod::TYPE_FIXED === $transaction->payment_method_type ? $transaction->payment_method_amount : calculatedAdminFee($subtotal, $transaction->payment_method_amount);
+        $admin_fee =  PaymentMethod::TYPE_FIXED === $transaction->payment_method_type ? $transaction->payment_method_amount : calculateAdminFee($subtotal, $transaction->payment_method_amount);
 
         $fees[] = [
             "type" => "Admin Fee",

@@ -4,6 +4,7 @@ namespace App\Repositories\Dashboard;
 
 use Carbon\Carbon;
 use App\Models\Transaction\Transaction;
+use App\Models\Transaction\TransactionStatus;
 
 class SummaryRepository
 {
@@ -14,37 +15,36 @@ class SummaryRepository
     }
     public static function bookingActive()
     {
-        return Transaction::where('payment_status', Transaction::PAYMENT_STATUS_PAID)
+        return Transaction::whereHas('transactionStatuses', function ($query) {
+                $query->where('name', TransactionStatus::STATUS_COMPLETED);
+            })
             ->count();
     }
     public static function bookingPending()
     {
-        return Transaction::where('payment_status', Transaction::PAYMENT_STATUS_PENDING)
-            ->count();
+        return 0;
     }
     public static function bookingPaid()
     {
-        return Transaction::where('payment_status', Transaction::PAYMENT_STATUS_PAID)
-            ->count();
+        return 0;
     }
     public static function bookingExpired()
     {
-        return Transaction::where('payment_status', Transaction::PAYMENT_STATUS_EXPIRED)
-            ->count();
+        return 0;
     }
 
     // DAILY SUMMARY
     public static function transactionToday()
     {
-        return Transaction::selectRaw('grand_total')
-            ->where('payment_status', Transaction::PAYMENT_STATUS_PAID)
+        return Transaction::selectRaw('total_amount')
+            // ->where('payment_status', Transaction::PAYMENT_STATUS_PAID)
             ->whereDate('created_at', now())
             ->get();
     }
     public static function transactionDaily()
     {
-        return Transaction::selectRaw('DATE(created_at) as transaction_date, COUNT(*) as transaction_amount, SUM(grand_total) as transaction_value')
-            ->where('payment_status', Transaction::PAYMENT_STATUS_PAID)
+        return Transaction::selectRaw('DATE(created_at) as transaction_date, COUNT(*) as transaction_amount, SUM(total_amount) as transaction_value')
+            // ->where('payment_status', Transaction::PAYMENT_STATUS_PAID)
             ->whereDate('created_at', '!=', now())
             ->groupBy('transaction_date')
             ->orderBy('transaction_date', 'DESC');            
@@ -66,7 +66,7 @@ class SummaryRepository
             DAYNAME(created_at) as transaction_day, 
             COUNT(*) as transaction_amount
         ")
-        ->where('payment_status', Transaction::PAYMENT_STATUS_PAID)
+        // ->where('payment_status', Transaction::PAYMENT_STATUS_PAID)
         ->whereBetween('created_at', [Carbon::now()->startOfWeek(Carbon::SUNDAY), Carbon::now()->endOfWeek(Carbon::SATURDAY)])
         ->groupBy('transaction_day')
         ->get();
@@ -74,10 +74,10 @@ class SummaryRepository
     // MONTHLY SUMMARY
     public static function transactionMonthly()
     {
-        return Transaction::selectRaw('DATE(created_at) as transaction_date, COUNT(*) as transaction_amount, SUM(grand_total) as transaction_value')
+        return Transaction::selectRaw('DATE(created_at) as transaction_date, COUNT(*) as transaction_amount, SUM(total_amount) as transaction_value')
         ->whereMonth('created_at', now()->month)
         ->groupBy('transaction_date')
-        ->where('payment_status', Transaction::PAYMENT_STATUS_PAID)
+        // ->where('payment_status', Transaction::PAYMENT_STATUS_PAID)
         ->orderBy('transaction_date')
         ->get();
     }
@@ -85,8 +85,8 @@ class SummaryRepository
     // YEARLY SUMMARY
     public static function transactionYearly()
     {
-        return Transaction::selectRaw('grand_total')
-            ->where('payment_status', Transaction::PAYMENT_STATUS_PAID)
+        return Transaction::selectRaw('total_amount')
+            // ->where('payment_status', Transaction::PAYMENT_STATUS_PAID)
             ->whereYear('created_at', now())
             ->get();
     }

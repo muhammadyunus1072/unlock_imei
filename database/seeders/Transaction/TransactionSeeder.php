@@ -33,13 +33,13 @@ class TransactionSeeder extends Seeder
                 $product = $faker->randomElement($products); // Get full product model
 
                 // Cek ketersediaan sebelum booking
-                $isNotAvailable = TransactionDetail::isNotAvailable(
-                    $imei,
-                );
+                // $isNotAvailable = TransactionDetail::isNotAvailable(
+                //     $imei,
+                // );
 
-                if ($isNotAvailable) {
-                    continue; // Skip if already booked
-                }
+                // if ($isNotAvailable) {
+                //     continue; // Skip if already booked
+                // }
 
                 $paymentMethod = $faker->randomElement($paymentMethods); // Contoh metode pembayaran
                 $price = $product->price;
@@ -49,7 +49,7 @@ class TransactionSeeder extends Seeder
                 $grandTotal = 0;
                 if($paymentMethod->fee_type === PaymentMethod::TYPE_PERCENTAGE)
                 {
-                    $admin_fee = calculatedAdminFee($subtotal, $paymentMethod->fee_amount);
+                    $admin_fee = calculateAdminFee($subtotal, $paymentMethod->fee_amount);
                     $grandTotal = $subtotal + $admin_fee;
                 }else{
                     $admin_fee = $paymentMethod->fee_amount;
@@ -66,7 +66,6 @@ class TransactionSeeder extends Seeder
                     'payment_method_id' => $paymentMethod->id,
                     'voucher_id' => null,
                     'created_at' => $bookingDate,
-                    'transaction_status' => Transaction::TRANSACTION_STATUS_COMPLETED,
                     'payment_status' => Transaction::PAYMENT_STATUS_PAID,
                     'grand_total' => $grandTotal,
                     'subtotal' => $subtotal,

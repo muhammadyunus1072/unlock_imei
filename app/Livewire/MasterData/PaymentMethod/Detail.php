@@ -21,10 +21,10 @@ class Detail extends Component
     public $name;
 
     #[Validate('required', message: 'Jenis Biaya Admin Harus Diisi', onUpdate: false)]
-    public $type;
+    public $fee_type;
 
     #[Validate('required', message: 'Nilai Biaya Admin Harus Diisi', onUpdate: false)]
-    public $amount;
+    public $fee_amount;
 
     #[Validate('required', message: 'Kode Harus Diisi', onUpdate: false)]
     public $code;
@@ -39,12 +39,12 @@ class Detail extends Component
         {
             $product = PaymentMethodRepository::find(Crypt::decrypt($this->objId));
             $this->name = $product->name;
-            $this->type = $product->type;
-            $this->amount = $product->amount;
+            $this->fee_type = $product->fee_type;
+            $this->fee_amount = $product->fee_amount;
             $this->code = $product->code;
             $this->is_active = $product->is_active ? true : false;
         }else{
-            $this->type = PaymentMethod::TYPE_PERCENTAGE;
+            $this->fee_type = PaymentMethod::TYPE_PERCENTAGE;
         }
 
         $this->type_choices = PaymentMethod::TYPE_CHOICE;
@@ -74,9 +74,9 @@ class Detail extends Component
 
             $validatedData = [
                 'name' => $this->name,
-                'type' => $this->type,
+                'fee_type' => $this->fee_type,
                 'code' => $this->code,
-                'amount' => imaskToValue($this->amount),
+                'fee_amount' => imaskToValue($this->fee_amount),
                 'is_active' => $this->is_active,
             ];
             if ($this->objId) {

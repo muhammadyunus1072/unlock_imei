@@ -8,6 +8,13 @@
               <div class="card-body">
                 <h2 class="card-title mt-0">
                     <a class="text-white" href="#">{{$item->name}}</a>
+                    <br>
+                    <a class="text-white" href="#">Garansi 
+                        @if (is_null($item->warranty_days))
+                            Selamanya
+                        @else
+                            @currency($item->warranty_days) Hari
+                        @endif</a>
                 </h2>
               </div>
               <div class="card-footer">

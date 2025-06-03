@@ -169,7 +169,7 @@ class Datatable extends Component
                 'render' => function($item)
                 {
                     $html = "<p class='mb-0'>{$item->payment_method_name}</p>";
-                    $html .= "<span class='badge badge-{$item->getPaymentStatusBadge()}'>" . $item->payment_status . "</span>";
+                    $html .= "<span class='badge badge-{$item->lastStatus->getStatusStyle()}'>" . $item->lastStatus->name . "</span>";
 
                     return $html;
                 }

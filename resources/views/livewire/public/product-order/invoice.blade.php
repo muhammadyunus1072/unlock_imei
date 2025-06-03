@@ -64,7 +64,7 @@
                                                 </tr>
                                                 <tr class="fs-6">
                                                     <td class="my-0 py-0 fw-bolder text-end">Status</td>
-                                                    <td class="my-0 py-0 text-end"><span class="fs-5 badge badge-{{$transaction->getTransactionStatusBadge()}}"> {{$transaction->transaction_status}} </span></td>
+                                                    <td class="my-0 py-0 text-end"><span class="fs-5 badge badge-{{$transaction->lastStatus->getStatusStyle()}}"> {{$transaction->lastStatus->name}} </span></td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -106,17 +106,17 @@
                                                 <td class="py-0 my-0 text-end"> @currency($subtotal)</td>
                                             </tr>
                                             <tr>
-                                                <td colspan="3" class="py-0 my-0 text-end">Admin</td>
-                                                <td class="py-0 my-0 text-end"> @currency($admin_fee)</td>
-                                            </tr>
-                                            <tr>
                                                 <td colspan="3" class="py-0 my-0 text-end">Diskon</td>
                                                 <td class="py-0 my-0 text-end">- @currency($discount)</td>
                                             </tr>
                                             <tr>
-                                                <td colspan="2"></td>
+                                                <td colspan="2" class="py-0 my-0"></td>
                                                 <td class="fs-3 py-0 my-0 text-dark fw-bold text-end">Total</td>
                                                 <td class="text-dark fs-3 fw-bolder text-end">Rp @currency($grand_total)</td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="3" class="py-0 my-0 text-end">Terbayar</td>
+                                                <td class="py-0 my-0 text-end">@currency($grand_total - $amount_due)</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -126,7 +126,7 @@
                                     <!--begin::Table-->
                                     <div class="col-auto bg-light p-3">
                                         <h3 class="fs-4 fw-normal mb-3">Jumlah yang harus dibayar</h3>
-                                        <h3 class="fs-2x fw-bold text-end">Rp @currency($grand_total)</h3>
+                                        <h3 class="fs-2x fw-bold text-end">Rp @currency($amount_due)</h3>
                                     <!--end::Table-->
                                     </div>
                                 </div>
@@ -164,7 +164,24 @@
                                     <span class="path4"></span>
                                     <span class="path5"></span>
                                 </i>
-                                 Print Invoice</button>
+                                 Print Invoice
+                            </button>
+                            <!-- end::Pint--> 
+                        </div>
+                        <!-- end::Actions-->
+                        <!-- begin::Actions-->
+                        <div class="my-1 me-5">
+                            <!-- begin::Pint-->
+                            <a href="{{ route('public.order_payment', [ 'id' => $objId ]) }}" target="_BLANK" class="btn btn-primary my-1 me-12"> 
+                                <i class="ki-duotone ki-dollar fs-2x">
+                                    <span class="path1"></span>
+                                    <span class="path2"></span>
+                                    <span class="path3"></span>
+                                    <span class="path4"></span>
+                                    <span class="path5"></span>
+                                </i>
+                                 Bayar Sekarang
+                            </a>
                             <!-- end::Pint--> 
                         </div>
                         <!-- end::Actions-->

@@ -9,6 +9,7 @@ use Livewire\Attributes\On;
 use App\Permissions\PermissionHelper;
 use App\Permissions\AccessTransaction;
 use App\Models\Transaction\Transaction;
+use App\Models\Transaction\TransactionStatus;
 use App\Repositories\Account\UserRepository;
 use App\Repositories\Transaction\Transaction\TransactionRepository;
 
@@ -23,7 +24,7 @@ class Filter extends Component
 
     public function mount()
     {
-        $this->statuses = Transaction::PAYMENT_STATUS_CHOICE;
+        $this->statuses = TransactionStatus::STATUS_CHOICE;
         $this->isCanDelete = UserRepository::authenticatedUser()->hasPermissionTo(PermissionHelper::transform(AccessTransaction::TRANSACTION, PermissionHelper::TYPE_DELETE));
 
         $this->dateStart = Carbon::now()->startOfMonth()->format('Y-m-d');
@@ -47,7 +48,7 @@ class Filter extends Component
         }
 
         TransactionRepository::forceDeleteBy([
-            ['status', Transaction::PAYMENT_STATUS_EXPIRED]
+            ['status', TransactionStatus::STATUS_CANCELLED]
         ]);
 
         Alert::success($this, 'Berhasil', 'Data Expired berhasil dihapus');

@@ -34,10 +34,16 @@ return new class extends Migration
             $table->bigInteger('obj_id')->unsigned();
         } else {
 
-            $table->index('ip', 'transaction_payments_ip_idx');
+            $table->index('transaction_id', 'transaction_payments_transaction_id_idx');
+            $table->index('status', 'transaction_payments_status_idx');
+            $table->index('payment_method_name', 'transaction_payments_payment_method_name_idx');
         }
         
         $table->unsignedBigInteger('transaction_id')->comment('ID Transaction');
+        $table->string('image')->nullable()->default(null)->comment('Gambar Bukti');
+        $table->text('note')->nullable()->default(null)->comment('Note');
+        $table->double('amount')->comment('Amount Paid');
+        $table->string('status')->comment('Payment Status');
         
         // Payment Method Information
         $table->unsignedBigInteger('payment_method_id')->comment('ID Payment Method');
@@ -46,6 +52,10 @@ return new class extends Migration
         $table->double('payment_method_fee_amount')->comment('Payment Method Fee Amount');
         $table->string('payment_method_code')->comment('Payment Method Code');
         $table->string('payment_method_is_xendit')->comment('Payment Method Is Xendit');
+
+        $table->string('external_id')->nullable()->default(null);
+        $table->string('checkout_link')->nullable()->default(null);
+        $table->json('payment_callback')->nullable()->comment('Payment Xendit Callback');
 
         $table->bigInteger("created_by")->unsigned()->nullable();
         $table->bigInteger("updated_by")->unsigned()->nullable();

@@ -131,7 +131,7 @@ class Datatable extends Component
                 }
             ],
             [
-                'key' => 'amount',
+                'key' => 'fee_amount',
                 'name' => 'Nilai Biaya Admin',
                 'render' => function($item)
                 {

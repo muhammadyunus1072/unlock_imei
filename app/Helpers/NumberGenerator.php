@@ -55,10 +55,12 @@ class NumberGenerator
         // Roman Day
         $roman_day = RomanConverter::toRoman($day_now);
         // Generate Format Number
+
+        $str = collect(range('A', 'Z'))->random(4)->implode('');
         $formats = [
             self::RESET_TYPE_YEARLY => "$code/$currentNumber/$year_now",
             self::RESET_TYPE_MONTHLY => "$code/$currentNumber/$roman_month/$year_now",
-            self::RESET_TYPE_DAILY => "$code/$currentNumber/$roman_day/$roman_month/$year_now",
+            self::RESET_TYPE_DAILY => "$code/$currentNumber/$roman_day/$roman_month/$year_now/$str",
         ];
     
         return $formats[$resetType];

@@ -11,28 +11,25 @@
                     </div>
                 @enderror
             </div>
+
             <div class="col-md-10 mb-4">
-                <label>Kode</label>
-                <input placeholder="Kode" type="text" class="form-control @error('code') is-invalid @enderror" wire:model="code" />
-    
-                @error('code')
-                    <div class="invalid-feedback">
-                        {{ $message }}
-                    </div>
-                @enderror
+                <div class="form-group" wire:ignore>
+                    <label>Kode</label>
+                    <textarea class="form-control ckeditor"  id="code" name="code">{{ $code }}</textarea>
+                </div>
             </div>
             <div class="col-md-10 mb-4">
                 <label>Jenis Biaya Admin</label>
-                <select class="form-select w-100" wire:model='type'>
+                <select class="form-select w-100" wire:model='fee_type'>
                     @php $isFound = false; @endphp
 
                     @foreach ($type_choices as $type_value => $type_name)
-                        @php $isFound = $isFound || $type_value == $type; @endphp
+                        @php $isFound = $isFound || $type_value == $fee_type; @endphp
                         <option value="{{ $type_value }}" {{$isFound ? 'selected' : ''}}>{{ $type_name }}</option>
                     @endforeach
                 </select>
     
-                @error('type')
+                @error('fee_type')
                     <div class="invalid-feedback">
                         {{ $message }}
                     </div>
@@ -40,9 +37,9 @@
             </div>
             <div class="col-md-10 mb-4">
                 <label>Nilai Biaya Admin</label>
-                <input placeholder="Nilai Biaya Admin" type="text" class="form-control currency @error('amount') is-invalid @enderror" wire:model="amount" />
+                <input placeholder="Nilai Biaya Admin" type="text" class="form-control currency @error('fee_amount') is-invalid @enderror" wire:model="fee_amount" />
     
-                @error('amount')
+                @error('fee_amount')
                     <div class="invalid-feedback">
                         {{ $message }}
                     </div>
@@ -69,4 +66,6 @@
 </div>
 
 @include('js.imask')
+
+@include('js.ckeditor')
 

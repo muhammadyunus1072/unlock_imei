@@ -14,11 +14,11 @@ return new class extends Migration
 
     public function up()
     {
-        Schema::create('purchase_request_statuses', function (Blueprint $table) {
+        Schema::create('transaction_statuses', function (Blueprint $table) {
             $this->scheme($table);
         });
 
-        Schema::create('_history_purchase_request_statuses', function (Blueprint $table) {
+        Schema::create('_history_transaction_statuses', function (Blueprint $table) {
             $this->scheme($table, true);
         });
     }
@@ -30,8 +30,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('purchase_request_statuses');
-        Schema::dropIfExists('_history_purchase_request_statuses');
+        Schema::dropIfExists('transaction_statuses');
+        Schema::dropIfExists('_history_transaction_statuses');
     }
 
     private function scheme(Blueprint $table, $isHistory = false)
@@ -40,8 +40,11 @@ return new class extends Migration
         if ($isHistory) {
             $table->bigInteger('obj_id')->unsigned();
         } else {
+            $table->index('name', 'transaction_statuses_name_idx');
+            $table->index('remarks_id', 'transaction_statuses_remarks_id_idx');
+            $table->index('remarks_type', 'transaction_statuses_remarks_type_idx');
         }
-        $table->bigInteger('purchase_request_id')->unsigned();
+        $table->bigInteger('transaction_id')->unsigned();
         $table->string('name');
         $table->text('description')->nullable()->default(null);
         $table->bigInteger('remarks_id')->unsigned()->nullable()->default(null);

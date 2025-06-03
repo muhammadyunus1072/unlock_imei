@@ -56,20 +56,10 @@ class TransactionDetail extends Model
                 $allActive = $transaction->transactionDetails()->whereNull('active_at')->doesntExist();
 
                 if ($allActive) {
-                    $transaction->update(['transaction_status' => Transaction::TRANSACTION_STATUS_COMPLETED]);
+                    // $transaction->update(['transaction_status' => Transaction::TRANSACTION_STATUS_COMPLETED]);
                 }
             }
         });
-    }
-
-    public static function isNotAvailable($imei)
-    {
-        return self::join('transactions', 'transactions.id', '=', 'transaction_details.transaction_id')
-            ->where('transaction_details.imei', $imei)
-            ->whereIn('transactions.payment_status', [Transaction::PAYMENT_STATUS_PENDING])
-            ->where('transaction_details.deleted_at', null)
-            ->lockForUpdate() // ✅ Lock slot before creating transaction
-            ->exists();
     }
 
     public function transaction()

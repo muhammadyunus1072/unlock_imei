@@ -62,6 +62,11 @@ class PublicController extends Controller
         return view('app.public.product-order.invoice', ["objId" => $request->id]);
     }
 
+    public function order_payment(Request $request)
+    {
+        return view('app.public.product-order.payment', ["objId" => $request->id]);
+    }
+
     public function order_check(Request $request)
     {
         return view('app.public.product-order.order-check', ["objId" => null]);

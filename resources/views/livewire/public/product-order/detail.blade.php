@@ -127,25 +127,7 @@
                             </defs>
                         </svg>
                     </div>
-        
-        
-                    {{-- <div class="form-group mt-5" id="container-payment-method">
-                        <label for="payment-method" class="form-label">Metode Pembayaran</label>
-                        <select id="payment-method" class="form-select" aria-label="Default Select Payment Methods" wire:model.live="payment_method">
-                            <option value="">Pilih Metode Pembayaran</option>
-                            @foreach ($payment_method_choices as $payment_method)
-                                <option value="{{$payment_method['id']}}">{{$payment_method['name']}} - Admin Fee Rp. 
-                                    @if ($payment_method['fee_type'] === \App\Models\MasterData\PaymentMethod::TYPE_PERCENTAGE)
-                                        {{ numberFormat(calculatedAdminFee($subtotal, $payment_method['fee_amount'])) }}
-                                    @else
-                                        @currency($payment_method['fee_amount'])
-                                    @endif
-                                </option>
-                            @endforeach
-                        </select>
-                    </div> --}}
                     
-        
                 </div>
                 <div class="subtotal-wrapper">
                     <div id="subtotal" class="cart-subtotal">
@@ -182,6 +164,17 @@
                             <div class="order-item__label">Total Rp. @currency($grand_total)</div>
                         </div>
                     </div>
+                </div>
+
+                <div class="row sm-d-none">
+                    <form id="" class="w-100 " autocomplete="off" wire:submit="store">
+                        <button type="submit" id="btn-confirm-order" class="btn text-white w-100" style="background-color: #5d2fc2;">
+                            <span class="indicator-label">Confirm Order</span>
+                            <span class="indicator-progress">Please wait...
+                                <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                            </span>
+                        </button>
+                    </form>
                 </div>
             </div>
             <!-- Cart -->
@@ -302,22 +295,42 @@
                     @endforeach
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <form id="" class="w-100 " autocomplete="off" wire:submit="store">
-                <button type="submit" id="btn-confirm-order" class="btn text-white w-100" style="background-color: #5d2fc2;">
-                    <span class="indicator-label">Confirm Order</span>
-                    <span class="indicator-progress">Please wait...
-                        <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
-                    </span>
-                </button>
-            </form>
+
+                <div class="row lg-d-none">
+                    <form id="" class="w-100 " autocomplete="off" wire:submit="store">
+                        <button type="submit" id="btn-confirm-order" class="btn text-white w-100" style="background-color: #5d2fc2;">
+                            <span class="indicator-label">Confirm Order</span>
+                            <span class="indicator-progress">Please wait...
+                                <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                            </span>
+                        </button>
+                    </form>
+                </div>
         </div>
 </div>
 
 @push('css')
     <link href="{{ asset('assets/css/custom-homepage.css') }}" rel="stylesheet" type="text/css" />
     <style>
+        .sm-d-none {
+            display: none !important;
+        }
+        .lg-d-none {
+            display: none !important;
+        }
+
+        @media (min-width: 575.98px) {
+            .sm-d-none {
+                display: block !important;
+            }
+        }
+
+        @media (max-width: 575.98px) {
+            .lg-d-none {
+                display: block !important;
+            }
+        }
+
        .overlay:hover .img-detail {
           filter: brightness(0.7);
        }

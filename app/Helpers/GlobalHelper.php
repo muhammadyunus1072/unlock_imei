@@ -89,10 +89,17 @@ if (!function_exists('consoleLog')) {
     }
 }
 
-if (!function_exists('calculatedAdminFee')) {
-    function calculatedAdminFee($amount, $percentage)
+if (!function_exists('calculateAdminFee')) {
+    function calculateAdminFee($amount, $percentage)
     {
         return ceil(($amount / (1 - ($percentage / 100))) - $amount);
+    }
+}
+
+if (!function_exists('calculatePercentage')) {
+    function calculatePercentage($amount, $percentage)
+    {
+        return $percentage / 100 * $amount;
     }
 }
 
