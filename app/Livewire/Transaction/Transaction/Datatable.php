@@ -48,7 +48,7 @@ class Datatable extends Component
             return;
         }
         
-        TransactionRepository::delete(Crypt::decrypt($this->targetDeleteId));
+        TransactionRepository::delete(simple_decrypt($this->targetDeleteId));
         Alert::success($this, 'Berhasil', 'Data berhasil dihapus');
     }
 
@@ -84,7 +84,7 @@ class Datatable extends Component
                 'render' => function ($item) {
 
                     $editHtml = "";
-                    $id = Crypt::encrypt($item->id);
+                    $id = simple_encrypt($item->id);
                     if ($this->isCanUpdate) {
                         $editUrl = route('transaction.edit', $id);
                         $editHtml = "<div class='col-auto mb-2'>

@@ -76,9 +76,7 @@ class Payment extends Component
     public function onDialogConfirm()
     {
         if ($this->objId) {
-            $this->redirectRoute('public.index');
-        } else {
-            $this->redirectRoute('public.index');
+            $this->redirectRoute('public.order-payment', ['id' => $this->objId]);
         }
     }
 
@@ -94,7 +92,7 @@ class Payment extends Component
             return;
         }
         $this->transaction = TransactionRepository::findBy([
-            ['id', Crypt::decrypt($this->objId)]
+            ['id', simple_decrypt($this->objId)]
         ]);
         $this->calculatedTotal();
     }
@@ -127,16 +125,16 @@ class Payment extends Component
 
             $image = $this->image->store(FilePathHelper::FILE_CUSTOMER_TRANSACTION_PAYMENT, 'public');
             $validatedData = [
-                'transaction_id' => Crypt::decrypt($this->objId),
-                'amount' => imaskToValue($this->objId),
+                'transaction_id' => simple_decrypt($this->objId),
+                'amount' => imaskToValue($this->amount),
                 'image' => basename($image),
                 'payment_method_id' => Crypt::decrypt($this->payment_method),
             ];
             // dd($validatedData);
             $obj = TransactionPaymentRepository::create($validatedData);
-            $objId = $obj->id;
 
             DB::commit();
+            $this->getData();
             Alert::confirmation(
                 $this,
                 Alert::ICON_SUCCESS,

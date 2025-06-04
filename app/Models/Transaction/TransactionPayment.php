@@ -72,6 +72,17 @@ class TransactionPayment extends Model
                 $transaction->amount_due = $amount_due <= 0 ? 0 : $amount_due;
                 $transaction->save();
             }
+
+                if($transaction->amount_due <= 0)
+                {
+                    $status = new TransactionStatus();
+                    $status->transaction_id = $transaction->id;
+                    $status->name = TransactionStatus::STATUS_PAID;
+                    $status->description = null;
+                    $status->remarks_id = $model->id;
+                    $status->remarks_type = self::class;
+                    $status->save();
+                }
         });
     }
     

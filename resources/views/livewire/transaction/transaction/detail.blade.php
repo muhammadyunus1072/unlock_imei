@@ -1,90 +1,90 @@
-<div class="container">
-    <div class="row d-flex justify-content-start">
+<div class="container-fluid px-0">
+    <div class="row d-flex justify-content-start mx-0 px-0">
         <div class="col-12">
             <div class="col-md-6">
-                <h2 class="panel-configure__title">Review Transaksi</h2>
+                <h2 class="panel-configure__title pb-0">Review Transaksi </h2>
+                <h4 class="fw-normal fs-2x">{{$transaction->number}}</h4>
             </div>
         </div>
-        <div class="col-md-7 mb-4">
-            <div class="accordion" id="accordionExample">
+        <div class="col-md-7 mb-4 mx-0 px-0">
+            <div class="accordion" id="accordionExample" wire:ignore.self>
                 <div class="accordion-item">
                     <h2 class="accordion-header">
                     <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                         Informasi Kontak
                     </button>
                     </h2>
-                    <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
-                    <div class="accordion-body">
-                        <div class="pe-xl-10 pe-md-10">
-                            <div class="form-group">
-                                <label for="full_name" class="form-label">Nama Lengkap</label>
-                                <p class="form-control" id="full_name">{{ $transaction['customer_name'] }}</p>
-                            </div>
-                            <div class="form-group">
-                                <label for="email" class="form-label">E-mail</label>
-                                <p class="form-control" id="email">{{ $transaction['customer_email'] }}</p>
-                            </div>
-                            <div class="form-group">
-                                <label for="email" class="form-label">No Whatsapp</label>
-                                <div class="row d-flex justify-content-between">
-                                    <div class="col-md-6">
-                                        <p class="form-control" id="email">+62 {{ $transaction['customer_phone'] }}</p>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <a target="_blank" href="https://wa.me/62{{ $transaction['customer_phone'] }}" class="btn btn-success w-100" id="phone"><i class="fab fa-whatsapp fs-4"></i> +62 {{ $transaction['customer_phone'] }}</a>
+                    <div id="collapseOne" class="accordion-collapse collapse show" wire:ignore.self data-bs-parent="#accordionExample">
+                        <div class="accordion-body px-2">
+                            <div class="">
+                                <div class="form-group">
+                                    <label for="full_name" class="form-label">Nama Lengkap</label>
+                                    <p class="form-control" id="full_name">{{ $transaction['customer_name'] }}</p>
+                                </div>
+                                <div class="form-group">
+                                    <label for="email" class="form-label">E-mail</label>
+                                    <p class="form-control" id="email">{{ $transaction['customer_email'] }}</p>
+                                </div>
+                                <div class="form-group">
+                                    <label for="email" class="form-label">No Whatsapp</label>
+                                    <div class="row d-flex justify-content-between">
+                                        <div class="col-md-6">
+                                            <p class="form-control" id="email">+62 {{ $transaction['customer_phone'] }}</p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <a target="_blank" href="https://wa.me/62{{ $transaction['customer_phone'] }}" class="btn btn-success w-100" id="phone"><i class="fab fa-whatsapp fs-4"></i> +62 {{ $transaction['customer_phone'] }}</a>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="email" class="form-label">Instagram</label>
-                                <div class="row d-flex justify-content-between">
-                                    <div class="col-md-6">
-                                        <p class="form-control" id="email">{{ $customer_ig }}</p>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <a target="_blank" href="https://www.instagram.com/{{ $customer_ig }}" class="btn btn-instagram w-100" id="instagram"><i class="fab fa-instagram fs-4"></i>{{ $customer_ig }}</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="email" class="form-label">Facebook</label>
-                                <div class="row d-flex justify-content-between">
-                                    <div class="col-md-6">
-                                        <p class="form-control" id="email">{{ $customer_fb }}</p>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <a target="_blank" href="https://www.facebook.com/{{ $customer_fb }}" class="btn btn-facebook w-100" id="facebook"><i class="fab fa-facebook fs-4"></i>{{ $customer_fb }}</a>
+                                <div class="form-group">
+                                    <label for="email" class="form-label">Instagram</label>
+                                    <div class="row d-flex justify-content-between">
+                                        <div class="col-md-6">
+                                            <p class="form-control" id="email">{{ $customer_ig }}</p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <a target="_blank" href="https://www.instagram.com/{{ $customer_ig }}" class="btn btn-instagram w-100" id="instagram"><i class="fab fa-instagram fs-4"></i>{{ $customer_ig }}</a>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row mb-3">
-                                <label for="email" class="form-label">KTP / SIM</label>
-                                <a class="d-inline overlay" data-fslightbox="{{ rand() }}" href="{{ $customer_ktp_url }}" style="z-index: 99;">
-                                    <!--begin::Image-->
-                                    <img class="img-responsive img-detail rounded-3 w-100" src="{{ $customer_ktp_url }}">
-                                    <!--end::Image-->
-                                    <!--begin::Action-->
-                                    <div class="overlay-layer card-rounded bg-transparent">
-                                            <i class="bi bi-eye-fill text-white fs-5 eye-button"></i>
+                                <div class="form-group">
+                                    <label for="email" class="form-label">Facebook</label>
+                                    <div class="row d-flex justify-content-between">
+                                        <div class="col-md-6">
+                                            <p class="form-control" id="email">{{ $customer_fb }}</p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <a target="_blank" href="https://www.facebook.com/{{ $customer_fb }}" class="btn btn-facebook w-100" id="facebook"><i class="fab fa-facebook fs-4"></i>{{ $customer_fb }}</a>
+                                        </div>
                                     </div>
-                                    <!--end::Action-->
-                                </a>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-md-12 mb-4" wire:ignore>
-                                    <label for="" class="form-label">Lokasi Map</label>
-                                    <div id="map" style="height: 400px;"></div>
                                 </div>
-                                <button
-                                    class="btn btn-primary"
-                                    {{-- onclick="window.open(`https://www.google.com/maps?q={{ $customer_lat }},{{ $customer_lng }}`, '_blank')"> --}}
-                                    onclick="window.open(`https://www.google.com/maps?q=-7.7012339,112.7904209`, '_blank')">
-                                    Buka Di Google Maps
-                                </button>
+                                <div class="row mb-3">
+                                    <label for="email" class="form-label">KTP / SIM</label>
+                                    <a class="d-inline overlay" data-fslightbox="{{ rand() }}" href="{{ $customer_ktp_url }}" style="z-index: 99;">
+                                        <!--begin::Image-->
+                                        <img class="img-responsive img-detail rounded-3 w-100" src="{{ $customer_ktp_url }}">
+                                        <!--end::Image-->
+                                        <!--begin::Action-->
+                                        <div class="overlay-layer card-rounded bg-transparent">
+                                                <i class="bi bi-eye-fill text-white fs-5 eye-button"></i>
+                                        </div>
+                                        <!--end::Action-->
+                                    </a>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-md-12 mb-4" wire:ignore>
+                                        <label for="" class="form-label">Lokasi Map</label>
+                                        <div id="map" style="height: 400px;"></div>
+                                    </div>
+                                    <button
+                                        class="btn btn-primary"
+                                        {{-- onclick="window.open(`https://www.google.com/maps?q={{ $customer_lat }},{{ $customer_lng }}`, '_blank')"> --}}
+                                        onclick="window.open(`https://www.google.com/maps?q=-7.7012339,112.7904209`, '_blank')">
+                                        Buka Di Google Maps
+                                    </button>
+                                </div>
                             </div>
                         </div>
-    
-                    </div>
                     </div>
                 </div>
                 <div class="accordion-item">
@@ -93,7 +93,7 @@
                         Ringkasan Pesanan
                     </button>
                     </h2>
-                    <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                    <div id="collapseTwo" class="accordion-collapse collapse" wire:ignore.self data-bs-parent="#accordionExample">
                         <div class="accordion-body">
                             <div id="order-items" class="order-items cart-overflow">
                                 {{-- Main Product --}}
@@ -116,7 +116,7 @@
                                         <div class="col-auto mx-0 px-0">Rp. @currency($item['product_price'])
                                             
                                         </div>
-                                        @if ($verified_at)
+                                        @if ($isVerified)
                                             @if ($item['active_at'])
                                                 <div class="">
                                                     <p class="text-center fs-sm fw-normal badge bg-primary text-white">
@@ -298,7 +298,7 @@
                                         </button>
                                         
                                     @else
-                                        <span class="badge bg-primary text-white">{{$item['status']}}</span>
+                                        <span class="badge bg-{{$item['style']}} text-white">{{$item['status']}}</span>
                                     @endif
                                 </td>
                             </tr>

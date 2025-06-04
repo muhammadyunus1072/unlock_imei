@@ -30,7 +30,7 @@ class Invoice extends Component
             return;
         }
         $this->transaction = TransactionRepository::findBy([
-            ['id', Crypt::decrypt($this->objId)]
+            ['id', simple_decrypt($this->objId)]
         ]);
         $this->calculatedTotal();
     }
@@ -54,7 +54,7 @@ class Invoice extends Component
 
         if($transaction)
         {
-            $this->objId = Crypt::encrypt($transaction->id);
+            $this->objId = simple_decrypt($transaction->id);
             $this->getData();
         }else{
             $this->objId = null;

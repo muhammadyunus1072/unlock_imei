@@ -3,6 +3,7 @@
 namespace App\Models\Transaction;
 
 use Carbon\Carbon;
+use App\Helpers\ServiceHelper;
 use App\Models\MasterData\Studio;
 use App\Models\MasterData\Product;
 use Illuminate\Support\Facades\DB;
@@ -20,6 +21,7 @@ class TransactionStatus extends Model
     const STATUS_NOT_VERIFIED = "Belum Diverifikasi";
     const STATUS_VERIFIED = "Diverifikasi";
     const STATUS_ACTIVED = "Diaktifkan";
+    const STATUS_PAID = "Dibayar Lunas";
     const STATUS_COMPLETED = "Selesai";
     const STATUS_CANCELLED = "Dibatalkan";
 
@@ -51,6 +53,23 @@ class TransactionStatus extends Model
             $transaction = $model->transaction;
             $transaction->last_status_id = $model->id;
             $transaction->save();
+
+            if ($transaction->transactionStatuses()->where('name', self::STATUS_ACTIVED)->where('name', self::STATUS_PAID)->exists()) {
+                $status = new TransactionStatus();
+                $status->transaction_id = $transaction->id;
+                $status->name = TransactionStatus::STATUS_COMPLETED;
+                $status->description = null;
+                $status->remarks_id = $model->id;
+                $status->remarks_type = self::class;
+                $status->save();
+            }
+            if ($model->name === self::STATUS_ACTIVED && $transaction->transactionStatuses()->where('name', self::STATUS_PAID)->doesntExist()) {
+                
+                logger('WA SENDING');
+                ServiceHelper::kirimWhatsapp($model->transaction->customer_phone, ServiceHelper::generateWhatsappPaymentMessage($model->transaction));
+                logger('WA SENDED');
+            }
+
         });
 
         self::deleted(function ($model) {

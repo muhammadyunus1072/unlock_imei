@@ -2,8 +2,50 @@
 
 namespace App\Helpers;
 
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Crypt;
+
 class ServiceHelper
 {
+    public static function generateOrderConfirmationMessage($transaction)
+    {
+        $message = [
+            "*Konfirmasi Pesanan*  
+        *Pesanan   : ".$transaction->number."*
+        *Tanggal   : ".Carbon::parse($transaction->created_at)->translatedFormat('d F Y, H:i')."*  
+        *Nama      : ".$transaction->customer_name."*  
+        *No WA     : 62".$transaction->customer_phone."*  
+        *Item      : ".$transaction->transactionDetails[0]->product_name."*  
+        *Kuantitas : ".numberFormat($transaction->transactionDetails->count())." IMEI*  
+        *Total     : Rp. ".numberFormat($transaction->transactionDetails->sum('product_price'))."*  
+
+        Konfirmasi pembayaran dapat dilakukan melalui link berikut:
+        ".route('transaction.edit', ['id' => simple_encrypt($transaction->id)])."
+",
+        ];
+        return $message;
+        // return $message[rand(0, count($message) - 1)];
+    }
+    public static function generateWhatsappPaymentMessage($transaction)
+    {
+        $message = [
+            "*Konfirmasi Pesanan*  
+        *Pesanan   : ".$transaction->number."*
+        *Tanggal   : ".Carbon::parse($transaction->created_at)->translatedFormat('d F Y, H:i')."*  
+        *Nama      : ".$transaction->customer_name."*  
+        *No WA     : 62".$transaction->customer_phone."*  
+        *Item      : ".$transaction->transactionDetails[0]->product_name."*  
+        *Kuantitas : ".numberFormat($transaction->transactionDetails->count())." IMEI*  
+        *Total     : Rp. ".numberFormat($transaction->transactionDetails->sum('product_price'))."*  
+
+        Pesanan anda sudah kami aktifkan, silahkan melakukan pembayaran melalui link berikut:
+        ".route('public.order_payment', ['id' => simple_encrypt($transaction->id)])."
+",
+        ];
+        return $message;
+        // return $message[rand(0, count($message) - 1)];
+    }
+    
     public static function kirimWhatsapp($phone, $message)
     {
         
@@ -11,22 +53,10 @@ class ServiceHelper
 
         $apikey = env('ADSMEDIA_API_KEY', null); // apikey , dapatkan di menu api information
         $deviceid = env('ADSMEDIA_DEVICE_ID'); //deviceid dapatkan di menu device
-        $phone = "628885133453"; // 6281xxxxxxx
+        $phone = "62".$phone; // 6281xxxxxxx
         $secret = "0"; // 0=data tersimpan, 1=data tersimpan dengan hash => 6288xxxxxxxx
         $tag = "app"; // optional string maksimal 50 karakter
-        $message = "**Konfirmasi Pesanan Toko Serba Ada**  
-        Halo [Nama],  
-        Terima kasih berbelanja di Toko Serba Ada!  
-        🛒 **Pesanan #** [No. Pesanan]  
-        📅 **Tanggal**: 1 Juni 2025  
-        📦 **Item**: [Jumlah] produk (Total: Rp [Total Harga])  
-        🚚 **Pengiriman**: Estimasi 2-3 hari kerja  
-
-        Simpan pesan ini sebagai bukti transaksi. Untuk pertanyaan, balas chat ini atau hubungi 0812-XXXX-XXXX.  
-
-        Salam hangat,  
-        Toko Serba Ada  
-        www.serbaada.com";  
+        
 
         $payload = [
                 "deviceid" => $deviceid,

@@ -56,7 +56,13 @@ class TransactionDetail extends Model
                 $allActive = $transaction->transactionDetails()->whereNull('active_at')->doesntExist();
 
                 if ($allActive) {
-                    // $transaction->update(['transaction_status' => Transaction::TRANSACTION_STATUS_COMPLETED]);
+                    $status = new TransactionStatus();
+                    $status->transaction_id = $transaction->id;
+                    $status->name = TransactionStatus::STATUS_ACTIVED;
+                    $status->description = null;
+                    $status->remarks_id = $model->id;
+                    $status->remarks_type = self::class;
+                    $status->save();
                 }
             }
         });

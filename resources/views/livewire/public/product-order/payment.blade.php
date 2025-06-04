@@ -105,13 +105,56 @@
                                 </div>
                                 <!--end::Table-->
                                 <div class="row d-flex justify-content-end">
-                                    <!--begin::Table-->
-                                    <div class="col-auto bg-light p-3">
-                                        <h3 class="fs-4 fw-normal mb-3">Jumlah yang harus dibayar</h3>
-                                        <h3 class="fs-2x fw-bold text-end">Rp @currency($amount_due)</h3>
-                                    <!--end::Table-->
+                                    @if ($amount_due)
+                                        <!--begin::Table-->
+                                        <div class="col-auto bg-light p-3">
+                                            <h3 class="fs-4 fw-normal mb-3">Jumlah yang harus dibayar</h3>
+                                            <h3 class="fs-2x fw-bold text-end">Rp @currency($amount_due)</h3>
+                                        <!--end::Table-->
+                                    @else
+                                        <!--begin::Table-->
+                                        <div class="col-4 bg-success rounded p-3">
+                                            <h3 class="fs-2x fw-bold text-center text-white">Lunas</h3>
+                                        <!--end::Table-->
+                                    @endif
                                     </div>
                                 </div>
+                                <!--begin::Table-->
+
+                                <h3>Riwayat Pembayaran</h3>
+                                <div class="table-responsive mb-3">
+                                    <table class="table table-borderless align-middle fs-6 mb-0">
+                                        <thead>
+                                            <tr class="border-bottom fs-6 fw-bold text-muted">
+                                                <th class="min-w-175px pb-2"><p class="ms-5 py-0 my-0">Tanggal</p></th>
+                                                <th class="min-w-100px text-end pb-2">Metode</th>
+                                                <th class="min-w-100px text-end pb-2">Nilai</th>
+                                                <th class="min-w-100px text-end pb-2">Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="fw-semibold text-gray-600">
+                                            @foreach ($transaction->transactionPayments as $payment)
+                                                <tr>
+                                                    <td>
+                                                        <div class="d-flex align-items-center">
+                                                            <!--begin::Title-->
+                                                            <div class="ms-5">
+                                                                <div class="fw-bold">@dateFull($payment->created_at)</div>
+                                                            </div>
+                                                            <!--end::Title-->
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-end">{{$payment->payment_method_name}}</td>
+                                                    <td class="text-end">Rp @currency($payment->amount)</td>
+                                                    <td class="text-end">
+                                                        <p class="badge bg-{{$payment->getStatusStyle()}} text-white">{{$payment->status}}</p>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!--end::Table-->
                                 <div class="row d-flex justify-content-center flex-column align-items-center">
 
                                     <div class="col-md-6 mb-2">

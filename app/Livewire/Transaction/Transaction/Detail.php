@@ -23,7 +23,7 @@ class Detail extends Component
     
     public $objId;
     public $cancellation_reason;
-    public $verified_at;
+    public $isVerified;
     public $targetActiveId;
     public $targetPaymentId;
     public $canUpdateStatus = false;
@@ -139,11 +139,16 @@ class Detail extends Component
         } catch (\Exception $e) {
             Alert::fail($this, "Gagal", $e->getMessage());
         }
+//         Pembayaran
+// Bank BCA
+// Nama Rekenning: AHMAT FAUZI
+// No. Rekenning: 0891497953
+
     }
 
     private function getData()
     {
-        $transaction = TransactionRepository::find(Crypt::decrypt($this->objId));
+        $transaction = TransactionRepository::find(simple_decrypt($this->objId));
         $this->transaction = $transaction;
         $this->canUpdateStatus = $transaction->whereHas('transactionStatuses', function($query) {
             $query->where('name', TransactionStatus::STATUS_VERIFIED);
@@ -161,7 +166,9 @@ class Detail extends Component
         $this->discount = Voucher::TYPE_PERCENTAGE == $transaction->voucher_type ? calculateAdminFee($this->subtotal, $transaction->voucher_amount) : $transaction->voucher_amount;
         $this->grand_total = $transaction->total_amount;
         $this->amount_due = $transaction->amount_due;
-        $this->verified_at = $transaction->verified_at;
+        $this->isVerified = $transaction->whereHas('transactionStatuses', function($query) {
+            $query->where('name', TransactionStatus::STATUS_VERIFIED);
+        })->exists();;
         $this->transaction_details = [];
         foreach($transaction->transactionDetails as $index => $item){
             $this->transaction_details[] = [
@@ -189,7 +196,7 @@ class Detail extends Component
 
     public function activeHandler()
     {
-        if(!$this->verified_at)
+        if(!$this->isVerified)
         {
             return;
         }
@@ -220,7 +227,7 @@ class Detail extends Component
             DB::beginTransaction();
 
             $validatedData = [
-                'transaction_id' => Crypt::decrypt($this->objId),
+                'transaction_id' => simple_decrypt($this->objId),
                 'name' => TransactionStatus::STATUS_VERIFIED,
                 // 'transaction_status' => Transaction::TRANSACTION_STATUS_VERIFIED,
             ];;
@@ -240,12 +247,10 @@ class Detail extends Component
             DB::beginTransaction();
 
             $validatedData = [
-                'transaction_id' => Crypt::decrypt($this->objId),
+                'transaction_id' => simple_decrypt($this->objId),
                 'name' => TransactionStatus::STATUS_CANCELLED,
                 // 'transaction_status' => Transaction::TRANSACTION_STATUS_CANCELED,
             ];
-
-            $objId = Crypt::decrypt($this->objId);
             $transaction = TransactionStatusRepository::create($validatedData);
             $this->getData();
             

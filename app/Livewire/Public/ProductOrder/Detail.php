@@ -280,7 +280,7 @@ class Detail extends Component
             }
             DB::commit();
             return redirect()->route('public.order_invoice', [
-                'id' => Crypt::encrypt($transaction->id),
+                'id' => simple_encrypt($transaction->id),
             ]);
         } catch (Exception $e) {
             DB::rollBack();

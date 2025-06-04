@@ -6,19 +6,19 @@
                 <!-- begin::Wrapper-->
                 <div class="mw-lg-950px mx-auto w-100">
                     <!-- begin::Header-->
-                    <div class="d-flex justify-content-between flex-column flex-sm-row mb-12">
+                    <div class="d-flex justify-content-between mb-12 row">
                         
                         <!--end::Logo-->
-                        <div class="text-sm-start">
+                        <div class="col-6 d-flex justify-content-start row">
                             <!--begin::Logo-->
-                            <a href="#" class="d-block mw-150px ms-sm-auto">
+                            <a href="#" class="mw-150px col-auto">
                                 <img alt="Logo" src="{{ asset(config('template.logo_auth'))}}" class="w-100">
                             </a>
                             <!--end::Logo-->
                         </div>
-                        <div class="">
+                        <div class="col-6">
                             <h4 class="fw-bolder text-gray-800 fs-2x pe-5 text-end">Invoice</h4>
-                            <h4 class="fw-normal text-gray-800 fs-2 pe-5 pb-7">Unlock Imei</h4>
+                            <h4 class="fw-normal text-gray-800 fs-2 pe-5 pb-7 text-end">Unlock Imei</h4>
                         </div>
                     </div>
                     <!--end::Header-->
@@ -130,16 +130,6 @@
                                     <!--end::Table-->
                                     </div>
                                 </div>
-                                <div class="row d-flex justify-content-start">
-                                    <!--begin::Table-->
-                                    <div class="col-auto p-3">
-                                        <h3 class="fs-1 fw-bold mb-3">Pembayaran</h3>
-                                        <h3 class="fs-4 fw-normal mb-3">Bank BCA</h3>
-                                        <h3 class="fs-4 fw-normal mb-3">Nama Rekenning: AHMAT FAUZI</h3>
-                                        <h3 class="fs-4 fw-normal mb-3">No. Rekenning: 0891497953</h3>
-                                    <!--end::Table-->
-                                    </div>
-                                </div>
                             </div>
                             <div class="row d-flex justify-content-center">
                                 <hr>
@@ -172,7 +162,7 @@
                         <!-- begin::Actions-->
                         <div class="my-1 me-5">
                             <!-- begin::Pint-->
-                            <a href="{{ route('public.order_payment', [ 'id' => $objId ]) }}" target="_BLANK" class="btn btn-primary my-1 me-12"> 
+                            <a href="{{ route('public.order_payment', [ 'id' => $objId ]) }}" target="_BLANK" class="btn btn-success my-1 me-12"> 
                                 <i class="ki-duotone ki-dollar fs-2x">
                                     <span class="path1"></span>
                                     <span class="path2"></span>

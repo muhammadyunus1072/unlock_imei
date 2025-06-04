@@ -72,15 +72,13 @@ class Transaction extends Model
             $status->remarks_id = $model->id;
             $status->remarks_type = self::class;
             $status->save();
-        });
-        
+        });        
     }
 
     public function onCreated()
     {
         logger('WA SENDING');
-        $result = ServiceHelper::kirimWhatsapp('', '');
-        logger($result);
+        ServiceHelper::kirimWhatsapp(env('ADMIN_PHONE'), ServiceHelper::generateOrderConfirmationMessage($this));
         logger('WA SENDED');
     }
     public function createInvoice()
