@@ -82,6 +82,8 @@ class ServiceHelper
 
         $result = curl_exec($curl);
         curl_close($curl);
+
+        logger($result);
         
         // $response = curl_exec($curl);
         // $errors = curl_error($curl);

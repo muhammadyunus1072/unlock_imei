@@ -54,7 +54,7 @@ class Invoice extends Component
 
         if($transaction)
         {
-            $this->objId = simple_decrypt($transaction->id);
+            $this->objId = simple_encrypt($transaction->id);
             $this->getData();
         }else{
             $this->objId = null;
