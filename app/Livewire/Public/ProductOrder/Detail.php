@@ -279,6 +279,7 @@ class Detail extends Component
                 TransactionDetailRepository::create($validatedData);
             }
             DB::commit();
+            $transaction->onCreated();
             return redirect()->route('public.order_invoice', [
                 'id' => simple_encrypt($transaction->id),
             ]);
