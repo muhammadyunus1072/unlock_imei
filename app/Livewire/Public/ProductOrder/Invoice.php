@@ -29,9 +29,7 @@ class Invoice extends Component
         if (!$this->objId) {
             return;
         }
-        $this->transaction = TransactionRepository::findBy([
-            ['id', simple_decrypt($this->objId)]
-        ]);
+        $this->transaction = TransactionRepository::find(simple_decrypt($this->objId));
         $this->calculatedTotal();
     }
 
