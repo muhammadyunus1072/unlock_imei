@@ -121,15 +121,18 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                <!--end::Table-->
-                                <div class="row d-flex justify-content-end">
+                                @if ($amount_due)
                                     <!--begin::Table-->
                                     <div class="col-auto bg-light p-3">
                                         <h3 class="fs-4 fw-normal mb-3">Jumlah yang harus dibayar</h3>
                                         <h3 class="fs-2x fw-bold text-end">Rp @currency($amount_due)</h3>
                                     <!--end::Table-->
-                                    </div>
-                                </div>
+                                @else
+                                    <!--begin::Table-->
+                                    <div class="col-4 bg-success rounded p-3">
+                                        <h3 class="fs-2x fw-bold text-center text-white">Lunas</h3>
+                                    <!--end::Table-->
+                                @endif
                             </div>
                             <div class="row d-flex justify-content-center">
                                 <hr>
@@ -159,6 +162,7 @@
                             <!-- end::Pint--> 
                         </div>
                         <!-- end::Actions-->
+                        
                         <!-- begin::Actions-->
                         <div class="my-1 me-5">
                             <!-- begin::Pint-->
