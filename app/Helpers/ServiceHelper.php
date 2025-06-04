@@ -23,7 +23,7 @@ class ServiceHelper
         ".route('transaction.edit', ['id' => simple_encrypt($transaction->id)])."
 ",
         ];
-        return $message;
+        return $message[0];
         // return $message[rand(0, count($message) - 1)];
     }
     public static function generateWhatsappPaymentMessage($transaction)
@@ -42,7 +42,7 @@ class ServiceHelper
         ".route('public.order_payment', ['id' => simple_encrypt($transaction->id)])."
 ",
         ];
-        return $message;
+        return $message[0];
         // return $message[rand(0, count($message) - 1)];
     }
     
