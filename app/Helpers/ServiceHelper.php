@@ -10,18 +10,18 @@ class ServiceHelper
     public static function generateOrderConfirmationMessage($transaction)
     {
         $message = [
-            "*Konfirmasi Pesanan*  
-        *Pesanan   : ".$transaction->number."*
-        *Tanggal   : ".Carbon::parse($transaction->created_at)->translatedFormat('d F Y, H:i')."*  
-        *Nama      : ".$transaction->customer_name."*  
-        *No WA     : 62".$transaction->customer_phone."*  
-        *Item      : ".$transaction->transactionDetails[0]->product_name."*  
-        *Kuantitas : ".numberFormat($transaction->transactionDetails->count())." IMEI*  
-        *Total     : Rp. ".numberFormat($transaction->transactionDetails->sum('product_price'))."*  
+            "
+    *Konfirmasi Pesanan*  
+    *Pesanan   : ".$transaction->number."*
+    *Tanggal    : ".Carbon::parse($transaction->created_at)->translatedFormat('d F Y, H:i')."*  
+    *Nama       : ".$transaction->customer_name."*  
+    *No WA     : 62".$transaction->customer_phone."*  
+    *Item         : ".$transaction->transactionDetails[0]->product_name."*  
+    *Kuantitas : ".numberFormat($transaction->transactionDetails->count())." IMEI*  
+    *Total        : Rp. ".numberFormat($transaction->transactionDetails->sum('product_price'))."*  
 
-        Konfirmasi pembayaran dapat dilakukan melalui link berikut:
-        ".route('transaction.edit', ['id' => simple_encrypt($transaction->id)])."
-",
+    Konfirmasi pembayaran dapat dilakukan melalui link berikut:
+    ".route('transaction.edit', ['id' => simple_encrypt($transaction->id)]),
         ];
         return $message[0];
         // return $message[rand(0, count($message) - 1)];
@@ -29,18 +29,17 @@ class ServiceHelper
     public static function generateWhatsappPaymentMessage($transaction)
     {
         $message = [
-            "*Konfirmasi Pesanan*  
-        *Pesanan   : ".$transaction->number."*
-        *Tanggal   : ".Carbon::parse($transaction->created_at)->translatedFormat('d F Y, H:i')."*  
-        *Nama      : ".$transaction->customer_name."*  
-        *No WA     : 62".$transaction->customer_phone."*  
-        *Item      : ".$transaction->transactionDetails[0]->product_name."*  
-        *Kuantitas : ".numberFormat($transaction->transactionDetails->count())." IMEI*  
-        *Total     : Rp. ".numberFormat($transaction->transactionDetails->sum('product_price'))."*  
+            "*Konfirmasi Pembayaran*  
+    *Pesanan   : ".$transaction->number."*
+    *Tanggal    : ".Carbon::parse($transaction->created_at)->translatedFormat('d F Y, H:i')."*  
+    *Nama       : ".$transaction->customer_name."*  
+    *No WA     : 62".$transaction->customer_phone."*  
+    *Item         : ".$transaction->transactionDetails[0]->product_name."*  
+    *Kuantitas : ".numberFormat($transaction->transactionDetails->count())." IMEI*  
+    *Total        : Rp. ".numberFormat($transaction->transactionDetails->sum('product_price'))."*  
 
-        Pesanan anda sudah kami aktifkan, silahkan melakukan pembayaran melalui link berikut:
-        ".route('public.order_payment', ['id' => simple_encrypt($transaction->id)])."
-",
+    Pesanan anda sudah kami aktifkan, silahkan melakukan pembayaran melalui link berikut:
+    ".route('public.order_payment', ['id' => simple_encrypt($transaction->id)]),
         ];
         return $message[0];
         // return $message[rand(0, count($message) - 1)];

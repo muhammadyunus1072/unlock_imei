@@ -76,7 +76,7 @@ class Payment extends Component
     public function onDialogConfirm()
     {
         if ($this->objId) {
-            $this->redirectRoute('public.order-payment', ['id' => $this->objId]);
+            $this->redirectRoute('public.order_payment', ['id' => $this->objId]);
         }
     }
 
