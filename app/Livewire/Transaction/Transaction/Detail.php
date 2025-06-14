@@ -278,7 +278,7 @@ class Detail extends Component
             $transactionPayment = TransactionPaymentRepository::update($objId, $validatedData);
             
             DB::commit();
-            $this->getData();
+            // $this->getData();
             Alert::success($this, 'Berhasil', 'Data berhasil di verifikasi');
         } catch (\Exception $e) {
             DB::rollBack();
