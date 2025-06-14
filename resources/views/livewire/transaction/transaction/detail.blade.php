@@ -204,7 +204,7 @@
                                 <tr class="odd">
                                     <td class="sorting_1">{{ Carbon\Carbon::parse($item->created_at)->translatedFormat('d F Y, H:i')}}</td>
                                     <td>
-                                        <p class="badge bg-primary text-white">{{$item->name}}</p>
+                                        <p class="badge bg-{{$item->getStatusStyle()}}">{{$item->name}}</p>
                                     </td>
                                     <td>-</td>
                                     <td>{{$item->name}}</td>
