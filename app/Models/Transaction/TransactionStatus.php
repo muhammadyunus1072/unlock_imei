@@ -58,24 +58,23 @@ class TransactionStatus extends Model
             $transaction->last_status_id = $model->id;
             $transaction->save();
 
-            // if ($transaction->transactionStatuses()->where('name', self::STATUS_ACTIVED)->exists() && 
-            // $transaction->transactionStatuses()->where('name', self::STATUS_PAID)->exists() && 
-            // $transaction->transactionStatuses()->where('name', self::STATUS_COMPLETED)->doesntExist()) {
-            //     $status = new TransactionStatus();
-            //     $status->transaction_id = $transaction->id;
-            //     $status->name = TransactionStatus::STATUS_COMPLETED;
-            //     $status->description = null;
-            //     $status->remarks_id = $model->id;
-            //     $status->remarks_type = self::class;
-            //     $status->save();
-            // }
+            if ($transaction->transactionStatuses()->where('name', self::STATUS_ACTIVED)->exists() && 
+            $transaction->transactionStatuses()->where('name', self::STATUS_PAID)->exists() && 
+            $transaction->transactionStatuses()->where('name', self::STATUS_COMPLETED)->doesntExist()) {
+                $status = new TransactionStatus();
+                $status->transaction_id = $transaction->id;
+                $status->name = TransactionStatus::STATUS_COMPLETED;
+                $status->description = null;
+                $status->remarks_id = $model->id;
+                $status->remarks_type = self::class;
+                $status->save();
+            }
             if ($model->name === self::STATUS_ACTIVED && $transaction->transactionStatuses()->where('name', self::STATUS_PAID)->doesntExist()) {
-                // SendWhatsappRepository::create([
-                //     'phone' => $model->transaction->customer_phone,
-                //     'message' => ServiceHelper::generateAwaitingPaymentMessage($model->transaction),
-                //     'status_text' => SendWhatsapp::STATUS_CREATED
-                // ]);
-                logger('CREATE SendWhatsappRepository');
+                SendWhatsappRepository::create([
+                    'phone' => $model->transaction->customer_phone,
+                    'message' => ServiceHelper::generateAwaitingPaymentMessage($model->transaction),
+                    'status_text' => SendWhatsapp::STATUS_CREATED
+                ]);
             }
 
         });

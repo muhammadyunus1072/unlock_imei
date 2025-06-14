@@ -24,6 +24,7 @@ use App\Models\Transaction\TransactionPayment;
 use App\Repositories\Core\Setting\SettingRepository;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Repositories\Service\SendWhatsapp\SendWhatsappRepository;
+use Xendit\BalanceAndTransaction\TransactionStatuses;
 
 class Transaction extends Model
 {
@@ -80,14 +81,14 @@ class Transaction extends Model
             $status->save();
         });        
         self::updated(function ($model) {
-            if ($model->amount_due <= 0) {
-                // TransactionStatus::create([
-                //     'transaction_id' => $model->id,
-                //     'name'           => TransactionStatus::STATUS_PAID,
-                //     'description'    => null,
-                //     'remarks_id'     => $model->id,
-                //     'remarks_type'   => self::class,
-                // ]);
+            if ($model->amount_due <= 0 &&  $model->transactionStatuses()->where('name', TransactionStatus::STATUS_PAID)->doesntExist()) {
+                TransactionStatus::create([
+                    'transaction_id' => $model->id,
+                    'name'           => TransactionStatus::STATUS_PAID,
+                    'description'    => null,
+                    'remarks_id'     => $model->id,
+                    'remarks_type'   => self::class,
+                ]);
             }
         });        
     }
