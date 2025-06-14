@@ -79,6 +79,17 @@ class Transaction extends Model
             $status->remarks_type = self::class;
             $status->save();
         });        
+        self::updated(function ($model) {
+            if ($model->amount_due <= 0) {
+                TransactionStatus::create([
+                    'transaction_id' => $model->id,
+                    'name'           => TransactionStatus::STATUS_PAID,
+                    'description'    => null,
+                    'remarks_id'     => $model->id,
+                    'remarks_type'   => self::class,
+                ]);
+            }
+        });        
     }
 
     public function onCreated()
