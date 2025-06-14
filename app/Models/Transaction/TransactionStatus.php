@@ -100,11 +100,11 @@ class TransactionStatus extends Model
     public function getStatusStyle(): string
     {
         $badges = [
-            'secondary' => [self::STATUS_NOT_VERIFIED],
-            'primary' => [self::STATUS_VERIFIED],
-            'warning' => [self::STATUS_ACTIVED],
-            'success' => [self::STATUS_COMPLETED],
-            'danger' => [self::STATUS_CANCELLED],
+            'secondary' => self::STATUS_NOT_VERIFIED,
+            'primary' => self::STATUS_VERIFIED,
+            'warning' => self::STATUS_ACTIVED,
+            'success' => self::STATUS_COMPLETED,
+            'danger' => self::STATUS_CANCELLED,
         ];
 
         $status = $this->status;
@@ -119,11 +119,11 @@ class TransactionStatus extends Model
     public static function getStyle($status): string
     {
         $badges = [
-            'secondary' => [self::STATUS_NOT_VERIFIED],
-            'primary' => [self::STATUS_VERIFIED],
-            'warning' => [self::STATUS_ACTIVED],
-            'success' => [self::STATUS_COMPLETED],
-            'danger' => [self::STATUS_CANCELLED],
+            'secondary' => self::STATUS_NOT_VERIFIED,
+            'primary' => self::STATUS_VERIFIED,
+            'warning' => self::STATUS_ACTIVED,
+            'success' => self::STATUS_COMPLETED,
+            'danger' => self::STATUS_CANCELLED,
         ];
         
         // Find the corresponding badge class
