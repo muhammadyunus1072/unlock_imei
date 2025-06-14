@@ -162,7 +162,7 @@
                             <!-- end::Pint--> 
                         </div>
                         <!-- end::Actions-->
-                        
+                        @if ($amount_due)
                         <!-- begin::Actions-->
                         <div class="my-1 me-5">
                             <!-- begin::Pint-->
@@ -179,6 +179,7 @@
                             <!-- end::Pint--> 
                         </div>
                         <!-- end::Actions-->
+                        @endif
                     </div>
                     <!-- end::Footer-->
                 </div>
