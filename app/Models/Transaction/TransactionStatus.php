@@ -70,11 +70,12 @@ class TransactionStatus extends Model
             //     $status->save();
             // }
             if ($model->name === self::STATUS_ACTIVED && $transaction->transactionStatuses()->where('name', self::STATUS_PAID)->doesntExist()) {
-                SendWhatsappRepository::create([
-                    'phone' => $model->transaction->customer_phone,
-                    'message' => ServiceHelper::generateAwaitingPaymentMessage($model->transaction),
-                    'status_text' => SendWhatsapp::STATUS_CREATED
-                ]);
+                // SendWhatsappRepository::create([
+                //     'phone' => $model->transaction->customer_phone,
+                //     'message' => ServiceHelper::generateAwaitingPaymentMessage($model->transaction),
+                //     'status_text' => SendWhatsapp::STATUS_CREATED
+                // ]);
+                logger('CREATE SendWhatsappRepository');
             }
 
         });
