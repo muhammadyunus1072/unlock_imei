@@ -54,6 +54,11 @@ class Index extends Component
     public function store()
     {
         try {
+            $phone = preg_replace('/[^\d]/', '', $this->setting[SettingSendWhatsapp::ADMIN_PHONE]);
+            if (!preg_match("/^8[0-9]{9,11}$/", $phone) || (strlen($phone) < 9 || strlen($phone) > 11)) {
+                throw new \Exception("Format No Telp tidak sesuai,<br>Contoh: +62 8XX-XXXX-XXXX");
+            }
+            $this->setting[SettingSendWhatsapp::ADMIN_PHONE] = $phone;
             DB::beginTransaction();
             if ($this->objId) {
                 SettingRepository::update(Crypt::decrypt($this->objId), [

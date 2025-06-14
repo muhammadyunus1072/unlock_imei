@@ -11,6 +11,8 @@ use Sis\TrackHistory\HasTrackHistory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\MasterData\ProductDetail;
 use App\Models\MasterData\ProductBookingTime;
+use App\Models\Service\SendWhatsapp;
+use App\Repositories\Service\SendWhatsapp\SendWhatsappRepository;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -24,10 +26,12 @@ class TransactionStatus extends Model
     const STATUS_PAID = "Dibayar Lunas";
     const STATUS_COMPLETED = "Selesai";
     const STATUS_CANCELLED = "Dibatalkan";
+    const STATUS_AWAITING_PAYMENT = "Menunggu Pembayaran";
 
     const STATUS_CHOICE = [
         self::STATUS_NOT_VERIFIED => self::STATUS_NOT_VERIFIED,
         self::STATUS_VERIFIED => self::STATUS_VERIFIED,
+        self::STATUS_AWAITING_PAYMENT => self::STATUS_AWAITING_PAYMENT,
         self::STATUS_COMPLETED => self::STATUS_COMPLETED,
         self::STATUS_CANCELLED => self::STATUS_CANCELLED,
     ];
@@ -64,10 +68,11 @@ class TransactionStatus extends Model
                 $status->save();
             }
             if ($model->name === self::STATUS_ACTIVED && $transaction->transactionStatuses()->where('name', self::STATUS_PAID)->doesntExist()) {
-                
-                logger('WA SENDING');
-                ServiceHelper::kirimWhatsapp($model->transaction->customer_phone, ServiceHelper::generateWhatsappPaymentMessage($model->transaction));
-                logger('WA SENDED');
+                SendWhatsappRepository::create([
+                    'phone' => $model->transaction->customer_phone,
+                    'message' => ServiceHelper::generateAwaitingPaymentMessage($model->transaction),
+                    'status_text' => SendWhatsapp::STATUS_CREATED
+                ]);
             }
 
         });

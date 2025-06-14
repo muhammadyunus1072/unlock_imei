@@ -9,7 +9,7 @@ use Carbon\Carbon;
 
 trait WithWhatsapp
 {
-    public function generateOrderConfirmationMessage($transaction)
+    public function generateOrderVerificationMessage($transaction)
     {
         $message = [
             "*Konfirmasi Pesanan*  

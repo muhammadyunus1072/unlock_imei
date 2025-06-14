@@ -52,6 +52,11 @@ return [
     */
 
     'channels' => [
+        'notification' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/notification.log'),
+            'level' => 'debug', // or 'info', 'error', etc.
+        ],
         'stack' => [
             'driver' => 'stack',
             'channels' => ['single'],

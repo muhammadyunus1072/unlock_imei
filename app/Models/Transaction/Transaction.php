@@ -78,7 +78,7 @@ class Transaction extends Model
     public function onCreated()
     {
         logger('WA SENDING');
-        ServiceHelper::kirimWhatsapp(env('ADMIN_PHONE'), ServiceHelper::generateOrderConfirmationMessage($this));
+        ServiceHelper::kirimWhatsapp(env('ADMIN_PHONE'), ServiceHelper::generateOrderVerificationMessage($this));
         logger('WA SENDED');
     }
     public function createInvoice()
