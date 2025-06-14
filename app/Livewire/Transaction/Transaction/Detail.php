@@ -274,7 +274,10 @@ class Detail extends Component
                 // 'transaction_status' => Transaction::TRANSACTION_STATUS_CANCELED,
             ];
             $objId = Crypt::decrypt($this->transaction_payments[$this->targetPaymentId]['id']);
-            
+            dd([
+                $objId,
+                $validatedData
+            ]);
             $transactionPayment = TransactionPaymentRepository::update($objId, $validatedData);
             
             DB::commit();
