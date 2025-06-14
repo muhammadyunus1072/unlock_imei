@@ -53,13 +53,15 @@ class ServiceHelper
         $apikey = env('ADSMEDIA_API_KEY', null); // apikey , dapatkan di menu api information
         $deviceid = env('ADSMEDIA_DEVICE_ID'); //deviceid dapatkan di menu device
         $phone = "62".$phone; // 6281xxxxxxx
-        $link = "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf";
+        $doc = "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf";
+        $img = "https://fastly.picsum.photos/id/295/200/300.jpg?hmac=b6Ets6Bu47pFHcU4UK7lI6xYkfy48orifVzWeHAe0zM";
 
         $payload = [
                 "deviceid" => $deviceid,
                 "phone" => $phone,
                 "message" => $message,
-                "document" => $link,
+                "document" => $doc,
+                "image" => $img,
         ];
 
         $curl = curl_init();
@@ -78,7 +80,7 @@ class ServiceHelper
 
         $result = curl_exec($curl);
         curl_close($curl);
-
+        dd($result);
         logger($result);
         
         // $response = curl_exec($curl);
