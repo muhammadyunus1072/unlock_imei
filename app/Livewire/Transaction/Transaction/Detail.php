@@ -273,8 +273,8 @@ class Detail extends Component
                 'amount' => imaskToValue($this->transaction_payments[$this->targetPaymentId]['amount']),
                 // 'transaction_status' => Transaction::TRANSACTION_STATUS_CANCELED,
             ];
-            dd($this->transaction_payments[$this->targetPaymentId]['id']);
-            $objId = Crypt::decrypt($this->targetPaymentId);
+            $objId = Crypt::decrypt($this->transaction_payments[$this->targetPaymentId]['id']);
+            dd($objId);
             $transactionPayment = TransactionPaymentRepository::update($objId, $validatedData);
             
             DB::commit();
