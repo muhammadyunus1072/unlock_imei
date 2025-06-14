@@ -90,7 +90,7 @@ class Transaction extends Model
         $phone = $settings->{SettingSendWhatsapp::ADMIN_PHONE};
         SendWhatsappRepository::create([
             'phone' => $phone,
-            'message' => ServiceHelper::generateAwaitingPaymentMessage(ServiceHelper::generateOrderVerificationMessage($this)),
+            'message' => ServiceHelper::generateOrderVerificationMessage($this),
             'status_text' => SendWhatsapp::STATUS_CREATED
         ]);
     }
