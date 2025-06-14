@@ -129,7 +129,7 @@
                                     <!--end::Table-->
                                 @else
                                     <!--begin::Table-->
-                                    <div class="col-4 bg-success rounded p-3">
+                                    <div class="col-auto bg-success rounded p-3">
                                         <h3 class="fs-2x fw-bold text-center text-white">Lunas</h3>
                                     <!--end::Table-->
                                 @endif
