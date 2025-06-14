@@ -71,6 +71,7 @@ class TransactionPayment extends Model
                 $amount_due = $transaction->amount_due - $model->amount;
                 $transaction->amount_due = $amount_due <= 0 ? 0 : $amount_due;
                 $transaction->save();
+                dd($transaction);
                 if($transaction->amount_due <= 0)
                 {
                     $status = new TransactionStatus();
