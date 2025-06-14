@@ -3,21 +3,27 @@
 namespace App\Models\Transaction;
 
 use App\Models\User;
+use App\Helpers\ServiceHelper;
 use App\Helpers\FilePathHelper;
 use App\Helpers\RomanConverter;
 use App\Services\XenditService;
 use App\Helpers\NumberGenerator;
-use App\Helpers\ServiceHelper;
 use App\Models\MasterData\Voucher;
 use Illuminate\Support\Facades\Log;
+use App\Models\Service\SendWhatsapp;
+use App\Settings\SettingSendWhatsapp;
 use Illuminate\Support\Facades\Crypt;
 use Sis\TrackHistory\HasTrackHistory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use App\Models\MasterData\PaymentMethod;
 use App\Models\Transaction\TransactionDetail;
+use App\Models\Transaction\TransactionStatus;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Transaction\TransactionPayment;
+use App\Repositories\Core\Setting\SettingRepository;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Repositories\Service\SendWhatsapp\SendWhatsappRepository;
 
 class Transaction extends Model
 {
@@ -77,9 +83,16 @@ class Transaction extends Model
 
     public function onCreated()
     {
-        logger('WA SENDING');
-        ServiceHelper::kirimWhatsapp(env('ADMIN_PHONE'), ServiceHelper::generateOrderVerificationMessage($this));
-        logger('WA SENDED');
+
+        $setting = SettingRepository::findBy(whereClause: [['name', SettingSendWhatsapp::NAME]]);
+
+        $settings = json_decode($setting->setting);
+        $phone = $settings->{SettingSendWhatsapp::ADMIN_PHONE};
+        SendWhatsappRepository::create([
+            'phone' => $phone,
+            'message' => ServiceHelper::generateAwaitingPaymentMessage(ServiceHelper::generateOrderVerificationMessage($this)),
+            'status_text' => SendWhatsapp::STATUS_CREATED
+        ]);
     }
     public function createInvoice()
     {

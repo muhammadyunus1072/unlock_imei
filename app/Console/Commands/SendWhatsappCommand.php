@@ -34,7 +34,7 @@ class SendWhatsappCommand extends Command
     {
         try {
             DB::beginTransaction();
-            logger('COMMAND EXECUTED');
+            Log::channel('notification')->info('COMMAND EXECUTED');
             $setting = SettingRepository::findBy(whereClause: [['name', SettingSendWhatsapp::NAME]]);
             
             if ($setting) {

@@ -86,15 +86,21 @@ Pesanan anda sudah kami aktifkan, silahkan melakukan pembayaran melalui link ber
         curl_close($curl);
         
         $decoded = json_decode($result, true);
+        $validatedData = [
+            "status"               => $decoded['status'],
+            "status_text_message"  => $decoded['statustext'],
+        ];
+        if($decoded['status'])
+        {
+            $validatedData = array_merge($validatedData, [
+                "message_id"           => $decoded['data']['messageid'] ?? null,
+                "status_text"          => $decoded['data']['status'] ?? null,
+                "price"                => $decoded['data']['price'] ?? null,
+                "data"                 => $result,
+            ]);
+        }
 
-        SendWhatsappRepository::update($data->id, [
-            "message_id"           => $decoded['data']['messageid'] ?? null,
-            "status"               => $decoded['status'] ?? null,
-            "status_text_message"  => $decoded['statustext'] ?? null,
-            "status_text"          => $decoded['data']['status'] ?? null,
-            "price"                => $decoded['data']['price'] ?? null,
-            "data"                 => $result,
-        ]);
+        SendWhatsappRepository::update($data->id, $validatedData);
 
         Log::channel('notification')->info('Send Notification To '.$phone, [
             $result,
