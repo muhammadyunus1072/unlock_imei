@@ -58,7 +58,9 @@ class TransactionStatus extends Model
             $transaction->last_status_id = $model->id;
             $transaction->save();
 
-            if ($transaction->transactionStatuses()->where('name', self::STATUS_ACTIVED)->exists() && $transaction->transactionStatuses()->where('name', self::STATUS_PAID)->exists()) {
+            if ($transaction->transactionStatuses()->where('name', self::STATUS_ACTIVED)->exists() && 
+            $transaction->transactionStatuses()->where('name', self::STATUS_PAID)->exists() && 
+            $transaction->transactionStatuses()->where('name', self::STATUS_COMPLETED)->doesntExist()) {
                 $status = new TransactionStatus();
                 $status->transaction_id = $transaction->id;
                 $status->name = TransactionStatus::STATUS_COMPLETED;
