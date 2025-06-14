@@ -55,10 +55,6 @@
                                                     <td class="my-0 py-0 text-end">{{ $transaction->number }}</td>
                                                 </tr>
                                                 <tr class="fs-6">
-                                                    <td class="my-0 py-0 fw-bolder text-end">Garansi</td>
-                                                    <td class="my-0 py-0 text-end">@currency($transaction->transactionDetails[0]->product_warranty_days) Hari</td>
-                                                </tr>
-                                                <tr class="fs-6">
                                                     <td class="my-0 py-0 fw-bolder text-end">Tanggal Transaksi</td>
                                                     <td class="my-0 py-0 text-end">@date($transaction->created_at)</td>
                                                 </tr>
@@ -66,6 +62,12 @@
                                                     <td class="my-0 py-0 fw-bolder text-end">Status</td>
                                                     <td class="my-0 py-0 text-end"><span class="fs-5 badge badge-{{$transaction->lastStatus->getStatusStyle()}}"> {{$transaction->lastStatus->name}} </span></td>
                                                 </tr>
+                                                @if ($amount_due)
+                                                    <tr class="fs-6">
+                                                        <td class="my-0 py-0 fw-bolder text-end">Garansi</td>
+                                                        <td class="my-0 py-0 text-end">{{ Carbon\Carbon::now()->addDays($model->product->warranty_days)->translatedFormat('d M Y') }}</td>
+                                                    </tr>    
+                                                @endif
                                             </tbody>
                                         </table>
                                     </div>
