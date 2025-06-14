@@ -67,7 +67,6 @@ class TransactionPayment extends Model
          self::updated(function ($model) {
             if ($model->status === self::STATUS_PAID) {
                 $transaction = $model->transaction;
-                dd($transaction);
                 $amount_due = $transaction->amount_due - $model->amount;
                 $transaction->amount_due = max(0, $amount_due);
                 $transaction->save();
