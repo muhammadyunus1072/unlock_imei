@@ -66,18 +66,19 @@ return [
             'route'  => 'setting_send_whatsapp.index',
             'icon' => 'ki-duotone ki-setting-2',
         ],
-        // [
-        //     // 'id' => 'menu_admin'
-        //     'text' => 'Laporan',
-        //     'icon' => 'ki-duotone ki-shield-tick',
-        //     'submenu' => [
-        //         [
-        //             'text' => 'Laporan - Transaksi',
-        //             'route' => 'transaction_report.index',
-        //             'icon_color' => 'success',
-        //         ],
-        //     ],
-        // ],
+        
+        [
+            // 'id' => 'menu_admin'
+            'text' => 'Transaksi',
+            'icon' => 'ki-duotone ki-shield-tick',
+            'submenu' => [
+                [
+                    'text' => 'Management Transaksi',
+                    'route' => 'transaction.index',
+                    'icon_color' => 'success',
+                ],
+            ],
+        ],
         [
             // 'id' => 'menu_admin'
             'text' => 'Admin',
