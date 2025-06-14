@@ -85,7 +85,7 @@ class Transaction extends Model
     {
 
         $setting = SettingRepository::findBy(whereClause: [['name', SettingSendWhatsapp::NAME]]);
-
+        dd($setting);
         $settings = json_decode($setting->setting);
         $phone = $settings->{SettingSendWhatsapp::ADMIN_PHONE};
         SendWhatsappRepository::create([
