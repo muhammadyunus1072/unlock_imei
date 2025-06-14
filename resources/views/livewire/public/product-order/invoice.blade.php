@@ -62,7 +62,7 @@
                                                     <td class="my-0 py-0 fw-bolder text-end">Status</td>
                                                     <td class="my-0 py-0 text-end"><span class="fs-5 badge badge-{{$transaction->lastStatus->getStatusStyle()}}"> {{$transaction->lastStatus->name}} </span></td>
                                                 </tr>
-                                                @if ($amount_due)
+                                                @if (!$amount_due)
                                                     <tr class="fs-6">
                                                         <td class="my-0 py-0 fw-bolder text-end">Garansi</td>
                                                         <td class="my-0 py-0 text-end">{{ Carbon\Carbon::now()->addDays($model->product->warranty_days)->translatedFormat('d M Y') }}</td>
