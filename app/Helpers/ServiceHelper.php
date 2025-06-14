@@ -54,7 +54,7 @@ class ServiceHelper
         $deviceid = env('ADSMEDIA_DEVICE_ID'); //deviceid dapatkan di menu device
         $phone = "62".$phone; // 6281xxxxxxx
         $doc = "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf";
-        $img = "https://fastly.picsum.photos/id/295/200/300.jpg?hmac=b6Ets6Bu47pFHcU4UK7lI6xYkfy48orifVzWeHAe0zM";
+        $img = "https://imei.eragro.co.id/files/images/logo_long.png";
 
         $payload = [
                 "deviceid" => $deviceid,
