@@ -53,16 +53,13 @@ class ServiceHelper
         $apikey = env('ADSMEDIA_API_KEY', null); // apikey , dapatkan di menu api information
         $deviceid = env('ADSMEDIA_DEVICE_ID'); //deviceid dapatkan di menu device
         $phone = "62".$phone; // 6281xxxxxxx
-        $secret = "0"; // 0=data tersimpan, 1=data tersimpan dengan hash => 6288xxxxxxxx
-        $tag = "app"; // optional string maksimal 50 karakter
-        
+        $link = "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf";
 
         $payload = [
                 "deviceid" => $deviceid,
                 "phone" => $phone,
                 "message" => $message,
-                "secret" => $secret,
-                "tag" => $tag
+                "document" => $link,
         ];
 
         $curl = curl_init();

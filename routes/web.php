@@ -15,6 +15,7 @@ use App\Http\Controllers\DashboardController;
 */
 
 Route::group([], __DIR__ . '/web/Auth.php');
+Route::group([], __DIR__ . '/web/Core.php');
 Route::group([], __DIR__ . '/web/Other.php');
 Route::group([], __DIR__ . '/web/Account.php');
 Route::group([], __DIR__ . '/web/MasterData.php');

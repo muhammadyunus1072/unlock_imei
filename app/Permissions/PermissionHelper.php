@@ -28,6 +28,7 @@ class PermissionHelper
 
     const ACCESS_ALIASES = [
         'AccessAccount' => AccessAccount::class,
+        'AccessCore' => AccessCore::class,
         'AccessMasterData' => AccessMasterData::class,
         'AccessTransaction' => AccessTransaction::class,
         'AccessReport' => AccessReport::class,
@@ -35,6 +36,7 @@ class PermissionHelper
 
     const ACCESS_GROUPS = [
         'Utama' => AccessAccount::ALL,
+        'Utama' => AccessCore::ALL,
         'MasterData' => AccessMasterData::ALL,
         'Transaction' => AccessTransaction::ALL,
         'Service' => AccessReport::ALL,
@@ -42,6 +44,7 @@ class PermissionHelper
 
     const ACCESS_ALL = [
         ...AccessAccount::ALL,
+        ...AccessCore::ALL,
         ...AccessMasterData::ALL,
         ...AccessTransaction::ALL,
         ...AccessReport::ALL,
@@ -49,6 +52,7 @@ class PermissionHelper
 
     const ACCESS_TYPE_ALL = [
         ...AccessAccount::TYPE_ALL,
+        ...AccessCore::TYPE_ALL,
         ...AccessMasterData::TYPE_ALL,
         ...AccessTransaction::TYPE_ALL,
         ...AccessReport::TYPE_ALL,
@@ -56,6 +60,7 @@ class PermissionHelper
 
     const ACCESS_TRANSLATE = [
         ...AccessAccount::TRANSLATE,
+        ...AccessCore::TRANSLATE,
         ...AccessMasterData::TRANSLATE,
         ...AccessTransaction::TRANSLATE,
         ...AccessReport::TRANSLATE,

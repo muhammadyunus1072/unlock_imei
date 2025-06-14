@@ -2,9 +2,11 @@
 
 namespace App\Providers;
 
+use App\Settings\SettingSendWhatsapp;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Xendit\Configuration;
+use Illuminate\Contracts\Foundation\Application;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -13,7 +15,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->singleton(SettingSendWhatsapp::class, function (Application $app) {
+            return new SettingSendWhatsapp();
+        });
     }
 
     /**
@@ -25,6 +29,8 @@ class AppServiceProvider extends ServiceProvider
 
         $this->loadMigrationsFrom([
             database_path('migrations'), // Default
+            database_path('migrations/core'),
+            database_path('migrations/service'),
             database_path('migrations/user'),
             database_path('migrations/other'),
             database_path('migrations/master-data'),

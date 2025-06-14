@@ -60,17 +60,11 @@ return [
                 ],
             ],
         ],
+
         [
-            // 'id' => 'menu_admin'
-            'text' => 'Transaksi',
-            'icon' => 'ki-duotone ki-shield-tick',
-            'submenu' => [
-                [
-                    'text' => 'Management Transaksi',
-                    'route' => 'transaction.index',
-                    'icon_color' => 'success',
-                ],
-            ],
+            'text' => 'Pengaturan Notifikasi',
+            'route'  => 'setting_send_whatsapp.index',
+            'icon' => 'ki-duotone ki-setting-2',
         ],
         [
             // 'id' => 'menu_admin'
