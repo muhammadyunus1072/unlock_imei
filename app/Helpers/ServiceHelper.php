@@ -12,40 +12,260 @@ class ServiceHelper
 {
     public static function generateOrderVerificationMessage($transaction)
     {
-        $message = [
-        "
-*Verfikasi Pesanan*  
-*Pesanan   : ".$transaction->number."*
-*Tanggal    : ".Carbon::parse($transaction->created_at)->translatedFormat('d F Y, H:i')."*  
-*Nama       : ".$transaction->customer_name."*  
-*No WA     : 62".$transaction->customer_phone."*  
-*Item         : ".$transaction->transactionDetails[0]->product_name."*  
-*Kuantitas : ".numberFormat($transaction->transactionDetails->count())." IMEI*  
-*Total        : Rp. ".numberFormat($transaction->transactionDetails->sum('product_price'))."*  
+       $message = [
+    "*Verifikasi Pesanan Anda!*  
+Nomor Pesanan: *{$transaction->number}*  
+Tanggal: *".Carbon::parse($transaction->created_at)->translatedFormat('d F Y, H:i')."*  
+Nama Pelanggan: *{$transaction->customer_name}*  
+No. WhatsApp: *62{$transaction->customer_phone}*  
+Produk: *{$transaction->transactionDetails[0]->product_name}*  
+Jumlah: *".numberFormat($transaction->transactionDetails->count())." IMEI*  
+Total: *Rp. ".numberFormat($transaction->transactionDetails->sum('product_price'))."*  
 
-Verifikasi Pesanan dapat dilakukan melalui link berikut:
+Silakan klik link berikut untuk melakukan verifikasi:  
 ".route('transaction.edit', ['id' => simple_encrypt($transaction->id)]),
-        ];
-        return $message[0];
+
+    "*Halo! Ini adalah konfirmasi pesanan Anda.*  
+Kode: *{$transaction->number}*  
+Dipesan pada: *".Carbon::parse($transaction->created_at)->translatedFormat('d F Y, H:i')."*  
+Atas nama: *{$transaction->customer_name}*  
+No. HP: *62{$transaction->customer_phone}*  
+Produk: *{$transaction->transactionDetails[0]->product_name}*  
+Qty: *".numberFormat($transaction->transactionDetails->count())." IMEI*  
+Total Pembayaran: *Rp. ".numberFormat($transaction->transactionDetails->sum('product_price'))."*  
+
+Klik link ini untuk verifikasi:  
+".route('transaction.edit', ['id' => simple_encrypt($transaction->id)]),
+
+    "*Pesanan Anda sedang diproses!*  
+Nomor: *{$transaction->number}*  
+Tanggal Pesanan: *".Carbon::parse($transaction->created_at)->translatedFormat('d F Y, H:i')."*  
+Nama: *{$transaction->customer_name}*  
+No WA: *62{$transaction->customer_phone}*  
+Produk: *{$transaction->transactionDetails[0]->product_name}*  
+Jumlah IMEI: *".numberFormat($transaction->transactionDetails->count())."*  
+Total: *Rp. ".numberFormat($transaction->transactionDetails->sum('product_price'))."*  
+
+Verifikasi lewat link ini:  
+".route('transaction.edit', ['id' => simple_encrypt($transaction->id)]),
+
+    "*Konfirmasi Pembelian*  
+Pesanan: *{$transaction->number}*  
+Tgl: *".Carbon::parse($transaction->created_at)->translatedFormat('d F Y, H:i')."*  
+Nama Customer: *{$transaction->customer_name}*  
+WA: *62{$transaction->customer_phone}*  
+Barang: *{$transaction->transactionDetails[0]->product_name}*  
+IMEI: *".numberFormat($transaction->transactionDetails->count())."* unit  
+Total Biaya: *Rp. ".numberFormat($transaction->transactionDetails->sum('product_price'))."*  
+
+Verifikasi di:  
+".route('transaction.edit', ['id' => simple_encrypt($transaction->id)]),
+
+    "*Detail Pemesanan Anda*  
+Nomor: *{$transaction->number}*  
+Tanggal: *".Carbon::parse($transaction->created_at)->translatedFormat('d F Y, H:i')."*  
+Nama Anda: *{$transaction->customer_name}*  
+No WA: *62{$transaction->customer_phone}*  
+Produk: *{$transaction->transactionDetails[0]->product_name}*  
+IMEI: *".numberFormat($transaction->transactionDetails->count())."*  
+Total: *Rp. ".numberFormat($transaction->transactionDetails->sum('product_price'))."*  
+
+Link verifikasi:  
+".route('transaction.edit', ['id' => simple_encrypt($transaction->id)]),
+
+    "*Pesanan Telah Kami Terima!*  
+Nomor: *{$transaction->number}*  
+Tanggal: *".Carbon::parse($transaction->created_at)->translatedFormat('d F Y, H:i')."*  
+Nama: *{$transaction->customer_name}*  
+Nomor WA: *62{$transaction->customer_phone}*  
+Produk: *{$transaction->transactionDetails[0]->product_name}*  
+Kuantitas: *".numberFormat($transaction->transactionDetails->count())."*  
+Total: *Rp. ".numberFormat($transaction->transactionDetails->sum('product_price'))."*  
+
+Silakan verifikasi melalui link ini:  
+".route('transaction.edit', ['id' => simple_encrypt($transaction->id)]),
+
+    "*Terima kasih telah memesan!*  
+Kode Pesanan: *{$transaction->number}*  
+Waktu: *".Carbon::parse($transaction->created_at)->translatedFormat('d F Y, H:i')."*  
+Nama: *{$transaction->customer_name}*  
+WhatsApp: *62{$transaction->customer_phone}*  
+Item: *{$transaction->transactionDetails[0]->product_name}*  
+IMEI: *".numberFormat($transaction->transactionDetails->count())."*  
+Jumlah Bayar: *Rp. ".numberFormat($transaction->transactionDetails->sum('product_price'))."*  
+
+Verifikasi via:  
+".route('transaction.edit', ['id' => simple_encrypt($transaction->id)]),
+
+    "*📦 Konfirmasi Pesanan*  
+Nomor Order: *{$transaction->number}*  
+Tanggal Order: *".Carbon::parse($transaction->created_at)->translatedFormat('d F Y, H:i')."*  
+Nama Pemesan: *{$transaction->customer_name}*  
+Nomor WA: *62{$transaction->customer_phone}*  
+Barang Dipesan: *{$transaction->transactionDetails[0]->product_name}*  
+Jumlah IMEI: *".numberFormat($transaction->transactionDetails->count())."*  
+Total Pembayaran: *Rp. ".numberFormat($transaction->transactionDetails->sum('product_price'))."*  
+
+Cek dan verifikasi di sini:  
+".route('transaction.edit', ['id' => simple_encrypt($transaction->id)]),
+
+    "*🎉 Terima Kasih! Pesanan Anda Sudah Masuk.*  
+Nomor: *{$transaction->number}*  
+Tanggal: *".Carbon::parse($transaction->created_at)->translatedFormat('d F Y, H:i')."*  
+Nama Customer: *{$transaction->customer_name}*  
+WA: *62{$transaction->customer_phone}*  
+Produk: *{$transaction->transactionDetails[0]->product_name}*  
+Jumlah: *".numberFormat($transaction->transactionDetails->count())."*  
+Total: *Rp. ".numberFormat($transaction->transactionDetails->sum('product_price'))."*  
+
+Verifikasi dengan klik:  
+".route('transaction.edit', ['id' => simple_encrypt($transaction->id)]),
+
+    "*Halo, ini detail pesanan Anda!*  
+Nomor: *{$transaction->number}*  
+Waktu Pesanan: *".Carbon::parse($transaction->created_at)->translatedFormat('d F Y, H:i')."*  
+Nama Lengkap: *{$transaction->customer_name}*  
+Nomor WhatsApp: *62{$transaction->customer_phone}*  
+Item Pesanan: *{$transaction->transactionDetails[0]->product_name}*  
+Total IMEI: *".numberFormat($transaction->transactionDetails->count())."*  
+Total Harga: *Rp. ".numberFormat($transaction->transactionDetails->sum('product_price'))."*  
+
+Klik link berikut untuk memverifikasi:  
+".route('transaction.edit', ['id' => simple_encrypt($transaction->id)]),
+];
+
+// Pilih secara acak
+return $message[rand(0, count($message) - 1)];
+
         // return $message[rand(0, count($message) - 1)];
     }
     public static function generateAwaitingPaymentMessage($transaction)
     {
         $message = [
-        "
-*IMEI Sudah Aktif, Menunggu Pembayaran*  
-*Pesanan   : ".$transaction->number."*
-*Tanggal    : ".Carbon::parse($transaction->created_at)->translatedFormat('d F Y, H:i')."*  
-*Nama       : ".$transaction->customer_name."*  
-*No WA     : 62".$transaction->customer_phone."*  
-*Item         : ".$transaction->transactionDetails[0]->product_name."*  
-*Kuantitas : ".numberFormat($transaction->transactionDetails->count())." IMEI*  
-*Total        : Rp. ".numberFormat($transaction->transactionDetails->sum('product_price'))."*  
+    "*🔔 IMEI Anda Sudah Aktif!*  
+Pesanan No: *{$transaction->number}*  
+Tanggal: *".Carbon::parse($transaction->created_at)->translatedFormat('d F Y, H:i')."*  
+Nama: *{$transaction->customer_name}*  
+No WA: *62{$transaction->customer_phone}*  
+Produk: *{$transaction->transactionDetails[0]->product_name}*  
+Jumlah: *".numberFormat($transaction->transactionDetails->count())." IMEI*  
+Total: *Rp. ".numberFormat($transaction->transactionDetails->sum('product_price'))."*  
 
-Pesanan anda sudah kami aktifkan, silahkan melakukan pembayaran melalui link berikut:
+Pesanan Anda telah berhasil kami proses dan IMEI telah diaktifkan. Silakan lanjutkan ke proses pembayaran melalui tautan berikut:  
 ".route('public.order_payment', ['id' => simple_encrypt($transaction->id)]),
-        ];
-        return $message[0];
+
+    "*📱 Aktivasi IMEI Telah Berhasil*  
+Nomor Pesanan: *{$transaction->number}*  
+Tanggal Pemesanan: *".Carbon::parse($transaction->created_at)->translatedFormat('d F Y, H:i')."*  
+Nama Pemesan: *{$transaction->customer_name}*  
+No. WhatsApp: *62{$transaction->customer_phone}*  
+Item: *{$transaction->transactionDetails[0]->product_name}*  
+Total IMEI: *".numberFormat($transaction->transactionDetails->count())."*  
+Jumlah Tagihan: *Rp. ".numberFormat($transaction->transactionDetails->sum('product_price'))."*  
+
+Kami informasikan bahwa IMEI Anda telah aktif. Mohon segera lakukan pembayaran pada link berikut:  
+".route('public.order_payment', ['id' => simple_encrypt($transaction->id)]),
+
+    "*✅ IMEI Diaktifkan — Pembayaran Ditunggu*  
+Pesanan Anda dengan nomor *{$transaction->number}* sudah diproses.  
+Tanggal: *".Carbon::parse($transaction->created_at)->translatedFormat('d F Y, H:i')."*  
+Atas Nama: *{$transaction->customer_name}*  
+Nomor WA: *62{$transaction->customer_phone}*  
+Produk: *{$transaction->transactionDetails[0]->product_name}*  
+Jumlah IMEI: *".numberFormat($transaction->transactionDetails->count())."*  
+Total Pembayaran: *Rp. ".numberFormat($transaction->transactionDetails->sum('product_price'))."*  
+
+Silakan lanjutkan proses pembayaran melalui link berikut:  
+".route('public.order_payment', ['id' => simple_encrypt($transaction->id)]),
+
+    "*🎉 IMEI Sudah Aktif*  
+Terima kasih telah melakukan pemesanan dengan nomor *{$transaction->number}*.  
+Pesanan Anda telah kami proses dan IMEI sudah aktif.  
+Tanggal: *".Carbon::parse($transaction->created_at)->translatedFormat('d F Y, H:i')."*  
+Nama: *{$transaction->customer_name}*  
+WA: *62{$transaction->customer_phone}*  
+Produk: *{$transaction->transactionDetails[0]->product_name}*  
+Jumlah: *".numberFormat($transaction->transactionDetails->count())." IMEI*  
+Total: *Rp. ".numberFormat($transaction->transactionDetails->sum('product_price'))."*  
+
+Silakan selesaikan pembayaran Anda di link berikut ini:  
+".route('public.order_payment', ['id' => simple_encrypt($transaction->id)]),
+
+    "*🧾 Tagihan Pembayaran Pesanan*  
+Halo *{$transaction->customer_name}*, IMEI Anda sudah kami aktifkan untuk pesanan *{$transaction->number}*.  
+Tanggal Order: *".Carbon::parse($transaction->created_at)->translatedFormat('d F Y, H:i')."*  
+WA: *62{$transaction->customer_phone}*  
+Item: *{$transaction->transactionDetails[0]->product_name}*  
+Jumlah: *".numberFormat($transaction->transactionDetails->count())." unit*  
+Total Tagihan: *Rp. ".numberFormat($transaction->transactionDetails->sum('product_price'))."*  
+
+Silakan segera lakukan pembayaran melalui tautan berikut:  
+".route('public.order_payment', ['id' => simple_encrypt($transaction->id)]),
+
+    "*📣 IMEI Telah Diaktifkan*  
+Detail Pesanan:  
+- Nomor: *{$transaction->number}*  
+- Tanggal: *".Carbon::parse($transaction->created_at)->translatedFormat('d F Y, H:i')."*  
+- Nama: *{$transaction->customer_name}*  
+- WA: *62{$transaction->customer_phone}*  
+- Produk: *{$transaction->transactionDetails[0]->product_name}*  
+- Jumlah IMEI: *".numberFormat($transaction->transactionDetails->count())."*  
+- Total: *Rp. ".numberFormat($transaction->transactionDetails->sum('product_price'))."*  
+
+Mohon segera menyelesaikan pembayaran melalui link berikut:  
+".route('public.order_payment', ['id' => simple_encrypt($transaction->id)]),
+
+    "*🚀 Aktivasi Berhasil*  
+Pesanan Anda dengan nomor *{$transaction->number}* telah kami aktifkan.  
+Tanggal: *".Carbon::parse($transaction->created_at)->translatedFormat('d F Y, H:i')."*  
+Nama Anda: *{$transaction->customer_name}*  
+No WA: *62{$transaction->customer_phone}*  
+Item: *{$transaction->transactionDetails[0]->product_name}*  
+Jumlah IMEI: *".numberFormat($transaction->transactionDetails->count())."*  
+Tagihan: *Rp. ".numberFormat($transaction->transactionDetails->sum('product_price'))."*  
+
+Silakan lanjutkan ke tahap pembayaran via:  
+".route('public.order_payment', ['id' => simple_encrypt($transaction->id)]),
+
+    "*📌 Notifikasi Pembayaran*  
+Pesanan No: *{$transaction->number}*  
+Tanggal: *".Carbon::parse($transaction->created_at)->translatedFormat('d F Y, H:i')."*  
+Nama: *{$transaction->customer_name}*  
+WA: *62{$transaction->customer_phone}*  
+Produk: *{$transaction->transactionDetails[0]->product_name}*  
+IMEI: *".numberFormat($transaction->transactionDetails->count())."*  
+Total Bayar: *Rp. ".numberFormat($transaction->transactionDetails->sum('product_price'))."*  
+
+IMEI Anda telah aktif. Segera lakukan pembayaran melalui:  
+".route('public.order_payment', ['id' => simple_encrypt($transaction->id)]),
+
+    "*💡 IMEI Sudah Aktif, Yuk Bayar Sekarang!*  
+Nomor Pesanan: *{$transaction->number}*  
+Tanggal: *".Carbon::parse($transaction->created_at)->translatedFormat('d F Y, H:i')."*  
+Nama: *{$transaction->customer_name}*  
+Nomor WA: *62{$transaction->customer_phone}*  
+Item Pesanan: *{$transaction->transactionDetails[0]->product_name}*  
+IMEI: *".numberFormat($transaction->transactionDetails->count())."*  
+Total: *Rp. ".numberFormat($transaction->transactionDetails->sum('product_price'))."*  
+
+Klik link di bawah untuk melakukan pembayaran:  
+".route('public.order_payment', ['id' => simple_encrypt($transaction->id)]),
+
+    "*📝 Konfirmasi Aktivasi & Tagihan*  
+Pesanan Anda *{$transaction->number}* telah selesai kami aktifkan pada *".Carbon::parse($transaction->created_at)->translatedFormat('d F Y, H:i')."*.  
+Nama: *{$transaction->customer_name}*  
+Nomor HP: *62{$transaction->customer_phone}*  
+Item: *{$transaction->transactionDetails[0]->product_name}*  
+Jumlah: *".numberFormat($transaction->transactionDetails->count())."* IMEI  
+Total Tagihan: *Rp. ".numberFormat($transaction->transactionDetails->sum('product_price'))."*  
+
+Silakan selesaikan pembayaran melalui link berikut ini:  
+".route('public.order_payment', ['id' => simple_encrypt($transaction->id)]),
+];
+
+// Pilih acak saat kirim
+return $message[rand(0, count($message) - 1)];
+
         // return $message[rand(0, count($message) - 1)];
     }
     
