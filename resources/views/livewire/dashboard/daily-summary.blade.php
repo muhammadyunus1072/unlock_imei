@@ -4,7 +4,7 @@
         <div class="col-md-6 mb-2">
             <div class="card">
                 <div class="card-header d-flex justify-content-center">
-                    <h2 class="text-center pt-5">Jumlah Transaksi</h2>
+                    <h2 class="text-center pt-5">Jumlah Transaksi IMEI</h2>
                 </div>
                 <div class="card-body text-white text-center">
                     <h2>@currency($todayAmount)</h2>
@@ -14,7 +14,7 @@
         <div class="col-md-6 mb-2">
             <div class="card">
                 <div class="card-header d-flex justify-content-center">
-                    <h2 class="text-center pt-5">Nilai Transaksi</h2>
+                    <h2 class="text-center pt-5">Nilai Transaksi IMEI</h2>
                 </div>
                 <div class="card-body text-white text-center">
                     <h2>@currency($todayValue)</h2>

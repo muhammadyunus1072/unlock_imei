@@ -81,7 +81,8 @@ class Transaction extends Model
             $status->save();
         });        
         self::updated(function ($model) {
-            if ($model->amount_due <= 0 &&  $model->transactionStatuses()->where('name', TransactionStatus::STATUS_PAID)->doesntExist()) {
+            if ($model->amount_due <= 0 && 
+            $model->transactionStatuses()->where('name', TransactionStatus::STATUS_PAID)->doesntExist()) {
                 TransactionStatus::create([
                     'transaction_id' => $model->id,
                     'name'           => TransactionStatus::STATUS_PAID,
@@ -103,7 +104,10 @@ class Transaction extends Model
         SendWhatsappRepository::create([
             'phone' => $phone,
             'message' => ServiceHelper::generateOrderVerificationMessage($this),
-            'status_text' => SendWhatsapp::STATUS_CREATED
+            'status_text' => SendWhatsapp::STATUS_CREATED,
+            'transaction_id' => $this->id,
+            'remarks_id' => $this->id,
+            'remarks_type' => self::class,
         ]);
     }
     public function createInvoice()
@@ -122,9 +126,22 @@ class Transaction extends Model
         }
     }
 
+    public function hasStatusIn(array|string $statuses): bool
+    {
+        $names = $this->statuses->pluck('name')->toArray();
+        $statuses = (array) $statuses;
+
+        return count(array_intersect($names, $statuses)) > 0;
+    }
+    
     public function transactionDetails()
     {
         return $this->hasMany(TransactionDetail::class, 'transaction_id', 'id');
+    }
+
+    public function sendWhatsapps()
+    {
+        return $this->hasMany(SendWhatsapp::class, 'transaction_id', 'id');
     }
 
     public function lastStatus()

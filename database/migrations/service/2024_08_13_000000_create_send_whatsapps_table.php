@@ -34,11 +34,18 @@ return new class extends Migration
         if ($is_history) {
             $table->bigInteger('obj_id')->unsigned();
         } else {
+            $table->index('transaction_id', 'send_whatsapps_transaction_id_idx');
+            $table->index('remarks_id', 'send_whatsapps_remarks_id_idx');
+            $table->index('remarks_type', 'send_whatsapps_remarks_type_idx');
             $table->index('phone', 'send_whatsapps_phone_idx');
             $table->index('message_id', 'send_whatsapps_message_id_idx');
             $table->index('status', 'send_whatsapps_status_idx');
             $table->index('status_text', 'send_whatsapps_status_text_idx');
         }
+
+        $table->unsignedBigInteger("transaction_id")->nullable()->comment('ID Transaction');
+        $table->unsignedBigInteger("remarks_id")->nullable()->comment('ID Remarks Creator');
+        $table->string("remarks_type")->nullable()->comment('Type Remarks Creator');
 
         $table->string("phone")->comment('Target Phone');
         $table->text("message")->comment('Message');

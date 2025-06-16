@@ -15,8 +15,8 @@ class YearlySummary extends Component
     private function getHeaderData()
     {
         $transaction = SummaryRepository::transactionYearly();
-        $transactionAmount = $transaction->count();
-        $transactionValue = $transaction->sum('grand_total');
+        $transactionAmount = $transaction->sum('qty');
+        $transactionValue = $transaction->sum('total_amount');
         return [
             [
                 "col" => 6,

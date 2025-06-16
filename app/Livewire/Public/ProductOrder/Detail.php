@@ -178,43 +178,20 @@ class Detail extends Component
 
     public function store()
     {
-
-        // foreach ($this->product_details as $index => $product_detail) {
-            // if($product_detail['imei'])
-            // {
-
-            // }
-            // foreach ($product_detail['imei'] as $file) {
-            //     // Save or inspect each file
-            //     consoleLog($this, [
-            //         'index' => $index,
-            //         'file_name' => $file->getClientOriginalName(),
-            //         'real_path' => $file->getRealPath(),
-            //     ]);
-
-            //     // Example: store it
-            //     // $path = $file->store('uploads/imei', 'public');
-            // }
-        // }
-        consoleLog($this, $this->customer_ig);
-        consoleLog($this, $this->customer_fb);
-        consoleLog($this, $this->customer_ktp);
-        consoleLog($this, $this->product_details);
-        // return;
         try {
 
-        // $this->validate([
-        //     'customer_ktp' => 'required|image|max:2048',
-        //     'product_details.*.imei.*' => 'required|image|max:2048',
-        //     'customer_email' => 'required|email',
-        //     'customer_ig' => 'required',
-        //     'customer_fb' => 'required',
-        // ],[
-        //     'product_details.*.imei.*.image' => 'File yang diupload harus berupa gambar',
-        //     'product_details.*.imei.*.max' => 'Ukuran file maksimal 2MB',
-        //     'customer_ig.required' => 'Akun Instagram harus diisi',
-        //     'customer_fb.required' => 'Akun Facebook harus diisi',
-        // ]);
+        $this->validate([
+            'customer_ktp' => 'required|image|max:2048',
+            'product_details.*.imei.*' => 'required|image|max:2048',
+            'customer_email' => 'required|email',
+            'customer_ig' => 'required',
+            'customer_fb' => 'required',
+        ],[
+            'product_details.*.imei.*.image' => 'File yang diupload harus berupa gambar',
+            'product_details.*.imei.*.max' => 'Ukuran file maksimal 2MB',
+            'customer_ig.required' => 'Akun Instagram harus diisi',
+            'customer_fb.required' => 'Akun Facebook harus diisi',
+        ]);
             $phone = preg_replace('/[^\d]/', '', $this->customer_phone);
             if (!preg_match("/^8[0-9]{9,11}$/", $phone) || (strlen($phone) < 9 || strlen($phone) > 11)) {
                 throw new \Exception("Format No Telp tidak sesuai,<br>Contoh: +62 8XX-XXXX-XXXX");
@@ -257,7 +234,6 @@ class Detail extends Component
                     'facebook' => preg_replace('/\s+/', '.', $this->customer_fb),
                     'instagram' => preg_replace('/\s+/', '', $this->customer_ig),
                 ]),
-                'payment_method_id' => 0, // Example
                 'voucher_id' => $this->voucher_id ? Crypt::decrypt($this->voucher_id) : null,
                 
                 'subtotal' => $this->subtotal,

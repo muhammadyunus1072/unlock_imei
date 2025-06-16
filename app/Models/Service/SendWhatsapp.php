@@ -2,6 +2,7 @@
 
 namespace App\Models\Service;
 
+use App\Models\Transaction\Transaction;
 use Sis\TrackHistory\HasTrackHistory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -12,6 +13,9 @@ class SendWhatsapp extends Model
     use HasFactory, SoftDeletes, HasTrackHistory;
 
     protected $fillable = [
+        "transaction_id",
+        "remarks_id",
+        "remarks_type",
         "message_id",
         "status",
         "status_text_message",
@@ -56,4 +60,14 @@ class SendWhatsapp extends Model
         self::STATUS_PENDING => 'Pending',
         self::STATUS_SYSTEM_ERROR => 'System Error',
     ];
+
+    public function remarks()
+    {
+        return $this->belongsTo($this->remarks_type, 'remarks_id', 'id');
+    }
+
+    public function transaction()
+    {
+        return $this->belongsTo(Transaction::class, 'transaction_id', 'id');
+    }
 }

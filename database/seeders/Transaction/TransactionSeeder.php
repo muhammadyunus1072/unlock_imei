@@ -2,87 +2,100 @@
 
 namespace Database\Seeders\Transaction;
 
-use App\Models\MasterData\PaymentMethod;
 use Carbon\Carbon;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use App\Models\MasterData\Product;
 use App\Models\Transaction\Transaction;
+use App\Models\MasterData\PaymentMethod;
 use App\Models\Transaction\TransactionDetail;
-use App\Repositories\MasterData\PaymentMethod\PaymentMethodRepository;
+use App\Models\Transaction\TransactionStatus;
 
 class TransactionSeeder extends Seeder
 {
     public function run()
     {
         $faker = \Faker\Factory::create('id_ID');
-
-        // Ambil semua produk dan booking time
-        $paymentMethods = PaymentMethodRepository::getBy([
-            ['is_active', true],
-        ]);
         $products = Product::all();
 
-        for($day = 0; $day < 100; $day++) {
+        for($day = 0; $day < 30; $day++) {
             $imei = $faker->uuid();
             $bookingDate = Carbon::now()->subDays($day);
 
             $randTransactionCount = rand(5, 10);
-            for ($i=0; $i < $randTransactionCount; $i++) { 
+            for ($t=0; $t < $randTransactionCount; $t++) { 
                 // Pilih produk acak
-                $product = $faker->randomElement($products); // Get full product model
-
-                // Cek ketersediaan sebelum booking
-                // $isNotAvailable = TransactionDetail::isNotAvailable(
-                //     $imei,
-                // );
-
-                // if ($isNotAvailable) {
-                //     continue; // Skip if already booked
-                // }
-
-                $paymentMethod = $faker->randomElement($paymentMethods); // Contoh metode pembayaran
+                $product = $faker->randomElement($products); 
                 $price = $product->price;
                 $qty = rand(1, 4);
                 $subtotal = $price * $qty;
                 $admin_fee = 0;
                 $grandTotal = 0;
-                if($paymentMethod->fee_type === PaymentMethod::TYPE_PERCENTAGE)
-                {
-                    $admin_fee = calculateAdminFee($subtotal, $paymentMethod->fee_amount);
-                    $grandTotal = $subtotal + $admin_fee;
-                }else{
-                    $admin_fee = $paymentMethod->fee_amount;
-                    $grandTotal = $subtotal + $admin_fee;
-                }
+                $grandTotal = $subtotal;
                 $transaction = Transaction::create([
                     'customer_name' => $faker->userName(),
                     'customer_email' => $faker->email(),
                     'customer_phone' => $faker->phoneNumber(),
                     'customer_lat' => $faker->latitude(),
                     'customer_long' => $faker->longitude(),
+                    'customer_ip_lat' => $faker->latitude(),
+                    'customer_ip_long' => $faker->longitude(),
                     'customer_ktp' => $faker->word(),
-                    'customer_social_media' => json_encode([]),
-                    'payment_method_id' => $paymentMethod->id,
+                    'customer_social_media' => json_encode([
+                        'instagram' => '',
+                        'facebook' => '',
+                    ]),
                     'voucher_id' => null,
                     'created_at' => $bookingDate,
-                    'payment_status' => Transaction::PAYMENT_STATUS_PAID,
-                    'grand_total' => $grandTotal,
+                    'total_amount' => $grandTotal,
+                    'amount_due' => $grandTotal,
                     'subtotal' => $subtotal,
-                    'admin_fee' => $admin_fee,
                     'discount' => 0,
                     // 'cached_ip_location_id' => 1,
                 ]);
 
-                for ($i = 0; $i < $qty; $i++) {
+                $message = "Seeder Transaction 1: " . number_format($day + 1, 0, ",", ".") . " / 30 ";
+                $this->command->info($message);
+                for ($d = 0; $d < $qty; $d++) {
+                  
                     $transactionDetail = TransactionDetail::create([
                         'transaction_id' => $transaction->id,
-                        'product_id' => $$product->id,
+                        'product_id' => $product->id,
                         'imei' => $imei,
-                        'active_at' => Carbon::parse($bookingDate)->addMinutes(rand(3, 60)),
                     ]);
+
+                $message = "Seeder Transaction 2 ke " . $d + 1 . ": " . number_format($day + 1, 0, ",", ".") . " / 30 ";
+                $this->command->info($message);
                 } 
+                $stepStatuses = [
+                    // TransactionStatus::STATUS_NOT_VERIFIED,
+                    TransactionStatus::STATUS_VERIFIED,
+                    TransactionStatus::STATUS_ACTIVED,
+                    TransactionStatus::STATUS_AWAITING_PAYMENT,
+                    TransactionStatus::STATUS_PAID,
+                    // TransactionStatus::STATUS_CANCELLED,
+                    // TransactionStatus::STATUS_COMPLETED,
+                ];
+
+                $endIndex = rand(1, count($stepStatuses) - 1); // skip index 0 to ensure we go at least 1 step
+                $statusesToInsert = array_slice($stepStatuses, 0, $endIndex + 1);
+
+                foreach ($statusesToInsert as $key => $status) {
+                    TransactionStatus::create([
+                        'transaction_id' => $transaction->id,
+                        'name' => $status,
+                        'description' => 'Seeder auto-step',
+                        'remarks_id' => $transaction->id,
+                        'remarks_type' => Transaction::class,
+                    ]);
+
+                $message = "Seeder Transaction 3 ke " . $key + 1 . ": " . number_format($day + 1, 0, ",", ".") . " / 30 ";
+                $this->command->info($message);
+                }
             }
+
+            $message = "Seeder Transaction: " . number_format($day + 1, 0, ",", ".") . " / 30 ";
+            $this->command->info($message);
         }
     }
 }

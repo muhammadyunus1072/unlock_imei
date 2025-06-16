@@ -23,10 +23,10 @@ class TransactionStatus extends Model
     const STATUS_NOT_VERIFIED = "Belum Diverifikasi";
     const STATUS_VERIFIED = "Diverifikasi";
     const STATUS_ACTIVED = "Diaktifkan";
+    const STATUS_AWAITING_PAYMENT = "Menunggu Pembayaran";
     const STATUS_PAID = "Dibayar Lunas";
     const STATUS_COMPLETED = "Selesai";
     const STATUS_CANCELLED = "Dibatalkan";
-    const STATUS_AWAITING_PAYMENT = "Menunggu Pembayaran";
 
     const STATUS_CHOICE = [
         self::STATUS_NOT_VERIFIED => self::STATUS_NOT_VERIFIED,
@@ -40,6 +40,7 @@ class TransactionStatus extends Model
         self::STATUS_NOT_VERIFIED => [self::STATUS_VERIFIED, self::STATUS_CANCELLED],
         self::STATUS_VERIFIED => [self::STATUS_COMPLETED],
     ];
+
     protected $fillable = [
         'transaction_id',
         'name',
@@ -69,11 +70,15 @@ class TransactionStatus extends Model
                 $status->remarks_type = self::class;
                 $status->save();
             }
-            if ($model->name === self::STATUS_ACTIVED && $transaction->transactionStatuses()->where('name', self::STATUS_PAID)->doesntExist()) {
+            if ($model->name === self::STATUS_ACTIVED && 
+            $transaction->transactionStatuses()->where('name', self::STATUS_PAID)->doesntExist()) {
                 SendWhatsappRepository::create([
                     'phone' => $model->transaction->customer_phone,
                     'message' => ServiceHelper::generateAwaitingPaymentMessage($model->transaction),
-                    'status_text' => SendWhatsapp::STATUS_CREATED
+                    'status_text' => SendWhatsapp::STATUS_CREATED,
+                    'transaction_id' => $transaction->id,
+                    'remarks_id' => $model->id,
+                    'remarks_type' => self::class,
                 ]);
             }
 

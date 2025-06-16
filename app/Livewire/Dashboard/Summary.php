@@ -12,37 +12,19 @@ class Summary extends Component
 
     public function getHeaderData()
     {
-        $transactionCount = SummaryRepository::transactionCount();
-        $bookingActive = SummaryRepository::bookingActive();
-        $bookingPending = SummaryRepository::bookingPending();
-        $bookingPaid = SummaryRepository::bookingPaid();
-        $bookingExpired = SummaryRepository::bookingExpired();
-
+        $amountNotVerified = SummaryRepository::amountNotVerified();
+        $amountWaitingPayment = SummaryRepository::amountWaitingPayment();
+        
         return [
             [
                 "col" => 6,
-                "name" => "Total Transaksi",
-                "value" => $transactionCount
+                "name" => "Menunggu Verfikasi",
+                "value" => $amountNotVerified
             ],
             [
                 "col" => 6,
-                "name" => "Booking Aktif",
-                "value" => $bookingActive
-            ],
-            [
-                "col" => 4,
-                "name" => "Status PENDING",
-                "value" => $bookingPending
-            ],
-            [
-                "col" => 4,
-                "name" => "Status PAID",
-                "value" => $bookingPaid
-            ],
-            [
-                "col" => 4,
-                "name" => "Status EXPIRED",
-                "value" => $bookingExpired
+                "name" => "Menunggu Pembayaran",
+                "value" => $amountWaitingPayment
             ],
         ];
     }

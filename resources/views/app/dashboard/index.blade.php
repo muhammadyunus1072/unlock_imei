@@ -21,20 +21,18 @@
 @section('content')
     <div class="card">
         <div class="card-body">
-            {{-- <h1 class="panel-configure__title">Ringkasan Transaksi</h1>
+            <h1 class="panel-configure__title">Ringkasan Transaksi</h1>
             <livewire:dashboard.summary>
 
             <h1 class="panel-configure__title mt-5">Ringkasan Keuangan Harian</h1>
             <livewire:dashboard.daily-summary>
 
-            <h1 class="panel-configure__title mt-5">Ringkasan Keuangan Mingguan</h1>
-            <livewire:dashboard.weekly-summary>
-
             <h1 class="panel-configure__title mt-5">Ringkasan Keuangan Bulanan</h1>
+            <livewire:dashboard.current-month-summary>
             <livewire:dashboard.monthly-summary>
 
             <h1 class="panel-configure__title mt-5">Ringkasan Keuangan Tahunan</h1>
-            <livewire:dashboard.yearly-summary> --}}
+            <livewire:dashboard.yearly-summary>
         </div>
     </div>
 @stop

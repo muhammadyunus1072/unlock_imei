@@ -4,6 +4,7 @@ namespace App\Repositories\Transaction\Transaction;
 
 use Carbon\Carbon;
 use App\Models\Transaction\Transaction;
+use App\Models\Transaction\TransactionStatus;
 use App\Repositories\MasterDataRepository;
 
 class TransactionRepository extends MasterDataRepository
@@ -23,24 +24,35 @@ class TransactionRepository extends MasterDataRepository
     public static function datatable($search, $status, $dateStart, $dateEnd, $allUser = false)
     {
         // dd(["$dateStart 00:00:00", "$dateEnd 23:59:59"]);
-        return Transaction::when($status != 'Seluruh', function($query) use ($status){
-                $query->where('payment_status', '=', $status);
-            })
-            ->whereBetween('created_at', [Carbon::parse($dateStart)->startOfDay(), Carbon::parse($dateEnd)->endOfDay()])
-            ->when($search, function($query) use($search) {
-                $query->where(function($whereQuery) use($search) {
-                    $whereQuery->orWhere('customer_email', env('QUERY_LIKE'), '%' . $search . '%')
-                        ->orWhere('customer_phone', env('QUERY_LIKE'), '%' . $search . '%')
-                        ->orWhereHas('transactionDetails', function ($q) use ($search) {
-                            $q->where('transaction_details.product_name', env('QUERY_LIKE'), "%{$search}%");
-                        });
+        return Transaction::when($status != 'Seluruh' && $status != TransactionStatus::STATUS_AWAITING_PAYMENT, function($query) use ($status){
+                    $query->whereHas('transactionStatuses', function ($q) use($status) {
+                        $q->where('name', $status);
+                    });
+                })
+                ->when($status == TransactionStatus::STATUS_AWAITING_PAYMENT, function($query) use ($status){
+                    $query->whereHas('transactionStatuses', function ($q) {
+                        $q->where('name', TransactionStatus::STATUS_ACTIVED)
+                        ->orWhere('name', TransactionStatus::STATUS_AWAITING_PAYMENT);
+                    })
+                    ->whereDoesntHave('transactionStatuses', function ($q) {
+                        $q->where('name', TransactionStatus::STATUS_PAID);
+                    });
+                })
+                ->whereBetween('created_at', [Carbon::parse($dateStart)->startOfDay(), Carbon::parse($dateEnd)->endOfDay()])
+                ->when($search, function($query) use($search) {
+                    $query->where(function($whereQuery) use($search) {
+                        $whereQuery->orWhere('customer_email', env('QUERY_LIKE'), '%' . $search . '%')
+                            ->orWhere('customer_phone', env('QUERY_LIKE'), '%' . $search . '%')
+                            ->orWhereHas('transactionDetails', function ($q) use ($search) {
+                                $q->where('transaction_details.product_name', env('QUERY_LIKE'), "%{$search}%");
+                            });
+                    });
+                })
+                ->when(auth()->user()->hasRole(config('template.registration_default_role')), function($query) {
+                    $query->where('user_id', auth()->user()->id);
+                })
+                ->when(auth()->user()->hasRole(config('template.admin_role')) && !$allUser, function($query) {
+                    $query->where('user_id', auth()->user()->id);
                 });
-            })
-            ->when(auth()->user()->hasRole(config('template.registration_default_role')), function($query) {
-                $query->where('user_id', auth()->user()->id);
-            })
-            ->when(auth()->user()->hasRole(config('template.admin_role')) && !$allUser, function($query) {
-                $query->where('user_id', auth()->user()->id);
-            });
     }
 }

@@ -16,9 +16,9 @@ class DailySummary extends Component
     public $todayValue;
     public function mount()
     {
-        $transactionToday = collect(SummaryRepository::transactionToday());
-        $this->todayAmount = $transactionToday->count();
-        $this->todayValue = $transactionToday->sum('grand_total');
+        $transactionToday = SummaryRepository::transactionToday();
+        $this->todayAmount = $transactionToday->sum('qty');
+        $this->todayValue = collect($transactionToday)->sum('total_amount');
     }
 
     private function getTransactionDaily()
