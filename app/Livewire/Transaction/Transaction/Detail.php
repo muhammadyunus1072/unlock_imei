@@ -8,11 +8,13 @@ use Livewire\Attributes\On;
 use App\Helpers\FilePathHelper;
 use App\Models\MasterData\Voucher;
 use Illuminate\Support\Facades\DB;
+use App\Settings\SettingSendWhatsapp;
 use Illuminate\Support\Facades\Crypt;
 use App\Models\Transaction\Transaction;
 use App\Models\MasterData\PaymentMethod;
 use App\Models\Transaction\TransactionStatus;
 use App\Models\Transaction\TransactionPayment;
+use App\Repositories\Core\Setting\SettingRepository;
 use App\Repositories\Transaction\Transaction\TransactionRepository;
 use App\Repositories\Transaction\Transaction\TransactionDetailRepository;
 use App\Repositories\Transaction\Transaction\TransactionStatusRepository;
@@ -33,6 +35,9 @@ class Detail extends Component
     public $next_statuses = [];
     public $transaction_details = [];
     public $transaction_payments = [];
+    public $send_whatsapps = [];
+    public $admin_phone;
+
     public $customer_ig;
     public $customer_fb;
     public $customer_ktp_url;
@@ -51,6 +56,11 @@ class Detail extends Component
         {
             $this->getData();
         }
+
+        $setting = SettingRepository::findBy(whereClause: [['name', SettingSendWhatsapp::NAME]]);
+        
+        $settings = json_decode($setting->setting);
+        $this->admin_phone = $settings->{SettingSendWhatsapp::ADMIN_PHONE};
     }
 
     #[On('on-verify-dialog-confirm')]
@@ -190,6 +200,16 @@ class Detail extends Component
                 'amount' => valueToImask($item['amount']),
                 'status' => $item['status'],
                 'style' => $item->getStatusStyle(),
+            ];
+        }
+        foreach($transaction->sendWhatsapps as $index => $item){
+            $this->send_whatsapps[] = [
+                'id' => Crypt::encrypt($item['id']),
+                'note' => $item['note'],
+                'phone' => ($this->admin_phone == $item['phone']) ? 'ADMIN' : "+62" .$item['phone'],
+                'status' => $item['status_text'],
+                'style' => $item->getStatusStyle(),
+                'message' => $item['message'],
             ];
         }
     }

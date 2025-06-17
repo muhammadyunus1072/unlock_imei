@@ -24,7 +24,10 @@ class TransactionRepository extends MasterDataRepository
     public static function datatable($search, $status, $dateStart, $dateEnd, $allUser = false)
     {
         // dd(["$dateStart 00:00:00", "$dateEnd 23:59:59"]);
-        return Transaction::when($status != 'Seluruh' && $status != TransactionStatus::STATUS_AWAITING_PAYMENT, function($query) use ($status){
+        return Transaction::when($status != 'Seluruh' 
+        && $status != TransactionStatus::STATUS_AWAITING_PAYMENT 
+        && $status != TransactionStatus::STATUS_NOT_VERIFIED
+        , function($query) use ($status){
                     $query->whereHas('transactionStatuses', function ($q) use($status) {
                         $q->where('name', $status);
                     });
@@ -36,6 +39,14 @@ class TransactionRepository extends MasterDataRepository
                     })
                     ->whereDoesntHave('transactionStatuses', function ($q) {
                         $q->where('name', TransactionStatus::STATUS_PAID);
+                    });
+                })
+                ->when($status == TransactionStatus::STATUS_NOT_VERIFIED, function($query) use ($status){
+                    $query->whereHas('transactionStatuses', function ($q) {
+                        $q->where('name', TransactionStatus::STATUS_NOT_VERIFIED);
+                    })
+                    ->whereDoesntHave('transactionStatuses', function ($q) {
+                        $q->where('name', TransactionStatus::STATUS_VERIFIED);
                     });
                 })
                 ->whereBetween('created_at', [Carbon::parse($dateStart)->startOfDay(), Carbon::parse($dateEnd)->endOfDay()])

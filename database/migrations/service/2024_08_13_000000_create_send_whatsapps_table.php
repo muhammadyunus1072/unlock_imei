@@ -41,11 +41,13 @@ return new class extends Migration
             $table->index('message_id', 'send_whatsapps_message_id_idx');
             $table->index('status', 'send_whatsapps_status_idx');
             $table->index('status_text', 'send_whatsapps_status_text_idx');
+            $table->index('note', 'send_whatsapps_note _idx');
         }
 
         $table->unsignedBigInteger("transaction_id")->nullable()->comment('ID Transaction');
         $table->unsignedBigInteger("remarks_id")->nullable()->comment('ID Remarks Creator');
         $table->string("remarks_type")->nullable()->comment('Type Remarks Creator');
+        $table->string("note")->nullable()->comment('Note');
 
         $table->string("phone")->comment('Target Phone');
         $table->text("message")->comment('Message');

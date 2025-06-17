@@ -68,7 +68,7 @@ class TransactionSeeder extends Seeder
                 $this->command->info($message);
                 } 
                 $stepStatuses = [
-                    // TransactionStatus::STATUS_NOT_VERIFIED,
+                    TransactionStatus::STATUS_NOT_VERIFIED,
                     TransactionStatus::STATUS_VERIFIED,
                     TransactionStatus::STATUS_ACTIVED,
                     TransactionStatus::STATUS_AWAITING_PAYMENT,
@@ -81,6 +81,10 @@ class TransactionSeeder extends Seeder
                 $statusesToInsert = array_slice($stepStatuses, 0, $endIndex + 1);
 
                 foreach ($statusesToInsert as $key => $status) {
+                    if($status == TransactionStatus::STATUS_NOT_VERIFIED)
+                    {
+                        break;
+                    }
                     TransactionStatus::create([
                         'transaction_id' => $transaction->id,
                         'name' => $status,

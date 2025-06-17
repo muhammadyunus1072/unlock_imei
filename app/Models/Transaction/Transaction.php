@@ -108,6 +108,7 @@ class Transaction extends Model
             'transaction_id' => $this->id,
             'remarks_id' => $this->id,
             'remarks_type' => self::class,
+            'note' => SendWhatsapp::TYPE_ORDER_VERIFICATION,
         ]);
     }
     public function createInvoice()

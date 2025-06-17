@@ -79,6 +79,7 @@ class TransactionStatus extends Model
                     'transaction_id' => $transaction->id,
                     'remarks_id' => $model->id,
                     'remarks_type' => self::class,
+                    'note' => SendWhatsapp::TYPE_AWAITING_PAYMENT,
                 ]);
             }
 

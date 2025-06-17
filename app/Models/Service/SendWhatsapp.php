@@ -61,6 +61,27 @@ class SendWhatsapp extends Model
         self::STATUS_SYSTEM_ERROR => 'System Error',
     ];
 
+    CONST TYPE_ORDER_VERIFICATION = 'PERMINTAAN VERIFIKASI';
+    CONST TYPE_AWAITING_PAYMENT = 'MENUNGGU PEMBAYARAN';
+
+    public function getStatusStyle(): string
+    {
+        $badges = [
+            'secondary' => [self::STATUS_CREATED],
+            'primary' => [self::STATUS_SEND, self::STATUS_RECEIVED],
+            'success' => [self::STATUS_DELIVERED, self::STATUS_READ],
+            'danger' => [self::STATUS_CANCEL, self::STATUS_PENDING, self::STATUS_SYSTEM_ERROR, self::STATUS_REJECT],
+        ];
+
+        $status = $this->name;
+        
+        // Find the corresponding badge class
+        $badgeColor = array_keys(array_filter($badges, fn($statuses) => in_array($status, $statuses, true)))[0] ?? 'secondary';
+
+        return $badgeColor;
+        // return "<span class='badge badge-{$badgeColor}'>" . strtoupper($status) . "</span>";
+    }
+
     public function remarks()
     {
         return $this->belongsTo($this->remarks_type, 'remarks_id', 'id');

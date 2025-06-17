@@ -306,6 +306,38 @@
 					</tbody>
 				</table>
             </div>
+
+            <div class="row mt-5">
+                <h3>Riwayat Notifikasi</h3>
+				<table id="master-table" width="100%" class="table table-bordered" style="border-collapse: collapse; border-spacing: 0;">
+					<thead>
+						<tr>
+							<th class="text-center" style="width: 20px;">Tujuan</th>
+							<th class="text-center" style="width: 120px;">Jenis Pesan</th>
+							<th class="text-center" style="width: 80px;">Status</th>
+							<th class="text-center" style="width: 80px;">Aksi</th>
+						</tr>
+					</thead>
+					<tbody>
+                        @foreach ($send_whatsapps as $index => $item)
+                            <tr>
+                                <td>
+                                    <p class="" >{{$item['phone']}}</p>
+                                </td>
+                                <td>
+                                    <p class="" >{{$item['note']}}</p>
+                                </td>
+                                <td>
+                                    <p class="badge bg-{{$item['style']}}" >{{$item['status']}}</p>
+                                </td>
+                                <td>
+                                    <a target="_BLANK" href="https://api.whatsapp.com/send/?phone={{$item['phone']}}&text={{$item['message']}}" class="btn btn-primary btn-sm">Kirim Manual</a>
+                                </td>
+                            </tr>
+                        @endforeach
+					</tbody>
+				</table>
+            </div>
         </div>
     </div>
 </div>
