@@ -202,6 +202,7 @@ class Detail extends Component
                 'style' => $item->getStatusStyle(),
             ];
         }
+        $this->send_whatsapps = [];
         foreach($transaction->sendWhatsapps as $index => $item){
             $this->send_whatsapps[] = [
                 'id' => Crypt::encrypt($item['id']),
