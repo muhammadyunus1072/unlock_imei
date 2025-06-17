@@ -44,11 +44,6 @@ return [
                     'icon_color' => 'success',
                 ],
                 [
-                    'text' => 'Garansi Produk',
-                    'route' => 'product_warranty.index',
-                    'icon_color' => 'success',
-                ],
-                [
                     'text' => 'Metode Pembayaran',
                     'route' => 'payment_method.index',
                     'icon_color' => 'success',
