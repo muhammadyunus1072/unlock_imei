@@ -29,6 +29,7 @@ class Datatable extends Component
     {
         $authUser = UserRepository::authenticatedUser();
         $this->isCanUpdate = $authUser->hasPermissionTo(PermissionHelper::transform(AccessMasterData::PRODUCT, PermissionHelper::TYPE_UPDATE));
+        $this->isCanDelete = $authUser->hasPermissionTo(PermissionHelper::transform(AccessMasterData::PRODUCT, PermissionHelper::TYPE_DELETE));
     }
 
     #[On('on-delete-dialog-confirm')]
