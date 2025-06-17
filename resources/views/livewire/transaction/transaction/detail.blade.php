@@ -78,8 +78,8 @@
                                     </div>
                                     <button
                                         class="btn btn-primary"
-                                        {{-- onclick="window.open(`https://www.google.com/maps?q={{ $customer_lat }},{{ $customer_lng }}`, '_blank')"> --}}
-                                        onclick="window.open(`https://www.google.com/maps?q=-7.7012339,112.7904209`, '_blank')">
+                                        onclick="window.open(`https://www.google.com/maps?q={{ $customer_lat }},{{ $customer_lng }}`, '_blank')">
+                                        
                                         Buka Di Google Maps
                                     </button>
                                 </div>
