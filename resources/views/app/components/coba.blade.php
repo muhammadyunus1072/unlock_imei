@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Animasi Garis Panah GSAP</title>
+  <title>Animasi Garis Panah</title>
   <style>
     body {
       background: #111;
@@ -35,11 +35,15 @@
   <path id="line" d="M 50 150 Q 250 50, 450 150" />
 </svg>
 
-<!-- ✅ GSAP + DrawSVGPlugin CDN (versi resmi, bukan trial) -->
+<!-- ✅ GSAP + DrawSVGPlugin -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/DrawSVGPlugin.min.js"></script>
 
 <script>
+  // 🟢 WAJIB! Daftarkan plugin dulu
+  gsap.registerPlugin(DrawSVGPlugin);
+
+  // 🔄 Lalu baru bisa dipakai
   gsap.from("#line", {
     duration: 3,
     drawSVG: "0%",
