@@ -11,6 +11,7 @@ Route::group(["controller" => PublicController::class, "prefix" => "", "as" => "
     Route::get('{id}/order-payment', 'order_payment')->name('order_payment'); 
     Route::get('order-check', 'order_check')->name('order-check'); 
     Route::get('contact', 'contact')->name('contact'); 
+    Route::get('coba', 'coba')->name('coba'); 
 });
 
 Route::middleware('auth')->group(function () {

@@ -33,24 +33,24 @@ class PublicController extends Controller
         return view('app.public.contact.index');
     }
     
-    public function generate(Request $request)
-    {
-        try {
-            $transaction = TransactionRepository::findBy([
-                ['id', Crypt::decrypt($request->id)]
-            ]);
+    // public function generate(Request $request)
+    // {
+    //     try {
+    //         $transaction = TransactionRepository::findBy([
+    //             ['id', Crypt::decrypt($request->id)]
+    //         ]);
             
-            if(!$transaction || $transaction->payment_status !== Transaction::PAYMENT_STATUS_PAID || !$transaction->booking_code)
-            {
-                return redirect()->route('public.index');
-            }
-            $qrCode = QrCode::size(400)->generate($transaction->booking_code);
+    //         if(!$transaction || $transaction->payment_status !== Transaction::PAYMENT_STATUS_PAID || !$transaction->booking_code)
+    //         {
+    //             return redirect()->route('public.index');
+    //         }
+    //         $qrCode = QrCode::size(400)->generate($transaction->booking_code);
 
-            return view('app.service.generate-qr.index', ["qrCode" => $qrCode, "code" => $transaction->booking_code]);
-        } catch (DecryptException $e) {
-            return redirect()->route('public.index');
-        }
-    }
+    //         return view('app.service.generate-qr.index', ["qrCode" => $qrCode, "code" => $transaction->booking_code]);
+    //     } catch (DecryptException $e) {
+    //         return redirect()->route('public.index');
+    //     }
+    // }
     
     public function product_order(Request $request)
     {
@@ -70,6 +70,11 @@ class PublicController extends Controller
     public function order_check(Request $request)
     {
         return view('app.public.product-order.order-check', ["objId" => null]);
+    }
+
+    public function coba()
+    {
+        return view('app.components.coba');
     }
     
     public function booking_review(Request $request)

@@ -9,7 +9,7 @@ class ProductWarrantyController extends Controller
 {
     public function index()
     {
-        return view('app.master-data.product-warranty.index');
+        return view('app.components.coba');
     }
 
     public function create()
