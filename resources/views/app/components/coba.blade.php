@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Animasi Garis Panah</title>
+  <meta charset="UTF-8">
+  <title>Animasi Garis GSAP</title>
   <style>
     body {
       background: #111;
@@ -10,46 +10,52 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
+      margin: 0;
     }
+
     svg {
-      width: 500px;
+      width: 600px;
       height: 300px;
     }
+
     path {
       stroke: #00ffcc;
-      stroke-width: 3;
+      stroke-width: 4;
       fill: none;
-      marker-end: url(#arrowhead);
     }
   </style>
 </head>
 <body>
 
-<svg viewBox="0 0 500 300">
-  <defs>
-    {{-- <marker id="arrowhead" markerWidth="10" markerHeight="7" 
-            refX="10" refY="3.5" orient="auto">
-      <polygon points="0 0, 10 3.5, 0 7" fill="#00ffcc" />
-    </marker> --}}
-  </defs>
-  <path id="line" d="M 50 150 Q 250 50, 450 150" />
+<svg viewBox="0 0 600 200" preserveAspectRatio="none">
+  <path id="line" d="
+    M 0 100 
+    Q 50 50, 100 100 
+    T 200 100 
+    T 300 100 
+    T 400 100 
+    T 500 100 
+    T 600 100
+  " />
 </svg>
 
-<!-- ✅ GSAP + DrawSVGPlugin -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/DrawSVGPlugin.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/DrawSVGPlugin.min.js"></script>
 
 <script>
-  // 🟢 WAJIB! Daftarkan plugin dulu
-  gsap.registerPlugin(DrawSVGPlugin);
-
-  // 🔄 Lalu baru bisa dipakai
+ // use a script tag or an external JS file
+ document.addEventListener("DOMContentLoaded", (event) => {
+  gsap.registerPlugin(DrawSVGPlugin)
+  
+  // ✅ Animasi
   gsap.from("#line", {
-    duration: 3,
+    duration: 2,
     drawSVG: "0%",
-    ease: "power1.inOut"
+    ease: "power2.inOut"
   });
-</script>
+ });
 
+</script>
 </body>
 </html>
