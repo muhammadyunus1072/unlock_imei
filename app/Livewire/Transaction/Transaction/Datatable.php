@@ -156,31 +156,26 @@ class Datatable extends Component
                 }
             ],
             [
-                'key' => 'grand_total',
-                'name' => 'Grand Total',
+                'key' => 'total_amount',
+                'name' => 'Harga Total',
                 'render' => function($item)
                 {
-                    return "Rp ".numberFormat($item->grand_total);
+                    return "Rp ".numberFormat($item->total_amount);
                 }
             ],
             [
-                'key' => 'payment_method_name',
+                'sortable' => false,
+                'searchable' => false,
                 'name' => 'Metode Pembayaran',
                 'render' => function($item)
                 {
-                    $html = "<p class='mb-0'>{$item->payment_method_name}</p>";
-                    $html .= "<span class='badge badge-{$item->lastStatus->getStatusStyle()}'>" . $item->lastStatus->name . "</span>";
+                    $html = "";
+                    foreach ($item->transactionStatuses as $key => $status) {
+                        $html .= "<span class='mb-1 badge badge-{$status->getStatusStyle()}'>" . $status->name . "</span></br>";
+                    }
 
                     return $html;
                 }
-            ],
-            [
-                'key' => 'verified_at',
-                'name' => 'Verifikasi',
-                'render' => function ($item) {
-                    $html = $item->verified_at ? Carbon::parse($item->verified_at)->translatedFormat('d/m/Y H:i') : "<span class='badge badge-warning ms-1'>Belum Check In</span>";
-                    return $html;
-                },
             ],
         ];
     }

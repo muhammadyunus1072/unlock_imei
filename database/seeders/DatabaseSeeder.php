@@ -30,7 +30,7 @@ class DatabaseSeeder extends Seeder
         // DEMO
         $this->call([
             PaymentMethodSeeder::class,
-            ProductSeeder::class,
+            // ProductSeeder::class,
             // TransactionSeeder::class,
         ]);
     }

@@ -8,5 +8,6 @@ Route::middleware(['auth', 'access_permission'])->group(function () {
     Route::group(["controller" => SettingController::class], function () {
         // Core
         Route::get('/setting_send_whatsapp', 'send_whatsapp')->name('setting_send_whatsapp.index');
+        Route::get('/setting_finance', 'finance')->name('setting_finance.index');
     });
 });

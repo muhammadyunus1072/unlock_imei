@@ -33,6 +33,7 @@ class Detail extends Component
     // Transaction Information
     public $transaction;
     public $next_statuses = [];
+    public $transaction_statuses = [];
     public $transaction_details = [];
     public $transaction_payments = [];
     public $send_whatsapps = [];
@@ -140,6 +141,60 @@ class Detail extends Component
         );
     }
 
+
+    public function paidHandler()
+    {
+        if(!$this->isVerified)
+        {
+            return;
+        }
+
+        try {       
+            DB::beginTransaction();
+            
+            $validatedData = [
+                'status' => TransactionPayment::STATUS_PAID,
+                'amount' => imaskToValue($this->amount_due),
+                
+                'transaction_id' => simple_decrypt($this->objId),
+                'payment_method_id' => 1,
+                'note' => 'DIBAYAR LUNAS OLEH ADMIN',
+            ];
+            
+            $transactionPayment = TransactionPaymentRepository::create($validatedData);
+            $this->getData();
+            Alert::success($this, 'Berhasil', 'Berhasil Dilunasi');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Alert::fail($this, "Gagal", $e->getMessage());
+        }
+    }
+
+    #[On('on-paid-dialog-confirm')]
+    public function onPaidDialogConfirm()
+    {
+        $this->paidHandler();
+    }
+
+    #[On('on-paid-dialog-cancel')]
+    public function onPaidDialogCancel()
+    {
+    }
+
+    public function showPaidDialog()
+    {
+        Alert::confirmation(
+            $this,
+            Alert::ICON_QUESTION,
+            "Batalkan Data",
+            "Apakah Anda Yakin Ingin Melunasi Transaksi Ini ?",
+            "on-paid-dialog-confirm",
+            "on-paid-dialog-cancel",
+            "Ya",
+            "Tidak",
+        );
+    }
+
     public function deleteStatus($id)
     {
         try {
@@ -160,6 +215,7 @@ class Detail extends Component
     {
         $transaction = TransactionRepository::find(simple_decrypt($this->objId));
         $this->transaction = $transaction;
+        $this->transaction_statuses = $transaction->transactionStatuses;
         $this->canUpdateStatus = $transaction->whereHas('transactionStatuses', function($query) {
             $query->where('name', TransactionStatus::STATUS_VERIFIED);
         })->orWhereHas('transactionStatuses', function($query) {
@@ -198,6 +254,7 @@ class Detail extends Component
                 'image_url' => generateUrl($item['image'], FilePathHelper::FILE_CUSTOMER_TRANSACTION_PAYMENT),
                 'payment_method_name' => $item['payment_method_name'],
                 'amount' => valueToImask($item['amount']),
+                'note' => $item['note'],
                 'status' => $item['status'],
                 'style' => $item->getStatusStyle(),
             ];

@@ -13,7 +13,8 @@ class ServiceHelper
     public static function generateOrderVerificationMessage($transaction)
     {
        $message = [
-    "*Verifikasi Pesanan Anda!*  
+    "VERIFIKASI PESANAN
+*Verifikasi Pesanan Anda!*  
 Nomor Pesanan: *{$transaction->number}*  
 Tanggal: *".Carbon::parse($transaction->created_at)->translatedFormat('d F Y, H:i')."*  
 Nama Pelanggan: *{$transaction->customer_name}*  
@@ -25,7 +26,8 @@ Total: *Rp. ".numberFormat($transaction->transactionDetails->sum('product_price'
 Silakan klik link berikut untuk melakukan verifikasi:  
 ".route('transaction.edit', ['id' => simple_encrypt($transaction->id)]),
 
-    "*Halo! Ini adalah konfirmasi pesanan Anda.*  
+    "VERIFIKASI PESANAN
+*Halo! Ini adalah konfirmasi pesanan Anda.*  
 Kode: *{$transaction->number}*  
 Dipesan pada: *".Carbon::parse($transaction->created_at)->translatedFormat('d F Y, H:i')."*  
 Atas nama: *{$transaction->customer_name}*  
@@ -37,7 +39,8 @@ Total Pembayaran: *Rp. ".numberFormat($transaction->transactionDetails->sum('pro
 Klik link ini untuk verifikasi:  
 ".route('transaction.edit', ['id' => simple_encrypt($transaction->id)]),
 
-    "*Pesanan Anda sedang diproses!*  
+    "VERIFIKASI PESANAN
+*Pesanan Anda sedang diproses!*  
 Nomor: *{$transaction->number}*  
 Tanggal Pesanan: *".Carbon::parse($transaction->created_at)->translatedFormat('d F Y, H:i')."*  
 Nama: *{$transaction->customer_name}*  
@@ -49,7 +52,8 @@ Total: *Rp. ".numberFormat($transaction->transactionDetails->sum('product_price'
 Verifikasi lewat link ini:  
 ".route('transaction.edit', ['id' => simple_encrypt($transaction->id)]),
 
-    "*Konfirmasi Pembelian*  
+    "VERIFIKASI PESANAN
+*Konfirmasi Pembelian*  
 Pesanan: *{$transaction->number}*  
 Tgl: *".Carbon::parse($transaction->created_at)->translatedFormat('d F Y, H:i')."*  
 Nama Customer: *{$transaction->customer_name}*  
@@ -61,7 +65,8 @@ Total Biaya: *Rp. ".numberFormat($transaction->transactionDetails->sum('product_
 Verifikasi di:  
 ".route('transaction.edit', ['id' => simple_encrypt($transaction->id)]),
 
-    "*Detail Pemesanan Anda*  
+    "VERIFIKASI PESANAN
+*Detail Pemesanan Anda*  
 Nomor: *{$transaction->number}*  
 Tanggal: *".Carbon::parse($transaction->created_at)->translatedFormat('d F Y, H:i')."*  
 Nama Anda: *{$transaction->customer_name}*  
@@ -73,7 +78,8 @@ Total: *Rp. ".numberFormat($transaction->transactionDetails->sum('product_price'
 Link verifikasi:  
 ".route('transaction.edit', ['id' => simple_encrypt($transaction->id)]),
 
-    "*Pesanan Telah Kami Terima!*  
+    "VERIFIKASI PESANAN
+*Pesanan Telah Kami Terima!*  
 Nomor: *{$transaction->number}*  
 Tanggal: *".Carbon::parse($transaction->created_at)->translatedFormat('d F Y, H:i')."*  
 Nama: *{$transaction->customer_name}*  
@@ -85,7 +91,8 @@ Total: *Rp. ".numberFormat($transaction->transactionDetails->sum('product_price'
 Silakan verifikasi melalui link ini:  
 ".route('transaction.edit', ['id' => simple_encrypt($transaction->id)]),
 
-    "*Terima kasih telah memesan!*  
+    "VERIFIKASI PESANAN
+*Terima kasih telah memesan!*  
 Kode Pesanan: *{$transaction->number}*  
 Waktu: *".Carbon::parse($transaction->created_at)->translatedFormat('d F Y, H:i')."*  
 Nama: *{$transaction->customer_name}*  
@@ -97,7 +104,8 @@ Jumlah Bayar: *Rp. ".numberFormat($transaction->transactionDetails->sum('product
 Verifikasi via:  
 ".route('transaction.edit', ['id' => simple_encrypt($transaction->id)]),
 
-    "*📦 Konfirmasi Pesanan*  
+    "VERIFIKASI PESANAN
+*📦 Konfirmasi Pesanan*  
 Nomor Order: *{$transaction->number}*  
 Tanggal Order: *".Carbon::parse($transaction->created_at)->translatedFormat('d F Y, H:i')."*  
 Nama Pemesan: *{$transaction->customer_name}*  
@@ -109,7 +117,8 @@ Total Pembayaran: *Rp. ".numberFormat($transaction->transactionDetails->sum('pro
 Cek dan verifikasi di sini:  
 ".route('transaction.edit', ['id' => simple_encrypt($transaction->id)]),
 
-    "*🎉 Terima Kasih! Pesanan Anda Sudah Masuk.*  
+    "VERIFIKASI PESANAN
+*🎉 Terima Kasih! Pesanan Anda Sudah Masuk.*  
 Nomor: *{$transaction->number}*  
 Tanggal: *".Carbon::parse($transaction->created_at)->translatedFormat('d F Y, H:i')."*  
 Nama Customer: *{$transaction->customer_name}*  
@@ -121,7 +130,8 @@ Total: *Rp. ".numberFormat($transaction->transactionDetails->sum('product_price'
 Verifikasi dengan klik:  
 ".route('transaction.edit', ['id' => simple_encrypt($transaction->id)]),
 
-    "*Halo, ini detail pesanan Anda!*  
+    "VERIFIKASI PESANAN
+*Halo, ini detail pesanan Anda!*  
 Nomor: *{$transaction->number}*  
 Waktu Pesanan: *".Carbon::parse($transaction->created_at)->translatedFormat('d F Y, H:i')."*  
 Nama Lengkap: *{$transaction->customer_name}*  
@@ -268,6 +278,134 @@ return $message[rand(0, count($message) - 1)];
 
         // return $message[rand(0, count($message) - 1)];
     }
+    
+    public static function generatePaymentVerificationMessage($transaction)
+{
+    $message = [
+        "*🧾 VERIFIKASI PEMBAYARAN*  
+Pesanan No: *{$transaction->number}*  
+Tanggal: *".Carbon::parse($transaction->created_at)->translatedFormat('d F Y, H:i')."*  
+Nama Pelanggan: *{$transaction->customer_name}*  
+Nomor WA: *62{$transaction->customer_phone}*  
+Produk: *{$transaction->transactionDetails[0]->product_name}*  
+Jumlah IMEI: *".numberFormat($transaction->transactionDetails->count())."*  
+Total Pembayaran: *Rp. ".numberFormat($transaction->transactionDetails->sum('product_price'))."*  
+
+Pembayaran telah dilakukan. Silakan verifikasi melalui:  
+".route('public.order_payment', ['id' => simple_encrypt($transaction->id)]),
+
+        "*📥 Konfirmasi Pembayaran Masuk*  
+Nomor Pesanan: *{$transaction->number}*  
+Tanggal Pemesanan: *".Carbon::parse($transaction->created_at)->translatedFormat('d F Y, H:i')."*  
+Nama: *{$transaction->customer_name}*  
+WA: *62{$transaction->customer_phone}*  
+Item: *{$transaction->transactionDetails[0]->product_name}*  
+Jumlah: *".numberFormat($transaction->transactionDetails->count())."*  
+Total: *Rp. ".numberFormat($transaction->transactionDetails->sum('product_price'))."*  
+
+Pelanggan telah membayar. Silakan segera verifikasi di:  
+".route('public.order_payment', ['id' => simple_encrypt($transaction->id)]),
+
+        "*💳 Pembayaran Telah Dilakukan*  
+Pesanan No: *{$transaction->number}*  
+Tgl: *".Carbon::parse($transaction->created_at)->translatedFormat('d F Y, H:i')."*  
+Nama: *{$transaction->customer_name}*  
+No WA: *62{$transaction->customer_phone}*  
+Produk: *{$transaction->transactionDetails[0]->product_name}*  
+IMEI: *".numberFormat($transaction->transactionDetails->count())."*  
+Total: *Rp. ".numberFormat($transaction->transactionDetails->sum('product_price'))."*  
+
+Silakan verifikasi pembayaran via link berikut:  
+".route('public.order_payment', ['id' => simple_encrypt($transaction->id)]),
+
+        "*🔔 Notifikasi Pembayaran*  
+Nomor Order: *{$transaction->number}*  
+Tanggal Order: *".Carbon::parse($transaction->created_at)->translatedFormat('d F Y, H:i')."*  
+Nama Pemesan: *{$transaction->customer_name}*  
+No HP: *62{$transaction->customer_phone}*  
+Produk: *{$transaction->transactionDetails[0]->product_name}*  
+Jumlah IMEI: *".numberFormat($transaction->transactionDetails->count())."*  
+Jumlah Bayar: *Rp. ".numberFormat($transaction->transactionDetails->sum('product_price'))."*  
+
+Lakukan verifikasi pembayaran sekarang:  
+".route('public.order_payment', ['id' => simple_encrypt($transaction->id)]),
+
+        "*✅ Pelanggan Telah Melakukan Pembayaran*  
+Detail pesanan sebagai berikut:  
+- No Pesanan: *{$transaction->number}*  
+- Tanggal: *".Carbon::parse($transaction->created_at)->translatedFormat('d F Y, H:i')."*  
+- Nama: *{$transaction->customer_name}*  
+- WA: *62{$transaction->customer_phone}*  
+- Produk: *{$transaction->transactionDetails[0]->product_name}*  
+- IMEI: *".numberFormat($transaction->transactionDetails->count())."*  
+- Total: *Rp. ".numberFormat($transaction->transactionDetails->sum('product_price'))."*  
+
+Verifikasi di link berikut:  
+".route('public.order_payment', ['id' => simple_encrypt($transaction->id)]),
+
+        "*📨 Pembayaran Diterima*  
+Pesanan *{$transaction->number}* telah dibayar oleh pelanggan.  
+Tanggal Pemesanan: *".Carbon::parse($transaction->created_at)->translatedFormat('d F Y, H:i')."*  
+Nama: *{$transaction->customer_name}*  
+WA: *62{$transaction->customer_phone}*  
+Produk: *{$transaction->transactionDetails[0]->product_name}*  
+IMEI: *".numberFormat($transaction->transactionDetails->count())."*  
+Total: *Rp. ".numberFormat($transaction->transactionDetails->sum('product_price'))."*  
+
+Segera verifikasi pembayaran melalui:  
+".route('public.order_payment', ['id' => simple_encrypt($transaction->id)]),
+
+        "*🔎 Cek Pembayaran Masuk*  
+Pesanan dengan no *{$transaction->number}* dari *{$transaction->customer_name}* telah dibayar.  
+Tanggal: *".Carbon::parse($transaction->created_at)->translatedFormat('d F Y, H:i')."*  
+WA: *62{$transaction->customer_phone}*  
+Produk: *{$transaction->transactionDetails[0]->product_name}*  
+IMEI: *".numberFormat($transaction->transactionDetails->count())."*  
+Total: *Rp. ".numberFormat($transaction->transactionDetails->sum('product_price'))."*  
+
+Tautan verifikasi:  
+".route('public.order_payment', ['id' => simple_encrypt($transaction->id)]),
+
+        "*🛠️ Verifikasi Diperlukan*  
+Nomor Pesanan: *{$transaction->number}*  
+Tanggal: *".Carbon::parse($transaction->created_at)->translatedFormat('d F Y, H:i')."*  
+Nama Customer: *{$transaction->customer_name}*  
+Nomor WhatsApp: *62{$transaction->customer_phone}*  
+Produk: *{$transaction->transactionDetails[0]->product_name}*  
+Total IMEI: *".numberFormat($transaction->transactionDetails->count())."*  
+Jumlah Transfer: *Rp. ".numberFormat($transaction->transactionDetails->sum('product_price'))."*  
+
+Verifikasi sekarang di:  
+".route('public.order_payment', ['id' => simple_encrypt($transaction->id)]),
+
+        "*⚠️ Pembayaran Harus Dikonfirmasi*  
+Detail:  
+No Order: *{$transaction->number}*  
+Tanggal: *".Carbon::parse($transaction->created_at)->translatedFormat('d F Y, H:i')."*  
+Nama: *{$transaction->customer_name}*  
+No WA: *62{$transaction->customer_phone}*  
+Produk: *{$transaction->transactionDetails[0]->product_name}*  
+IMEI: *".numberFormat($transaction->transactionDetails->count())."*  
+Total Bayar: *Rp. ".numberFormat($transaction->transactionDetails->sum('product_price'))."*  
+
+Silakan buka link berikut untuk verifikasi:  
+".route('public.order_payment', ['id' => simple_encrypt($transaction->id)]),
+
+        "*📍 Pembayaran Baru dari Pelanggan*  
+Pelanggan dengan nama *{$transaction->customer_name}* telah membayar pesanan *{$transaction->number}*.  
+Tanggal: *".Carbon::parse($transaction->created_at)->translatedFormat('d F Y, H:i')."*  
+Nomor WA: *62{$transaction->customer_phone}*  
+Produk: *{$transaction->transactionDetails[0]->product_name}*  
+Jumlah: *".numberFormat($transaction->transactionDetails->count())."* IMEI  
+Total: *Rp. ".numberFormat($transaction->transactionDetails->sum('product_price'))."*  
+
+Lakukan pengecekan dan verifikasi melalui:  
+".route('public.order_payment', ['id' => simple_encrypt($transaction->id)]),
+    ];
+
+    return $message[rand(0, count($message) - 1)];
+}
+
     
     public static function send($data, $settings)
     {

@@ -61,18 +61,16 @@ return [
             'route'  => 'setting_send_whatsapp.index',
             'icon' => 'ki-duotone ki-setting-2',
         ],
-        
+
         [
-            // 'id' => 'menu_admin'
+            'text' => 'Pengaturan Keuangann',
+            'route'  => 'setting_finance.index',
+            'icon' => 'ki-duotone ki-setting-2',
+        ],
+        [
             'text' => 'Transaksi',
-            'icon' => 'ki-duotone ki-shield-tick',
-            'submenu' => [
-                [
-                    'text' => 'Management Transaksi',
-                    'route' => 'transaction.index',
-                    'icon_color' => 'success',
-                ],
-            ],
+            'route'  => 'transaction.index',
+            'icon' => 'ki-duotone ki-setting-2',
         ],
         [
             // 'id' => 'menu_admin'

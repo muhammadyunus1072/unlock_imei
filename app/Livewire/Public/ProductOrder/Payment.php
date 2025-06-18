@@ -91,9 +91,11 @@ class Payment extends Component
         if (!$this->objId) {
             return;
         }
-        $this->transaction = TransactionRepository::findBy([
-            ['id', simple_decrypt($this->objId)]
-        ]);
+        $this->transaction = Transaction::with('transactionStatuses', 'transactionDetails')
+        ->where('id', simple_decrypt($this->objId))->first();
+        // TransactionRepository::findBy([
+        //     ['id', simple_decrypt($this->objId)]
+        // ]);
         $this->calculatedTotal();
     }
 

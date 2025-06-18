@@ -245,98 +245,113 @@
 
             <div class="row mt-5">
                 <h3>Riwayat Pembayaran</h3>
-				<table id="master-table" width="100%" class="table table-bordered" style="border-collapse: collapse; border-spacing: 0;">
-					<thead>
-						<tr>
-							<th class="text-center" style="width: 20px;">Bukti Bayar</th>
-							<th class="text-center" style="width: 120px;">Nilai</th>
-							<th class="text-center" style="width: 80px;">Metode</th>
-							<th class="text-center" style="width: 50px;">Aksi</th>
-						</tr>
-					</thead>
-					<tbody>
-                        @foreach ($transaction_payments as $index => $item)
+
+                <div class="table-responsive">
+                    <table class="table table-bordered" style="border-collapse: collapse; border-spacing: 0;">
+                        <thead>
                             <tr>
-                                <td>
-                                    <a class="d-inline overlay col-auto" data-fslightbox="{{ rand() }}" href="{{ $item['image_url'] }}" style="height: 80px !important; width: 80px !important; z-index: 99;">
-                                        <!--begin::Image-->
-                                        <img class="img-responsive img-detail rounded-3" width="80" height="80" src="{{ $item['image_url'] }}">
-                                        <!--end::Image-->
-                                        <!--begin::Action-->
-                                        <div class="overlay-layer card-rounded bg-transparent">
-                                                <i class="bi bi-eye-fill text-white fs-5 eye-button"></i>
-                                        </div>
-                                        <!--end::Action-->
-                                    </a>
-                                </td>
-                                <td>
-                                    <input type="text" class="form-control currency" wire:model="transaction_payments.{{$index}}.amount" />
-                                </td>
-                                <td>
-                                    <p class="" >{{$transaction_payments[$index]['payment_method_name']}}</p>
-                                </td>
-                                <td>
-                                    @if ($item['status'] == App\Models\Transaction\TransactionPayment::STATUS_PENDING)
-                                        
-                                        <button wire:click="showVerifyPaymentDialog('{{$index}}')" type="button" class="btn btn-primary btn-sm my-1"> 
-                                            <i class="ki-duotone ki-check">
-                                                <span class="path1"></span>
-                                                <span class="path2"></span>
-                                                <span class="path3"></span>
-                                                <span class="path4"></span>
-                                                <span class="path5"></span>
-                                            </i>
-                                        </button>
-                                        <button wire:click="showDeletePaymentDialog('{{$index}}')" type="button" class="btn btn-danger btn-sm my-1"> 
-                                            <i class="ki-duotone ki-time">
+                                <th class="text-center" style="width: 20px;">Bukti Bayar</th>
+                                <th class="text-center" style="width: 120px;">Nilai</th>
+                                <th class="text-center" style="width: 80px;">Metode</th>
+                                <th class="text-center" style="width: 80px;">Catatan</th>
+                                <th class="text-center" style="width: 50px;">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($transaction_payments as $index => $item)
+                                <tr>
+                                    <td>
+                                        <a class="d-inline overlay col-auto" data-fslightbox="{{ rand() }}" href="{{ $item['image_url'] }}" style="height: 80px !important; width: 80px !important; z-index: 99;">
+                                            <!--begin::Image-->
+                                            <img class="img-responsive img-detail rounded-3" width="80" height="80" src="{{ $item['image_url'] }}">
+                                            <!--end::Image-->
+                                            <!--begin::Action-->
+                                            <div class="overlay-layer card-rounded bg-transparent">
+                                                    <i class="bi bi-eye-fill text-white fs-5 eye-button"></i>
+                                            </div>
+                                            <!--end::Action-->
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control currency" wire:model="transaction_payments.{{$index}}.amount" style="width: 100px"/>
+                                    </td>
+                                    <td>
+                                        <p class="" >{{$transaction_payments[$index]['payment_method_name']}}</p>
+                                    </td>
+                                    <td>
+                                        <p class="" >{{$transaction_payments[$index]['note']}}</p>
+                                    </td>
+                                    <td>
+                                        @if ($item['status'] == App\Models\Transaction\TransactionPayment::STATUS_PENDING)
+                                            
+                                            <button wire:click="showVerifyPaymentDialog('{{$index}}')" type="button" class="btn btn-primary btn-sm my-1"> 
+                                                <i class="ki-duotone ki-check">
                                                     <span class="path1"></span>
                                                     <span class="path2"></span>
                                                     <span class="path3"></span>
                                                     <span class="path4"></span>
                                                     <span class="path5"></span>
                                                 </i>
-                                        </button>
-                                        
-                                    @else
-                                        <span class="badge bg-{{$item['style']}} text-white">{{$item['status']}}</span>
-                                    @endif
-                                </td>
-                            </tr>
-                        @endforeach
-					</tbody>
-				</table>
+                                            </button>
+                                            <button wire:click="showDeletePaymentDialog('{{$index}}')" type="button" class="btn btn-danger btn-sm my-1"> 
+                                                <i class="ki-duotone ki-time">
+                                                        <span class="path1"></span>
+                                                        <span class="path2"></span>
+                                                        <span class="path3"></span>
+                                                        <span class="path4"></span>
+                                                        <span class="path5"></span>
+                                                    </i>
+                                            </button>
+                                            
+                                        @else
+                                            <span class="badge bg-{{$item['style']}} text-white">{{$item['status']}}</span>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+                @if (! $transaction_statuses->contains('name', \App\Models\Transaction\TransactionStatus::STATUS_PAID))
+                    <div class="row mx-auto w-75">
+                        <button type="button" class="btn btn-success btn-sm" wire:click="showPaidDialog">Dibayar LUNAS</button>
+                    </div>
+                @endif
             </div>
 
             <div class="row mt-5">
                 <h3>Riwayat Notifikasi</h3>
-				<table id="master-table" width="100%" class="table table-bordered" style="border-collapse: collapse; border-spacing: 0;">
-					<thead>
-						<tr>
-							<th class="text-center" style="width: 20px;">Tujuan</th>
-							<th class="text-center" style="width: 120px;">Jenis Pesan</th>
-							<th class="text-center" style="width: 80px;">Status</th>
-							<th class="text-center" style="width: 80px;">Aksi</th>
-						</tr>
-					</thead>
-					<tbody>
-                        @foreach ($send_whatsapps as $index => $item)
+                
+                <div class="table-responsive">
+                    <table class="table table-bordered" style="border-collapse: collapse; border-spacing: 0;">
+                        <thead>
                             <tr>
-                                <td>
-                                    <p class="" >{{$item['phone']}}</p>
-                                </td>
-                                <td>
-                                    <p class="" >{{$item['note']}}</p>
-                                </td>
-                                <td>
-                                    <p class="badge bg-{{$item['style']}}" >{{$item['status']}}</p>
-                                </td>
-                                <td>
-                                    <a target="_BLANK" href="https://api.whatsapp.com/send/?phone={{$item['phone']}}&text={{$item['message']}}" class="btn btn-primary btn-sm">Kirim Manual</a>
-                                </td>
+                                <th class="text-center" style="width: 20px;">Tujuan</th>
+                                <th class="text-center" style="width: 120px;">Jenis Pesan</th>
+                                <th class="text-center" style="width: 80px;">Status</th>
+                                <th class="text-center" style="width: 80px;">Aksi</th>
                             </tr>
-                        @endforeach
-					</tbody>
-				</table>
+                        </thead>
+                        <tbody>
+                            @foreach ($send_whatsapps as $index => $item)
+                                <tr>
+                                    <td>
+                                        <p class="" >{{$item['phone']}}</p>
+                                    </td>
+                                    <td>
+                                        <p class="" >{{$item['note']}}</p>
+                                    </td>
+                                    <td>
+                                        <p class="badge bg-{{$item['style']}}" >{{$item['status']}}</p>
+                                    </td>
+                                    <td>
+                                        <a target="_BLANK" href="https://api.whatsapp.com/send/?phone={{$item['phone']}}&text={{$item['message']}}" class="btn btn-primary btn-sm">Kirim Manual</a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

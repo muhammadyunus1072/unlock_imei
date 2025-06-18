@@ -62,7 +62,7 @@
                                                     <td class="my-0 py-0 fw-bolder text-end">Status</td>
                                                     <td class="my-0 py-0 text-end"><span class="fs-5 badge badge-{{$transaction->lastStatus->getStatusStyle()}}"> {{$transaction->lastStatus->name}} </span></td>
                                                 </tr>
-                                                @if (!$amount_due)
+                                                @if ($transaction->transactionStatuses->contains('name', \App\Models\Transaction\TransactionStatus::STATUS_COMPLETED))
                                                     <tr class="fs-6">
                                                         <td class="my-0 py-0 fw-bolder text-end">Garansi</td>
                                                         <td class="my-0 py-0 text-end">{{ Carbon\Carbon::now()->addDays($transaction->transactionDetails[0]->product->warranty_days)->translatedFormat('d F Y') }}</td>
@@ -94,13 +94,13 @@
                                                     <div class="d-flex align-items-center">
                                                         <!--begin::Title-->
                                                         <div class="ms-5">
-                                                            <div class="fw-bold">{{ $transaction->transactionDetails[0]->product_name }}</div>
+                                                            <div class="fw-bold">{{ $transaction->transactionDetails[0]->product_name }} | Garansi @currency($transaction->transactionDetails[0]->product_warranty_days) Hari</div>
                                                         </div>
                                                         <!--end::Title-->
                                                     </div>
                                                 </td>
                                                 <td class="text-end">@currency($transaction->transactionDetails->count())</td>
-                                                <td class="text-end">Rp @currency($transaction->transactionDetails[0]->product_price)</td>
+                                                <td class="text-end">@currency($transaction->transactionDetails[0]->product_price)</td>
                                                 <td class="text-end">Rp @currency($transaction->transactionDetails->sum('product_price'))</td>
                                             </tr>
                                             <tr>
@@ -123,7 +123,7 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                @if ($amount_due)
+                                @if (!$transaction->transactionStatuses->contains('name', \App\Models\Transaction\TransactionStatus::STATUS_PAID))
                                     <!--begin::Table-->
                                     <div class="col-auto bg-light p-3">
                                         <h3 class="fs-4 fw-normal mb-3">Jumlah yang harus dibayar</h3>
@@ -164,7 +164,7 @@
                             <!-- end::Pint--> 
                         </div>
                         <!-- end::Actions-->
-                        @if ($amount_due)
+                        @if (!$transaction->transactionStatuses->contains('name', \App\Models\Transaction\TransactionStatus::STATUS_PAID))
                         <!-- begin::Actions-->
                         <div class="my-1 me-5">
                             <!-- begin::Pint-->

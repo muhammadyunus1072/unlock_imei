@@ -36,10 +36,10 @@
 @section('content')
     <div class="card">
         <div class="card-header">
-            <livewire:transaction.transaction.filter lazy>
+            <livewire:transaction.transaction.filter lazy :status="$status">
         </div>
         <div class="card-body">
-            <livewire:transaction.transaction.datatable lazy>
+            <livewire:transaction.transaction.datatable lazy :status="$status">
         </div>
     </div>
 @stop

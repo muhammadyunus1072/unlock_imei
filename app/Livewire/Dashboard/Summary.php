@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Dashboard;
 
+use App\Models\Transaction\TransactionStatus;
 use App\Repositories\Dashboard\SummaryRepository;
 use Livewire\Component;
 use App\Traits\Livewire\WithDatatableHeader;
@@ -19,12 +20,14 @@ class Summary extends Component
             [
                 "col" => 6,
                 "name" => "Menunggu Verfikasi",
-                "value" => $amountNotVerified
+                "value" => $amountNotVerified,
+                'url' => route('transaction.index', ['status' => TransactionStatus::STATUS_NOT_VERIFIED])
             ],
             [
                 "col" => 6,
                 "name" => "Menunggu Pembayaran",
-                "value" => $amountWaitingPayment
+                "value" => $amountWaitingPayment,
+                'url' => route('transaction.index', ['status' => TransactionStatus::STATUS_AWAITING_PAYMENT])
             ],
         ];
     }

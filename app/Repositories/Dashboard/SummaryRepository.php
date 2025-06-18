@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Dashboard;
 
+use App\Models\Service\SendWhatsapp;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Models\Transaction\Transaction;
@@ -23,8 +24,7 @@ class SummaryRepository
                 $query->where('name', TransactionStatus::STATUS_NOT_VERIFIED);
             })
             ->whereDoesntHave('transactionStatuses', function ($q) {
-                $q->where('name', TransactionStatus::STATUS_VERIFIED)
-                    ->where('name', TransactionStatus::STATUS_ACTIVED);
+                $q->where('name', TransactionStatus::STATUS_VERIFIED);
             })
             ->joinSub($queryDetail, 'detail', function ($join) {
                 $join->on('transactions.id', '=', 'detail.transaction_id');
@@ -39,7 +39,8 @@ class SummaryRepository
         )
         ->groupBy('transaction_id');
         return Transaction::whereHas('transactionStatuses', function ($query) {
-                $query->where('name', TransactionStatus::STATUS_ACTIVED);
+                $query->where('name', TransactionStatus::STATUS_ACTIVED)
+                    ->orWhere('name', TransactionStatus::STATUS_AWAITING_PAYMENT);
             })
             ->whereDoesntHave('transactionStatuses', function ($q) {
                 $q->where('name', TransactionStatus::STATUS_PAID);
@@ -119,6 +120,14 @@ class SummaryRepository
         // ->get();
     }
     // MONTHLY SUMMARY
+    public static function notificationCurrentMonth()
+    {
+        return SendWhatsapp::select('price')
+            ->where('status', 1)
+            ->whereMonth('created_at', now()->month)
+            ->whereYear('created_at', now()->year)
+            ->sum('price');
+    }
     public static function transactionCurrentMonth()
     {
         $queryDetail = TransactionDetail::select(
@@ -137,6 +146,7 @@ class SummaryRepository
             })
             ->get();
     }
+
     public static function transactionMonthly()
     {
         $queryDetail = TransactionDetail::select(
@@ -176,4 +186,39 @@ class SummaryRepository
             ->whereYear('created_at', now())
             ->get();
     }
+    public static function transactionByMonth()
+    {
+        $queryDetail = TransactionDetail::select(
+            'transaction_id',
+            DB::raw('COUNT(id) as qty')
+        )->groupBy('transaction_id');
+
+        $queryNotification = SendWhatsapp::select(
+            'transaction_id',
+            DB::raw('SUM(price) as price')
+        )
+        ->where('status', 1)
+        ->groupBy('transaction_id');
+
+        return Transaction::selectRaw("
+                MONTH(created_at) as month_number,
+                DATE_FORMAT(created_at, '%M') as month_name,
+                SUM(total_amount) as total_amount,
+                SUM(detail.qty) as total_transaction,
+                SUM(notification.price) as notification_price
+            ")
+            ->whereHas('transactionStatuses', function ($q) {
+                $q->where('name', TransactionStatus::STATUS_COMPLETED);
+            })
+            ->whereYear('created_at', now()->year)
+            ->joinSub($queryDetail, 'detail', function ($join) {
+                $join->on('transactions.id', '=', 'detail.transaction_id');
+            })
+            ->leftJoinSub($queryNotification, 'notification', function ($join) {
+                $join->on('transactions.id', '=', 'notification.transaction_id');
+            })
+            ->groupBy(DB::raw('MONTH(created_at), DATE_FORMAT(created_at, "%M")'))
+            ->orderBy(DB::raw('MONTH(created_at)'));
+    }
+
 }

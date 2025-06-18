@@ -24,6 +24,7 @@ class SendWhatsapp extends Model
         "data",
         "phone",
         "message",
+        "note",
     ];
     
     protected $guarded = ['id'];
@@ -61,7 +62,8 @@ class SendWhatsapp extends Model
         self::STATUS_SYSTEM_ERROR => 'System Error',
     ];
 
-    CONST TYPE_ORDER_VERIFICATION = 'PERMINTAAN VERIFIKASI';
+    CONST TYPE_ORDER_VERIFICATION = 'PERMINTAAN VERIFIKASI PESANAN';
+    CONST TYPE_PAYMENT_VERIFICATION = 'PERMINTAAN VERIFIKASI PEMBAYARAN';
     CONST TYPE_AWAITING_PAYMENT = 'MENUNGGU PEMBAYARAN';
 
     public function getStatusStyle(): string

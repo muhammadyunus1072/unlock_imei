@@ -3,10 +3,12 @@
 namespace App\Models\Transaction;
 
 use Carbon\Carbon;
+use App\Helpers\ServiceHelper;
 use App\Helpers\FilePathHelper;
 use App\Models\MasterData\Studio;
 use App\Models\MasterData\Product;
 use Illuminate\Support\Facades\DB;
+use App\Models\Service\SendWhatsapp;
 use Sis\TrackHistory\HasTrackHistory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
@@ -15,6 +17,7 @@ use App\Models\MasterData\ProductDetail;
 use App\Models\MasterData\ProductBookingTime;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Repositories\Service\SendWhatsapp\SendWhatsappRepository;
 
 class TransactionPayment extends Model
 {
@@ -64,11 +67,28 @@ class TransactionPayment extends Model
             $model->status = self::STATUS_PENDING;
             $model = $model->paymentMethod->saveInfo($model);
         });
+        self::created(function ($model) {
+            SendWhatsappRepository::create([
+                'phone' => $model->transaction->customer_phone,
+                'message' => ServiceHelper::generatePaymentVerificationMessage($model->transaction),
+                'status_text' => SendWhatsapp::STATUS_CREATED,
+                'transaction_id' => $model->transaction->id,
+                'remarks_id' => $model->id,
+                'remarks_type' => self::class,
+                'note' => SendWhatsapp::TYPE_PAYMENT_VERIFICATION,
+            ]);
+            if ($model->status === self::STATUS_PAID) {
+                $transaction = $model->transaction;
+                $amount_due = $transaction->amount_due - $model->amount;
+                $transaction->amount_due = $amount_due;
+                $transaction->save();
+            }
+        });
          self::updated(function ($model) {
             if ($model->status === self::STATUS_PAID) {
                 $transaction = $model->transaction;
                 $amount_due = $transaction->amount_due - $model->amount;
-                $transaction->amount_due = max(0, $amount_due);
+                $transaction->amount_due = $amount_due;
                 $transaction->save();
             }
         });

@@ -130,7 +130,7 @@
                     <!--begin::Mobile logo-->
                     <div class="d-flex align-items-center flex-grow-1 flex-lg-grow-0">
                         <a class="d-lg-none" href="{{ route('public.index') }}">
-                            <img alt="Logo" src="{{ asset(config('template.logo_panel')) }}" class="h-30px" />
+                            <img alt="Logo" src="{{ asset(config('template.logo_panel')) }}" style="height: 50px;" />
                         </a>
                     </div>
                     <!--end::Mobile logo-->
@@ -176,7 +176,7 @@
                                             <!--begin::Avatar-->
                                             <div class="symbol symbol-50px me-5">
                                                 <img alt="Logo"
-                                                    src="{{ asset(config('template.profile_image')) }}" />
+                                                    src="{{ asset(config('template.profile_image')) }}" style="height: 50px;"/>
                                             </div>
                                             <!--end::Avatar-->
                                             <!--begin::Username-->
@@ -238,9 +238,9 @@
                         <!--begin::Logo image-->
                         <a href="{{ route('public.index') }}">
                             <img alt="Logo" src="{{ asset(config('template.logo_panel')) }}"
-                                class="h-50px app-sidebar-logo-default p-1 rounded">
+                                class="h-60px app-sidebar-logo-default p-1 rounded">
                             <img alt="Logo" src="{{ asset(config('template.logo_auth')) }}"
-                                class="h-35px app-sidebar-logo-minimize p-1 rounded">
+                                class="h-55px app-sidebar-logo-minimize p-1 rounded">
                         </a>
                         <!--end::Logo image-->
 

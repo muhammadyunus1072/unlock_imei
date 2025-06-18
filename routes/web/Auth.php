@@ -4,7 +4,7 @@ use App\Http\Controllers\Auth\AuthController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
-    Route::get("/login", [AuthController::class, "login"])->name("login");
+    Route::get("/JDowUUcbh1jCdjFB9RN7ZVxTG4qjZb", [AuthController::class, "login"])->name("login");
     Route::get("/logout", [AuthController::class, "logout"])->name('logout');
     Route::get("/register", [AuthController::class, "register"])->name("register");
     Route::get('/forgot-password', [AuthController::class, 'forgotPassword'])->name('password.request');

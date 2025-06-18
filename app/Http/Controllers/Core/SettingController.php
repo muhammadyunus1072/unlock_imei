@@ -10,4 +10,8 @@ class SettingController extends Controller
     {
         return view('app.core.setting.send-whatsapp.index');
     }
+    public function finance()
+    {
+        return view('app.core.setting.finance.index');
+    }
 }

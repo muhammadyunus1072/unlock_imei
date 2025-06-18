@@ -27,7 +27,7 @@
             <h1 class="panel-configure__title mt-5">Ringkasan Keuangan Harian</h1>
             <livewire:dashboard.daily-summary>
 
-            <h1 class="panel-configure__title mt-5">Ringkasan Keuangan Bulanan</h1>
+            <h1 class="panel-configure__title mt-5">Ringkasan Keuangan Bulan Ini</h1>
             <livewire:dashboard.current-month-summary>
             <livewire:dashboard.monthly-summary>
 
