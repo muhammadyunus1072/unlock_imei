@@ -179,7 +179,7 @@
             </div>
             <!-- Cart -->
             <div class="cart mb-4 w-100 p-0">
-                <div class="p-5">
+                <div class="py-5">
                     <h2 class="cart-summary__title fs-1 p-0">Order Detail</h2>
                     <div class="form-group mb-0">
                         <table class="table w-auto my-0 py-0">
@@ -206,7 +206,7 @@
                     {{-- Main Product --}}
                     @foreach ($product_details as $index => $item)
                         <div class="row p-0 m-0 mt-4">
-                            <div class="col-lg-12 col-md-12 mb-2">
+                            <div class="col-lg-12 col-md-12 mb-2 p-0">
                                 <div class="row">
                                     <div class="order-item__description-name form-label d-flex justify-content-between">
                                         <span class="fs-3 fw-bold me-3">{{$index+1}}. Upload screenshot IMEI </span>
@@ -216,7 +216,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-12 col-md-12">
+                            <div class="col-lg-12 col-md-12 p-0">
                                 <div
                                 x-data="{
                                         isDragging: false,
