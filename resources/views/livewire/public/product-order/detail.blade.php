@@ -179,7 +179,7 @@
             </div>
             <!-- Cart -->
             <div class="cart mb-4 w-100 p-0">
-                <div class="py-5">
+                <div class="py-5 ps-md-4">
                     <h2 class="cart-summary__title fs-1 p-0">Order Detail</h2>
                     <div class="form-group mb-0">
                         <table class="table w-auto my-0 py-0">
