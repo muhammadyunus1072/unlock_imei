@@ -34,8 +34,8 @@ class PublicController extends Controller
         // $page = $request->page ?? null;
         $users = UserRepository::datatable(1)->paginate(10);
         $users->getCollection()->transform(function ($user) {
-            $user->first_name = "first $user";
-            $user->last_name = "last $user";
+            $user->first_name = "first $user->name";
+            $user->last_name = "last $user->name";
             $user->avatar = 'https://reqres.in/img/faces/10-image.jpg';
             return $user;
         });
