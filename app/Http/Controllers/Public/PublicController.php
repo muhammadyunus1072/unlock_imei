@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Crypt;
 use App\Models\Transaction\Transaction;
 use App\Events\TransactionPaidProcessed;
+use App\Repositories\Account\UserRepository;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Contracts\Encryption\DecryptException;
 use App\Repositories\Transaction\Transaction\TransactionRepository;
@@ -26,6 +27,19 @@ class PublicController extends Controller
     public function transaction()
     {
         return view('app.public.transaction.index');
+    }
+
+    public function get_api_users(Request $request)
+    {
+        // $page = $request->page ?? null;
+        $users = UserRepository::datatable(1)->paginate(10);
+        return response()->json([
+        'success' => true,
+        'current_page' => $users->currentPage(),
+        'last_page' => $users->lastPage(),
+        'total' => $users->total(),
+        'data' => $users->items(),
+    ]);
     }
 
     public function contact()
@@ -113,31 +127,31 @@ class PublicController extends Controller
                 throw new \Exception("Duplicate callback ignored for Invoice: $invoiceExternalId", 401);
             }
 
-            switch ($request->status) {
-                case 'EXPIRED':
-                    if ($transaction->payment_status !== Transaction::PAYMENT_STATUS_PAID) {
-                        $transaction->payment_status = Transaction::PAYMENT_STATUS_EXPIRED;
-                        $transaction->save();
-                        Log::info("Transaction expired: $invoiceExternalId", ['transaction_id' => $transaction->id]);
-                    }
-                    break;
+            // switch ($request->status) {
+            //     case 'EXPIRED':
+            //         if ($transaction->payment_status !== Transaction::PAYMENT_STATUS_PAID) {
+            //             $transaction->payment_status = Transaction::PAYMENT_STATUS_EXPIRED;
+            //             $transaction->save();
+            //             Log::info("Transaction expired: $invoiceExternalId", ['transaction_id' => $transaction->id]);
+            //         }
+            //         break;
         
-                case 'PAID':
-                    // If the payment is late (after expiry), update it to paid
-                    if ($transaction->payment_status === Transaction::PAYMENT_STATUS_EXPIRED) {
-                        Log::info("Late payment received for expired invoice: $invoiceExternalId", ['transaction_id' => $transaction->id]);
-                    }
+            //     case 'PAID':
+            //         // If the payment is late (after expiry), update it to paid
+            //         if ($transaction->payment_status === Transaction::PAYMENT_STATUS_EXPIRED) {
+            //             Log::info("Late payment received for expired invoice: $invoiceExternalId", ['transaction_id' => $transaction->id]);
+            //         }
         
-                    $transaction->payment_status = Transaction::PAYMENT_STATUS_PAID;
-                    $transaction->booking_code = substr(strtoupper(md5(uniqid() . 1)), 0, 3) . str_pad($transaction->id, 4, '0', STR_PAD_LEFT);;
-                    $transaction->scanned_at = null;
-                    $transaction->save();
+            //         $transaction->payment_status = Transaction::PAYMENT_STATUS_PAID;
+            //         $transaction->booking_code = substr(strtoupper(md5(uniqid() . 1)), 0, 3) . str_pad($transaction->id, 4, '0', STR_PAD_LEFT);;
+            //         $transaction->scanned_at = null;
+            //         $transaction->save();
         
-                    // Trigger event for further processing (e.g., email confirmation)
-                    // event(new TransactionPaidProcessed($transaction));
-                    break;
-                }
-            Log::info("Transaction updated: Invoice ID $invoiceExternalId, Status: $transaction->status");
+            //         // Trigger event for further processing (e.g., email confirmation)
+            //         // event(new TransactionPaidProcessed($transaction));
+            //         break;
+            //     }
+            // Log::info("Transaction updated: Invoice ID $invoiceExternalId, Status: $transaction->status");
             
             DB::commit();
             return response()->json(['message' => 'Callback received successfully'], 200);
