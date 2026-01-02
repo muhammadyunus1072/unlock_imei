@@ -31,10 +31,11 @@
     {{-- <livewire:public.product.data>      --}}
         {{-- Old --}}
         {{-- New --}}
-        <div class="text-center mb-4">
-        <h3 class="fs-2hx text-dark">Data Undangan</h3>
-    </div>
+        
         <livewire:public.undangan.datatable>     
             {{-- New --}}
+            <div class="text-center mb-4">
+        <h3 class="fs-2hx text-dark">Data Undangan</h3>
+    </div>
     
 @stop
