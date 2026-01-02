@@ -143,6 +143,63 @@
             {{ $data->links(data: ['scrollTo' => false]) }}
         </div>
     </div>
+    <!-- Modal -->
+<div class="modal fade" id="editUndanganModal" tabindex="-1" aria-labelledby="editUndanganModal" aria-hidden="true" wire:ignore.self>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="editUndanganModal">Ubah Undangan</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <label>Nama Undangan</label>
+                <input placeholder="Nama Undangan" type="text" class="form-control @error('name_edit') is-invalid @enderror" wire:model="name_edit" />
+    
+                @error('name_edit')
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
+                @enderror
+            </div>
+            <div class="col-md-4 mb-4">
+                <label>Deskipris Undangan</label>
+                <input placeholder="Deskripsi Undangan" type="text" class="form-control @error('description_edit') is-invalid @enderror" wire:model="description_edit" />
+    
+                @error('description_edit')
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
+                @enderror
+            </div>
+            <div class="col-md-4 mb-4">
+                <label>Jumlah</label>
+                <input placeholder="Jumlah" type="text" class="form-control currency @error('quantity_edit') is-invalid @enderror" wire:model="quantity_edit" />
+    
+                @error('quantity_edit')
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
+                @enderror
+            </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batalkan</button>
+        <button type="button" class="btn btn-primary" wire:click="saveEditUndangan">Simpan</button>
+      </div>
+    </div>
+  </div>
+</div>
 </div>
 
 @include('js.imask')
+
+@push('js') 
+    <script>
+        Livewire.on('onSuccessStore', function() {
+                $('#editUndanganModal').modal('hide');
+            });
+    </script>
+@endpush

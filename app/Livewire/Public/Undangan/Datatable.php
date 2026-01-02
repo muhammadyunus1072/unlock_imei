@@ -36,6 +36,11 @@ class Datatable extends Component
     public $quantity = 1;
     public $total = 0;
 
+    public $name_edit = "";
+    public $description_edit = "";
+    public $quantity_edit = "";
+    public $id_edit = "";
+
     public function onMount()
     {
         $this->isCanUpdate = true;
@@ -75,6 +80,33 @@ class Datatable extends Component
             "Hapus",
             "Batal",
         );
+    }
+    public function showEditDialog($id)
+    {
+        $data = UndanganRepository::find(Crypt::decrypt($id));
+        $this->id_edit = $id;
+        $this->name_edit = $data->name;
+        $this->description_edit = $data->description;
+        $this->quantity_edit = ValueToImask($data->quantity);
+    }
+
+    public function saveEditUndangan()
+    {
+        try {
+            $validatedData = [
+                'name' => $this->name_edit,
+                'description' => $this->description_edit,
+                'quantity' => imaskToValue($this->quantity_edit),
+            ];
+
+            UndanganRepository::update(Crypt::decrypt($this->id_edit), $validatedData);
+            Alert::success($this, 'Berhasil', 'Data berhasil diubah');
+            $this->dispatch('onSuccessStore');
+            $this->getUndanganQuantity();
+        } catch (Exception $e) {
+            DB::rollBack();
+            Alert::fail($this, "Gagal", $e->getMessage());
+        }
     }
 
     public function addUndangan()
@@ -121,6 +153,11 @@ class Datatable extends Component
 
                     $editHtml = "";
                     $id = Crypt::encrypt($item->id);
+                    $editHtml = "<div class='col-auto mb-2'
+                    ><button type='button' class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#editUndanganModal' wire:click=\"showEditDialog('$id')\">
+  Ubah
+</button>
+</div>";
 
                     $destroyHtml = "";
                     if ($this->isCanDelete) {
@@ -157,7 +194,7 @@ class Datatable extends Component
             ],
             [
                 'key' => 'quantity',
-                'name' => 'Quantity',
+                'name' => 'Jumlah',
                 'render' => function ($item) {
                     return number_format($item->quantity, 0, ',', '.') . " Orang";
                 },
