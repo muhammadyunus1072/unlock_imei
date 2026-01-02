@@ -40,17 +40,19 @@
             <label>Deskripsi</label>
             <input wire:model.live.debounce.300ms="description" type="text" class="form-control">
         </div>
-        <div class="col-sm-3 mb-2 {{ !isset($keyword_filter) || $keyword_filter == true ? '' : 'd-none' }}">
-            <label>Jumlah</label>
-            <input type="text" class="form-control currency" placeholder="Jumlah"  wire:model.live.debounce.300ms="quantity"/>
+        <div class="row">
+            <div class="col-6 col-md-12 mb-2 {{ !isset($keyword_filter) || $keyword_filter == true ? '' : 'd-none' }}">
+                <label>Jumlah</label>
+                <input type="text" class="form-control currency" placeholder="Jumlah"  wire:model.live.debounce.300ms="quantity"/>
+            </div>
+            <div class="col-6 col-md-12 d-flex mb-2 align-items-end{{ !isset($show_filter) || $show_filter == true ? '' : 'd-none' }}">
+                
+                    <button class="btn btn-light-danger"
+                        wire:click="addUndangan()">
+                        <i class="fa fa-plus"></i>
+                        Tambahkan
+                    </button>
         </div>
-        <div class="col-auto d-flex mb-2 align-items-end{{ !isset($show_filter) || $show_filter == true ? '' : 'd-none' }}">
-            
-                <button class="btn btn-light-danger"
-                    wire:click="addUndangan()">
-                    <i class="fa fa-plus"></i>
-                    Tambahkan
-                </button>
         </div>
     </div>
 
