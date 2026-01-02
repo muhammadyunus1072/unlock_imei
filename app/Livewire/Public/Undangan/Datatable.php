@@ -207,6 +207,10 @@ class Datatable extends Component
     {
         return UndanganRepository::datatable($this->name, $this->description);
     }
+    public function searchData()
+    {
+        $this->resetPage();
+    }
 
     private function getUndanganQuantity()
     {

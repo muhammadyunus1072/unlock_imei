@@ -26,16 +26,16 @@
         
         <div class="col-sm-3 mb-2 {{ !isset($keyword_filter) || $keyword_filter == true ? '' : 'd-none' }}">
             <label>Nama</label>
-            <input wire:model.live.debounce.300ms="name" type="text" class="form-control">
+            <input wire:model="name" type="text" class="form-control">
         </div>
         <div class="col-sm-3 mb-2 {{ !isset($keyword_filter) || $keyword_filter == true ? '' : 'd-none' }}">
             <label>Deskripsi</label>
-            <input wire:model.live.debounce.300ms="description" type="text" class="form-control">
+            <input wire:model="description" type="text" class="form-control">
         </div>
         <div class="row col-md-3">
             <div class="col-6 col-md-12 mb-2 {{ !isset($keyword_filter) || $keyword_filter == true ? '' : 'd-none' }}">
                 <label>Jumlah</label>
-                <input type="text" class="form-control currency" placeholder="Jumlah"  wire:model.live.debounce.300ms="quantity"/>
+                <input type="text" class="form-control currency" placeholder="Jumlah"  wire:model="quantity"/>
             </div>
             <div class="col-6 col-md-12 d-flex mb-2 align-items-end{{ !isset($show_filter) || $show_filter == true ? '' : 'd-none' }}">
                 
@@ -53,6 +53,14 @@
                     <option value="{{ $item }}">{{ $item }}</option>
                 @endforeach
             </select>
+        </div>
+        <div class="col-auto mb-2 {{ !isset($show_filter) || $show_filter == true ? '' : 'd-none' }}">
+            
+                    <button class="btn btn-light-primary"
+                        wire:click="searchData">
+                        <i class="fa fa-eye"></i>
+                        Cari
+                    </button>
         </div>
     </div>
 
