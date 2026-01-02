@@ -97,6 +97,10 @@ class PublicController extends Controller
     {
         return view('app.components.coba');
     }
+    public function turhamun()
+    {
+        return view('app.public.turhamun');
+    }
 
     public function booking_review(Request $request)
     {
