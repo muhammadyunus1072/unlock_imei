@@ -19,12 +19,22 @@
 @stop
 
 @section('content')
+{{-- OLD --}}
     <!--begin::Heading-->
-    <div class="text-center mb-4">
+    {{-- <div class="text-center mb-4">
         <div class="fs-5 text-muted fw-bold">Capture your every moments with</div>
         <h3 class="fs-2hx text-dark">{{ config('template.title') }}</h3>
-    </div>
+    </div> --}}
     <!--end::Heading-->
     {{-- <livewire:public.product.filter>      --}}
-    <livewire:public.product.data>     
+
+    {{-- <livewire:public.product.data>      --}}
+        {{-- Old --}}
+        {{-- New --}}
+        <div class="text-center mb-4">
+        <h3 class="fs-2hx text-dark">Data Undangan</h3>
+    </div>
+        <livewire:public.undangan.datatable>     
+            {{-- New --}}
+    
 @stop

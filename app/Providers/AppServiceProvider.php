@@ -36,6 +36,7 @@ class AppServiceProvider extends ServiceProvider
             database_path('migrations/master-data'),
             database_path('migrations/transaction'),
             database_path('migrations/booking'),
+            database_path('migrations/undangan'),
         ]);
 
         Blade::directive('currency', function ($expression) {

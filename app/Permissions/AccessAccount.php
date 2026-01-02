@@ -9,11 +9,15 @@ class AccessAccount
     const PERMISSION = "permission";
     const ROLE = "role";
 
+    const UNDANGAN = "undangan";
+
     const ALL = [
         self::DASHBOARD,
         self::USER,
         self::PERMISSION,
         self::ROLE,
+
+        self::UNDANGAN,
     ];
 
     const TYPE_ALL = [
@@ -21,6 +25,8 @@ class AccessAccount
         self::USER => PermissionHelper::TYPE_ALL,
         self::ROLE => PermissionHelper::TYPE_ALL,
         self::PERMISSION => PermissionHelper::TYPE_ALL,
+
+        self::UNDANGAN => PermissionHelper::TYPE_ALL,
     ];
 
     const TRANSLATE = [
@@ -28,5 +34,7 @@ class AccessAccount
         self::USER => "Pengguna",
         self::PERMISSION => "Akses",
         self::ROLE => "Jabatan",
+
+        self::UNDANGAN => "Undangan",
     ];
 }
