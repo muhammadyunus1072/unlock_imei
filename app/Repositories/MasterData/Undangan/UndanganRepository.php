@@ -23,4 +23,9 @@ class UndanganRepository extends MasterDataRepository
                 $query->where('description', 'LIKE', '%' . $description . '%');
             });
     }
+
+    public static function getTotalQuantity()
+    {
+        return Undangan::sum('quantity');
+    }
 }

@@ -1,4 +1,5 @@
 <div>
+        <h3 class="fs-2hx text-dark text-center">Total Undangan = @currency($total) Orang</h3>
     {{-- EXPORT DATA --}}
     @if (isset($showExport) && $showExport)
         <div class="row align-items-center">
@@ -38,6 +39,10 @@
         <div class="col-sm-3 mb-2 {{ !isset($keyword_filter) || $keyword_filter == true ? '' : 'd-none' }}">
             <label>Deskripsi</label>
             <input wire:model.live.debounce.300ms="description" type="text" class="form-control">
+        </div>
+        <div class="col-sm-3 mb-2 {{ !isset($keyword_filter) || $keyword_filter == true ? '' : 'd-none' }}">
+            <label>Jumlah</label>
+            <input type="text" class="form-control currency" placeholder="Jumlah"  wire:model.live.debounce.300ms="quantity"/>
         </div>
         <div class="col-auto d-flex mb-2 align-items-end{{ !isset($show_filter) || $show_filter == true ? '' : 'd-none' }}">
             
@@ -139,3 +144,5 @@
         </div>
     </div>
 </div>
+
+@include('js.imask')

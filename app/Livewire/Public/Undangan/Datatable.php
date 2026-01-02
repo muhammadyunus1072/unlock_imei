@@ -33,11 +33,14 @@ class Datatable extends Component
     public $name = "";
 
     public $description = "";
+    public $quantity = 1;
+    public $total = 0;
 
     public function onMount()
     {
         $this->isCanUpdate = true;
         $this->isCanDelete = true;
+        $this->getUndanganQuantity();
     }
 
     #[On('on-delete-dialog-confirm')]
@@ -49,6 +52,7 @@ class Datatable extends Component
 
         UndanganRepository::delete(Crypt::decrypt($this->targetDeleteId));
         Alert::success($this, 'Berhasil', 'Data berhasil dihapus');
+        $this->getUndanganQuantity();
     }
 
     #[On('on-delete-dialog-cancel')]
@@ -80,24 +84,26 @@ class Datatable extends Component
             $validatedData = [
                 'name' => $this->name,
                 'description' => $this->description,
+                'quantity' => imaskToValue($this->quantity),
             ];
 
             DB::beginTransaction();
             $obj = UndanganRepository::create($validatedData);
             $objId = $obj->id;
-
+            $this->quantity = ValueToImask(1);
             DB::commit();
 
-            Alert::confirmation(
-                $this,
-                Alert::ICON_SUCCESS,
-                "Berhasil",
-                "Data Berhasil Diperbarui",
-                "on-dialog-confirm",
-                "on-dialog-cancel",
-                "Oke",
-                "Tutup",
-            );
+            // Alert::confirmation(
+            //     $this,
+            //     Alert::ICON_SUCCESS,
+            //     "Berhasil",
+            //     "Data Berhasil Diperbarui",
+            //     "on-dialog-confirm",
+            //     "on-dialog-cancel",
+            //     "Oke",
+            //     "Tutup",
+            // );
+            $this->getUndanganQuantity();
         } catch (Exception $e) {
             DB::rollBack();
             Alert::fail($this, "Gagal", $e->getMessage());
@@ -149,13 +155,13 @@ class Datatable extends Component
                 'key' => 'description',
                 'name' => 'Deskripsi Undangan',
             ],
-            // [
-            //     'key' => 'quantity',
-            //     'name' => 'Quantity',
-            //     'render' => function ($item) {
-            //         return number_format($item->quantity, 0, ',', '.');
-            //     },
-            // ],
+            [
+                'key' => 'quantity',
+                'name' => 'Quantity',
+                'render' => function ($item) {
+                    return number_format($item->quantity, 0, ',', '.') . " Orang";
+                },
+            ],
         ];
     }
 
@@ -164,6 +170,10 @@ class Datatable extends Component
         return UndanganRepository::datatable($this->name, $this->description);
     }
 
+    private function getUndanganQuantity()
+    {
+        $this->total = UndanganRepository::getTotalQuantity();
+    }
     public function getView(): string
     {
         return 'livewire.public.undangan.datatable';
