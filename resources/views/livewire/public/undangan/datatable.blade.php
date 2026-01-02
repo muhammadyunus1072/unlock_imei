@@ -24,14 +24,7 @@
         <hr>
     @endif
     <div class="row justify-content-between mb-3">
-        <div class="col-auto mb-2 {{ !isset($show_filter) || $show_filter == true ? '' : 'd-none' }}">
-            <label>Show</label>
-            <select wire:model.change="length" class="form-select">
-                @foreach ($lengthOptions as $item)
-                    <option value="{{ $item }}">{{ $item }}</option>
-                @endforeach
-            </select>
-        </div>
+        
         <div class="col-sm-3 mb-2 {{ !isset($keyword_filter) || $keyword_filter == true ? '' : 'd-none' }}">
             <label>Nama</label>
             <input wire:model.live.debounce.300ms="name" type="text" class="form-control">
@@ -40,7 +33,7 @@
             <label>Deskripsi</label>
             <input wire:model.live.debounce.300ms="description" type="text" class="form-control">
         </div>
-        <div class="row">
+        <div class="row col-md-3">
             <div class="col-6 col-md-12 mb-2 {{ !isset($keyword_filter) || $keyword_filter == true ? '' : 'd-none' }}">
                 <label>Jumlah</label>
                 <input type="text" class="form-control currency" placeholder="Jumlah"  wire:model.live.debounce.300ms="quantity"/>
@@ -52,7 +45,15 @@
                         <i class="fa fa-plus"></i>
                         Tambahkan
                     </button>
+            </div>
         </div>
+        <div class="col-auto mb-2 {{ !isset($show_filter) || $show_filter == true ? '' : 'd-none' }}">
+            <label>Show</label>
+            <select wire:model.change="length" class="form-select">
+                @foreach ($lengthOptions as $item)
+                    <option value="{{ $item }}">{{ $item }}</option>
+                @endforeach
+            </select>
         </div>
     </div>
 
