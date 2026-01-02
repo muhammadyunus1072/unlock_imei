@@ -122,7 +122,6 @@ class Datatable extends Component
             DB::beginTransaction();
             $obj = UndanganRepository::create($validatedData);
             $objId = $obj->id;
-            $this->quantity = ValueToImask(1);
             DB::commit();
 
             // Alert::confirmation(
@@ -135,6 +134,8 @@ class Datatable extends Component
             //     "Oke",
             //     "Tutup",
             // );
+            $this->name = "";
+            $this->quantity = ValueToImask(1);
             $this->getUndanganQuantity();
         } catch (Exception $e) {
             DB::rollBack();
