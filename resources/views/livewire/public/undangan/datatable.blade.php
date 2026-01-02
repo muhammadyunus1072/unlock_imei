@@ -1,5 +1,4 @@
 <div>
-        <h3 class="fs-2hx text-dark text-center">Total Undangan = @currency($total) Orang</h3>
     {{-- EXPORT DATA --}}
     @if (isset($showExport) && $showExport)
         <div class="row align-items-center">
@@ -146,6 +145,8 @@
             {{ $data->links(data: ['scrollTo' => false]) }}
         </div>
     </div>
+
+        <h3 class="fs-2hx text-dark text-center">Total Undangan = @currency($total) Orang</h3>
     <!-- Modal -->
 <div class="modal fade" id="editUndanganModal" tabindex="-1" aria-labelledby="editUndanganModal" aria-hidden="true" wire:ignore.self>
   <div class="modal-dialog modal-lg">
