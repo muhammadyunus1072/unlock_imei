@@ -36,7 +36,6 @@ class Datatable extends Component
 
     public function onMount()
     {
-        $authUser = UserRepository::authenticatedUser();
         $this->isCanUpdate = true;
         $this->isCanDelete = true;
     }

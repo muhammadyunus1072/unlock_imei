@@ -17,12 +17,10 @@ class UndanganRepository extends MasterDataRepository
     public static function datatable($name, $description)
     {
         return Undangan::when($name, function ($query) use ($name) {
-            $query->where('name', 'LIKE', '%' . $name . '%')
-                ->orWhere('description', 'LIKE', '%' . $name . '%');
+            $query->where('name', 'LIKE', '%' . $name . '%');
         })
             ->when($description, function ($query) use ($description) {
-                $query->where('name', 'LIKE', '%' . $description . '%')
-                    ->orWhere('description', 'LIKE', '%' . $description . '%');
+                $query->where('description', 'LIKE', '%' . $description . '%');
             });
     }
 }
